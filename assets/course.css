@@ -1,0 +1,110 @@
+/* Shared deck styling for all weekly reveal.js decks.
+   Import AFTER the reveal theme css in each week's index.html. */
+
+:root {
+  --course-accent: #4da3ff;
+  --course-accent2: #7ee0a3;
+  --course-warn: #ffb454;
+}
+
+/* Section label chip shown on structural slides (Recap, Deep Dive, Exercise...) */
+.reveal .chip {
+  display: inline-block;
+  font-size: 0.55em;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--course-accent);
+  border: 1px solid var(--course-accent);
+  border-radius: 14px;
+  padding: 2px 14px;
+  margin-bottom: 18px;
+}
+
+/* Easter egg question styling */
+.reveal .easter-egg {
+  border: 2px dashed var(--course-warn);
+  border-radius: 12px;
+  padding: 18px 26px;
+  background: rgba(255, 180, 84, 0.07);
+}
+.reveal .easter-egg .egg-icon { font-size: 1.4em; }
+
+/* Analogy callout */
+.reveal .analogy {
+  border-left: 5px solid var(--course-accent2);
+  background: rgba(126, 224, 163, 0.07);
+  padding: 14px 22px;
+  border-radius: 0 10px 10px 0;
+  font-style: italic;
+  text-align: left;
+}
+.reveal .analogy::before {
+  content: "💡 Think of it like this";
+  display: block;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.7em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--course-accent2);
+  margin-bottom: 6px;
+}
+
+/* Click-to-reveal quiz answers */
+.reveal .quiz-answer {
+  filter: blur(9px);
+  cursor: pointer;
+  transition: filter 0.35s ease;
+  user-select: none;
+}
+.reveal .quiz-answer.revealed { filter: none; }
+
+/* Two-tier exercise blocks */
+.reveal .tier {
+  border-radius: 12px;
+  padding: 16px 22px;
+  text-align: left;
+  margin: 10px 0;
+}
+.reveal .tier.core   { border: 2px solid var(--course-accent);  }
+.reveal .tier.stretch{ border: 2px solid var(--course-accent2); }
+.reveal .tier .tier-label {
+  font-size: 0.6em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.reveal .tier.core .tier-label   { color: var(--course-accent); }
+.reveal .tier.stretch .tier-label{ color: var(--course-accent2); }
+
+/* Quote slide */
+.reveal .closing-quote {
+  font-size: 1.3em;
+  font-style: italic;
+  line-height: 1.5;
+}
+.reveal .closing-quote .attribution {
+  display: block;
+  margin-top: 24px;
+  font-size: 0.6em;
+  font-style: normal;
+  color: var(--course-accent);
+}
+
+/* Prediction prompt ("guess before we explain") */
+.reveal .predict {
+  border: 2px solid var(--course-accent);
+  border-radius: 12px;
+  padding: 16px 24px;
+  background: rgba(77, 163, 255, 0.08);
+}
+.reveal .predict::before {
+  content: "🤔 Your guess first";
+  display: block;
+  font-weight: 700;
+  font-size: 0.7em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--course-accent);
+  margin-bottom: 6px;
+}
