@@ -12,6 +12,10 @@ These instructions apply to ALL future work in this project (AI Course Tutoring)
 - Decks are self-hosted on a course website, released week by week; students revisit for self-study.
 - Include interactive elements where useful: click-to-reveal quizzes, small embedded demos, code snippets with syntax highlighting.
 - Mobile-friendly; no external dependencies that could break offline hosting (inline CSS/JS where possible).
+- **Speaker notes are mandatory on every slide.** Use `<aside class="notes">` with what the instructor should actually say: the extra detail not on the slide, the question to ask the class, timing hints, and the transition to the next slide. Instructor opens speaker view by pressing **S**.
+- **Never let content overflow the slide.** reveal.js does not shrink text to fit — if a slide is too tall the bottom is silently cut off on the projector. Keep to roughly 5 bullets or one visual plus 2 lines per slide; split into vertical sub-slides (↓) instead of crowding. Verify by rendering before delivery.
+- **Be generous with visuals.** Prefer an inline SVG diagram that builds up with `class="fragment"` over a bullet list. Aim for a visual on most concept slides, not just a few.
+- **Explain the mechanism, not only the metaphor.** After an analogy, show concretely *how* the thing works — what it observes, what numbers it stores, how those numbers change. Abstract statements like "it learns by playing" are not enough.
 
 ## Every weekly session follows this structure, in order
 1. **Recap** — quick intro/revision of last week's session (and answer to last week's easter egg).
@@ -22,11 +26,24 @@ These instructions apply to ALL future work in this project (AI Course Tutoring)
 6. **Motivational quote** — end every session with one.
 
 ## Teaching style rules (always apply)
+- **Audience is from southern India.** All students were born and raised in South India. Choose words, examples, and analogies that are native and relatable to them — everyday South Indian life (food, cricket, festivals, local travel, family life, regional tech culture like Bengaluru/Hyderabad/Chennai IT). Avoid US-centric idioms and references. Keep English simple and clear. Applies to ALL course material, not just one week.
 - **Calibrate to student depth.** Material must match students' current knowledge level. This level is expected to rise over the semester — update depth as students improve. Track/adjust when the user reports how students are doing.
 - **Real-world analogies for every concept.** Every non-trivial concept gets an easy, memorable real-world analogy.
 - **Prediction before explanation.** Where possible, ask students to guess before revealing how something works.
 - **Mixed audience always.** Never assume coding ability in core material; offer parallel technical tracks for builders (mirrors the schedule's code/no-code split in Weeks 5–7).
 - **Occasionally invite student-generated analogies**; the winning one appears (credited) in next week's recap.
+
+## Concept threads across weeks
+Introduce ideas early and shallow, then deepen. Deliberate threads:
+- **Weights** — introduced in Week 1 via Samuel's checkers score sheet; reused to explain attention Q/K/V; deepened in Week 2.
+- **Attention / Q-K-V** — intro-level in Week 1 (matchmaking analogy + scores becoming percentages); full treatment in Week 2.
+- **Next-word prediction** — Week 1 intro; Week 2 connects it to tokens, embeddings, and sampling/temperature.
+
+### Week 2 must-cover (requested by Santhosh)
+- Vectors and tensors: what a word-embedding vector actually is; meaning as coordinates.
+- Matrix multiplication: how it transforms/adjusts embeddings, and why attention is essentially matmul.
+- Why this makes **GPUs** the right hardware (thousands of identical multiply-add operations in parallel) — connect back to Week 1's Moore's law / scaling laws and the 2012 breakthrough.
+- Keep it visual and arithmetic-light; no linear algebra prerequisites assumed.
 
 ## Site extras (build as time permits)
 - Landing page with a "class knowledge meter" progress bar showing concepts unlocked so far.
