@@ -1,0 +1,27 @@
+# ---------------------------------------------------------------
+# INSTRUCTOR-ONLY — never commit. Contains student names, the
+# easter-egg answers, and the Human-or-AI answer key.
+# The repo is PUBLIC: anything committed here is world-readable.
+# Keep your own backup of this folder (Drive), not just this laptop.
+# ---------------------------------------------------------------
+instructor/
+
+# Raw form exports — student personal data
+*Responses*.csv
+*responses*.csv
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# ---------------------------------------------------------------
+# AUTHORING decks — these contain the speaker notes and the
+# easter-egg answers. Students get docs/ instead, which build.py
+# generates with the notes stripped out.
+# NOTE: this means git is NOT backing these up. Keep a copy in
+# Drive, or push them to a separate PRIVATE repo.
+# ---------------------------------------------------------------
+weeks/
+
+# Teaching plan / pedagogy notes — instructor-facing
+COURSE_PROJECT_INSTRUCTIONS.md

@@ -1,33 +1,57 @@
 # AI for Graduate Students — 8-Week Course
 
-Course website with weekly interactive slide decks, released week by week.
+An 8-week journey from the history of AI to building your own AI-powered systems.
 
-**Live site:** https://san81.github.io/ai-course/
+### 👉 [Open the course site](https://san81.github.io/ai-course/)
 
-## Structure
+New material unlocks every week. Come back any time to revise — the decks stay up for the
+rest of the course.
 
-```
-index.html                  Landing page (knowledge meter + week cards)
-assets/course.css           Shared styling for all decks (analogy boxes, quizzes, easter eggs)
-assets/reveal/dist/         Vendored reveal.js (slides framework + plugins + themes)
-weeks/weekN/index.html      One self-contained deck per week
-exercises/                  Weekly exercise handouts (core + stretch tiers)
-COURSE_PROJECT_INSTRUCTIONS.md   Recurring instructions for course material preparation
-```
+---
 
-## Weekly release workflow
+## How to use the slides
 
-1. Build/refine `weeks/weekN/index.html` locally.
-2. On release day: bump `RELEASED_WEEKS` in `index.html` (one line at the top of the script).
-3. Commit and push — GitHub Pages publishes automatically.
+Each week is an interactive deck that runs in your browser. Nothing to install.
 
-## Session structure (every deck)
+| Key | What it does |
+|---|---|
+| **→ / Space** | next slide |
+| **←** | back |
+| **↓ / ↑** | move within a topic (some slides stack vertically) |
+| **O** | overview — see every slide at once, jump anywhere |
+| **F** | full screen |
+| **Esc** | leave full screen or overview |
 
-Recap of last week → Easter egg question → Deep dive (with real-world analogies) → Exercise (core + stretch) → Motivational quote.
+Slides build up in steps, so keep pressing → even when a slide looks finished — there is
+usually more on it.
 
-## Local preview
+Works on a phone (swipe), but a laptop is much better for the diagrams.
 
-```bash
-python3 -m http.server 8000
-# open http://localhost:8000
-```
+## Weekly rhythm
+
+Recap → this week's easter-egg question → the main topic, with real-world analogies →
+an exercise → a quote to end on.
+
+The **easter egg** is a question asked at the start of every session. The answer is hidden
+somewhere in that week's material. Collect all eight and they spell something — revealed in
+Week 8. Write your answers down as you go.
+
+## Weeks
+
+| # | Topic |
+|---|---|
+| 1 | The Story of AI — History & Foundations |
+| 2 | How Modern AI Actually Works |
+| 3 | Prompting & Everyday Use |
+| 4 | AI for Research & Study |
+| 5 | Building I: APIs & Your First AI App |
+| 6 | Building II: RAG & Your Own Data |
+| 7 | Integrations & AI Agents |
+| 8 | Responsible AI & Capstone Demos |
+
+Weeks unlock as the course runs. Locked weeks show a 🔒 on the site.
+
+## Something broken?
+
+If a slide looks cut off, a diagram does not load, or a link is dead, tell me in class or
+open an issue on this repo.
