@@ -31,6 +31,17 @@
   .reveal .closing-quote { font-size: 1.05em; }
   .reveal svg { max-width: 100%; height: auto; }
   .reveal .caption { font-size: 0.58em; color: #9aa4b8; margin-top: 8px; }
+  /* welcome slide: the "who is in this room" chips */
+  .reveal .mix { display: flex; flex-wrap: wrap; gap: 9px; justify-content: center; margin: 16px 0 6px; }
+  .reveal .mix span {
+    border: 1px solid #2a3450; background: #1a2233; border-radius: 999px;
+    padding: 7px 15px; font-size: 0.5em; color: #e8edf5; white-space: nowrap;
+  }
+  .reveal .big-rule {
+    border: 2px solid #7ee0a3; background: rgba(126,224,163,.08); border-radius: 12px;
+    padding: 14px 24px; margin: 16px 0 10px;
+  }
+  .reveal .big-rule p { font-size: 0.8em; margin: 0; color: #7ee0a3; font-weight: 700; }
   /* --- photos: real image if present, drawn illustration if not --- */
   .reveal figure.photo { margin: 10px auto; }
   .reveal figure.photo img {
@@ -59,9 +70,47 @@
 <div class="reveal">
 <div class="slides">
 
+<!-- ==================== WELCOME ==================== -->
+<section>
+  <section>
+    <p class="chip">Welcome</p>
+    <h1>Welcome 👋</h1>
+    <p class="small">Eight weeks, one idea at a time — and by the end you will have
+    <strong>built something of your own</strong>. This is going to be a great learning journey,
+    and an enjoyable one.</p>
+    <div class="fragment">
+      <p class="small">And look at who is in this room:</p>
+      <div class="mix">
+        <span>🌾 Agriculture</span><span>💃 Kuchipudi dance</span><span>🔬 Semiconductors</span>
+        <span>🍽️ Restaurants</span><span>🏥 Medical research</span><span>💻 CSE &amp; AI-ML</span>
+        <span>📊 Data Science</span><span>📡 Electronics</span><span>🎨 Art</span>
+      </div>
+    </div>
+    <p class="small fragment">That mix is not a footnote. <strong>It is the most valuable thing
+    we have</strong> — AI only gets interesting when you point it at something you care about.</p>
+</section>
+
+  <section>
+    <p class="chip">How we work together</p>
+    <h2>Be curious. Out loud. 🙋</h2>
+    <ul class="small">
+      <li class="fragment">I will ask you to <strong>guess before I explain</strong>. Being wrong
+      is not a problem — it is the fastest way to remember the right answer.</li>
+      <li class="fragment">Interrupt. Unmute, or drop it in chat. You do not need to wait
+      for the end.</li>
+    </ul>
+    <div class="big-rule fragment">
+      <p>There is no such thing as a dumb question.</p>
+    </div>
+    <p class="small fragment">The question you feel shy about is usually the one five other
+    people are also stuck on. Ask it — you will be doing them a favour.</p>
+</section>
+
+</section>
+
 <!-- ==================== HOW THE COURSE WORKS ==================== -->
 <section>
-  <p class="chip">Welcome</p>
+  <p class="chip">The plan</p>
   <h2>How this course works</h2>
   <ul>
     <li>8 weeks: history → how AI works → using it → <strong>building</strong> → agents → ethics + capstone</li>
@@ -232,6 +281,15 @@
     exactly the game you just played.</p>
     <p class="small fragment">Seventy-five years ago. Before transistors, before screens, before
     anyone had written a line of software.</p>
+    <figure class="photo fragment">
+      <img src="../../assets/img/turing.jpg" alt="Alan Turing" style="max-height:190px"
+           onerror="this.closest('figure').classList.add('no-photo')">
+      <div class="photo-fallback"><svg viewBox="0 0 200 200" width="150">
+        <circle cx="100" cy="100" r="96" fill="#1a2233" stroke="#4da3ff" stroke-width="2"/>
+        <text x="100" y="112" fill="#4da3ff" font-size="34" text-anchor="middle" font-weight="bold">A.T.</text>
+      </svg></div>
+      <figcaption>Alan Turing — the man who asked the question</figcaption>
+    </figure>
 </section>
   <section>
     <h2>1956 — AI gets its name</h2>
@@ -1412,7 +1470,6 @@
     <li>Why was Jan 2025 a shock? <span class="quiz-answer">DeepSeek-R1: open weights matched the frontier, far cheaper</span></li>
   </ul>
 </section>
-<!-- ==================== ICEBREAKER: GUESS WHO ==================== -->
 <!-- ==================== RESOURCES ==================== -->
 <section>
   <p class="chip">Explore on your own</p>
@@ -1442,6 +1499,7 @@
   </div>
   <p class="small">🥚 And bring your easter egg answer. Also: watch the attention video.</p>
 </section>
+<!-- ==================== ICEBREAKER: GUESS WHO ==================== -->
 <!-- ==================== POLL 4: EXIT TICKET ==================== -->
 <!-- ==================== QUOTE ==================== -->
 <section>
