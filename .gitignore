@@ -21,7 +21,9 @@ Thumbs.db
 # NOTE: this means git is NOT backing these up. Keep a copy in
 # Drive, or push them to a separate PRIVATE repo.
 # ---------------------------------------------------------------
-weeks/
+# Leading slash matters: a bare "weeks/" would also match docs/weeks/,
+# which is exactly the student edition we DO want published.
+/weeks/
 
 # Teaching plan / pedagogy notes — instructor-facing
-COURSE_PROJECT_INSTRUCTIONS.md
+/COURSE_PROJECT_INSTRUCTIONS.md
