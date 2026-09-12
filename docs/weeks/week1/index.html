@@ -629,21 +629,25 @@
 
   <section>
     <h2>Step 2 — add up the wrongness: <span style="color:#ff7a7a">loss</span></h2>
-    <svg viewBox="0 0 620 175" width="620">
-      <g font-size="13">
-        <text x="70" y="26" fill="#9aa4b8">farmer</text>
-        <text x="205" y="26" fill="#9aa4b8">model says</text>
-        <text x="350" y="26" fill="#9aa4b8">actually got</text>
-        <text x="500" y="26" fill="#ff7a7a">off by</text>
-        <text x="70" y="52" fill="#e8edf5">10 kg</text><text x="205" y="52" fill="#e8edf5">5</text><text x="350" y="52" fill="#e8edf5">11</text><text x="500" y="52" fill="#ff7a7a">6</text>
-        <text x="70" y="76" fill="#e8edf5">20 kg</text><text x="205" y="76" fill="#e8edf5">10</text><text x="350" y="76" fill="#e8edf5">17</text><text x="500" y="76" fill="#ff7a7a">7</text>
-        <text x="70" y="100" fill="#e8edf5">30 kg</text><text x="205" y="100" fill="#e8edf5">15</text><text x="350" y="100" fill="#e8edf5">29</text><text x="500" y="100" fill="#ff7a7a">14</text>
-        <text x="70" y="124" fill="#9aa4b8">…and so on</text>
+    <svg viewBox="0 0 620 250" width="620">
+      <g font-size="12.5">
+        <text x="55" y="22" fill="#9aa4b8">fertiliser</text>
+        <text x="180" y="22" fill="#9aa4b8">model says</text>
+        <text x="305" y="22" fill="#9aa4b8">actually got</text>
+        <text x="425" y="22" fill="#ff7a7a">off by</text>
+        <text x="515" y="22" fill="#ffb454">gap × gap</text>
+
+        <text x="55" y="48" fill="#e8edf5">10 kg</text><text x="180" y="48" fill="#e8edf5">5</text><text x="305" y="48" fill="#e8edf5">11</text><text x="425" y="48" fill="#ff7a7a">6</text><text x="515" y="48" fill="#ffb454">36</text>
+        <text x="55" y="72" fill="#e8edf5">20 kg</text><text x="180" y="72" fill="#e8edf5">10</text><text x="305" y="72" fill="#e8edf5">17</text><text x="425" y="72" fill="#ff7a7a">7</text><text x="515" y="72" fill="#ffb454">49</text>
+        <text x="55" y="96" fill="#e8edf5">30 kg</text><text x="180" y="96" fill="#e8edf5">15</text><text x="305" y="96" fill="#e8edf5">29</text><text x="425" y="96" fill="#ff7a7a">14</text><text x="515" y="96" fill="#ffb454">196</text>
+        <text x="55" y="120" fill="#e8edf5">40 kg</text><text x="180" y="120" fill="#e8edf5">20</text><text x="305" y="120" fill="#e8edf5">34</text><text x="425" y="120" fill="#ff7a7a">14</text><text x="515" y="120" fill="#ffb454">196</text>
+        <text x="55" y="144" fill="#e8edf5">50 kg</text><text x="180" y="144" fill="#e8edf5">25</text><text x="305" y="144" fill="#e8edf5">47</text><text x="425" y="144" fill="#ff7a7a">22</text><text x="515" y="144" fill="#ffb454">484</text>
+        <text x="55" y="168" fill="#e8edf5">60 kg</text><text x="180" y="168" fill="#e8edf5">30</text><text x="305" y="168" fill="#e8edf5">53</text><text x="425" y="168" fill="#ff7a7a">23</text><text x="515" y="168" fill="#ffb454">529</text>
       </g>
-      <line x1="60" y1="136" x2="560" y2="136" stroke="#55607a"/>
+      <line x1="50" y1="184" x2="570" y2="184" stroke="#55607a"/>
       <g class="fragment">
-        <text x="70" y="162" fill="#7ee0a3" font-size="15" font-weight="bold">LOSS = all the gaps added up = 1490</text>
-        <text x="430" y="162" fill="#9aa4b8" font-size="12">one number for "how bad is this model"</text>
+        <text x="50" y="210" fill="#7ee0a3" font-size="15" font-weight="bold">LOSS = add up that last column = 1490</text>
+        <text x="50" y="236" fill="#9aa4b8" font-size="12">six mistakes squashed into one number: "how bad is this model?"</text>
       </g>
     </svg>
     <p class="small fragment">Lower loss = better model. Our job is now simple:
