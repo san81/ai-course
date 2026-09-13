@@ -13,9 +13,13 @@ nothing breaks if a file is missing — the deck works today without any of them
 | `feifei-li.jpg` | ImageNet slide **and** the prizes slide | Portrait of Fei-Fei Li |
 | `alexnet-team.jpg` | "2012 — deep learning's big bang" | Hinton with Krizhevsky and Sutskever, or Hinton alone |
 | `hinton.jpg` | Prizes slide | Portrait of Geoffrey Hinton |
-| `turing.jpg` | Closing quote | Portrait of Alan Turing |
+| `turing.jpg` | The "1950" reveal **and** the closing quote | Portrait of Alan Turing |
+| `Santhosh.jpg` | `intro/` — the instructor introduction deck | Your own photo (note the capital S) |
 
-`feifei-li.jpg` is used twice — one file covers both slides.
+`feifei-li.jpg` and `turing.jpg` are each used twice — one file covers both slides.
+
+⚠️ **Filenames are case-sensitive on GitHub Pages**, even though they are not on your Mac.
+`Santhosh.jpg` really does need the capital S in both the file and the HTML.
 
 ## Where to get properly licensed images
 
