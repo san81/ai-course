@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing your instructor — AI Course</title>
+<link rel="stylesheet" href="../assets/reveal/dist/reset.css">
+<link rel="stylesheet" href="../assets/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../assets/reveal/dist/theme/black.css">
+<link rel="stylesheet" href="../assets/course.css">
+<style>
+  .reveal h1 { font-size: 1.9em; text-transform: none; margin-bottom: 4px; }
+  .reveal h2 { font-size: 1.3em; text-transform: none; }
+  .reveal p, .reveal li { font-size: 0.84em; line-height: 1.42; }
+  .reveal .small, .reveal .small li { font-size: 0.66em; color: #a7b0c2; line-height: 1.45; }
+  .reveal .role { font-size: 0.72em; color: #4da3ff; margin: 0 0 4px; }
+  .reveal .where { font-size: 0.58em; color: #7b8497; margin: 0; }
+  .reveal .intro-row { display: flex; gap: 34px; align-items: center; text-align: left; }
+  /* Whole photo, uncropped — the source is a 3:4 portrait, so height drives the size
+     and the width follows. No object-fit: cover, which was cutting the head off. */
+  .reveal .intro-row img {
+    height: 340px; width: auto; border-radius: 18px;
+    box-shadow: 0 10px 34px rgba(0,0,0,.5); flex: 0 0 auto;
+  }
+  .reveal .intro-row .no-photo-box {
+    width: 255px; height: 340px; flex: 0 0 255px; border-radius: 18px;
+    border: 2px dashed #2a3450; background: #1a2233;
+    display: flex; align-items: center; justify-content: center;
+    color: #4da3ff; font-size: 0.9em; font-weight: 700;
+  }
+  .reveal .facts { list-style: none; margin: 12px 0 0; padding: 0; }
+  .reveal .facts li { font-size: 0.58em; margin: 8px 0; color: #e8edf5; line-height: 1.38; }
+  .reveal .facts li b { color: #ffb454; }
+  .reveal .facts .link { font-size: 0.86em; color: #4da3ff; font-family: monospace; }
+  .reveal .handoff {
+    border: 2px solid #7ee0a3; background: rgba(126,224,163,.08);
+    border-radius: 14px; padding: 18px 28px; margin-top: 10px;
+  }
+  .reveal .handoff p { font-size: 0.8em; margin: 0; color: #7ee0a3; font-weight: 700; }
+  .reveal svg { max-width: 100%; height: auto; }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ==================== INTRODUCING THE INSTRUCTOR ==================== -->
+<section>
+  <section>
+    <p class="chip">Your instructor</p>
+    <div class="intro-row">
+      <img src="../assets/img/Santhosh.jpg" alt="Santhosh Gandhe"
+           onerror="this.outerHTML='&lt;div class=\'no-photo-box\'&gt;S.G.&lt;/div&gt;'">
+      <div>
+        <h1>Santhosh Gandhe</h1>
+        <p class="role">Principal Software Engineer at <strong>Context.ai</strong>, San Francisco</p>
+        <p class="where">Living in Dublin, California</p>
+        <ul class="facts">
+          <li class="fragment"><b>Builds AI for a living</b> — Context.ai makes a custom AI harness
+          used by <b>Qualcomm</b> and <b>KKR</b></li>
+          <li class="fragment"><b>Open source maintainer</b> — <b>Data Prepper</b>, a data ingestion
+          platform used by AWS<br>
+          <span class="link">github.com/opensearch-project/data-prepper</span></li>
+          <li class="fragment"><b>Before that: Amazon</b> — OpenSearch, the search and data platform
+          behind a large part of the internet</li>
+          <li class="fragment"><b>Earlier</b> — Wayfair and LeanTaaS: retail at scale, then
+          software for hospitals</li>
+          <li class="fragment"><b>Away from the keyboard</b> — running, badminton, and the piano</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">
+      FOR WHOEVER IS INTRODUCING HIM — a script you can read almost word for word. About 90
+      seconds. Warm, not a CV reading. Pause on each click.
+
+      "Before we start, let me introduce the person taking you through the next eight weeks.
+
+      This is Santhosh Gandhe. He is a Principal Software Engineer at Context.ai in San
+      Francisco, and he joins us from Dublin, California.
+
+      [click] Here is the part that matters for this course: he does not teach AI from a
+      textbook — he builds it. Context.ai makes a custom AI harness, and their customers include
+      Qualcomm and KKR. So what you will hear over the next eight weeks is practice, not theory.
+
+      [click] He also maintains an open-source project called Data Prepper — a data ingestion
+      platform that AWS itself uses. That means the code he writes is public, anyone can read it,
+      and it runs inside one of the largest companies in the world. Any of you can go and look at
+      it tonight. Very few people teaching a course like this can say that.
+
+      [click] Before Context, he was at Amazon, working on OpenSearch — the search and data
+      platform that sits underneath an enormous amount of the internet you use every day, and
+      where Data Prepper comes from.
+
+      [click] And before that, Wayfair and LeanTaaS — retail at massive scale, and then software
+      for hospitals. Which is worth noticing: the same skills, pointed at completely different
+      industries.
+
+      [click] Outside work he runs, plays badminton, and plays the piano.
+
+      Please give him a warm welcome."
+
+      PRACTICAL NOTES FOR THE INTRODUCER
+      - Say the name clearly: SAN-thosh GAN-dhe.
+      - Do not read the list flatly. The line that lands hardest with students is the first one:
+        he builds this stuff for real companies right now.
+      - The Wayfair/LeanTaaS line quietly makes the course's own argument — AI and software are
+        tools you aim at a domain. This room has agriculture, dance, medicine and electronics
+        in it, so that point is worth landing rather than rushing.
+      - The hobbies line is there to make him a person, not a CV. Keep it light and quick.
+      - Ask students to keep cameras on and to use chat freely, then hand over.
+      - If you are short on time, the first two bullets and the hobbies line are enough.
+      - Data Prepper is pronounced exactly as written. If a student asks what it does, the one
+        line is: it collects data from many places and gets it ready to search. Do not go deeper;
+        he can take that question himself.
+      - Press S at any time to see these notes. Press → to reach the handoff slide.
+    </aside>
+  </section>
+
+  <section>
+    <h2>Over to you 🎤</h2>
+    <div class="handoff">
+      <p>Eight weeks. From where AI came from — to something you built yourself.</p>
+    </div>
+    <p class="small">Cameras on if you are comfortable. Chat stays open the whole session.
+    Ask anything, at any time.</p>
+    <aside class="notes">
+      Closing line for the introducer, then stop sharing and hand the screen to Santhosh.
+
+      "You are in good hands. Over to you, Santhosh."
+
+      Then: stop screen share, so he can share the Week 1 deck.
+      ⚠️ Important — he should share the WINDOW, not the entire screen, because the Week 1 deck
+      has speaker notes and easter-egg answers open in a second window.
+    </aside>
+  </section>
+</section>
+
+</div></div>
+
+<script src="../assets/reveal/dist/reveal.js"></script>
+<script src="../assets/reveal/dist/plugin/notes.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: false,
+    width: 1200,
+    height: 760,
+    margin: 0.05,
+    minScale: 0.2,
+    maxScale: 1.6,
+    plugins: [ RevealNotes ]
+  });
+</script>
+</body>
+</html>

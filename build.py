@@ -36,8 +36,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "docs"
 
-# Copied verbatim into docs/
-COPY_DIRS = ["assets"]
+# Copied verbatim into docs/ — NOT stripped.
+#
+# "intro" is the instructor-introduction deck, presented by a colleague who needs its
+# speaker notes to read the script. It is published WITH notes on purpose. Its notes
+# contain no answer keys and no student names; the leak check below still enforces that.
+COPY_DIRS = ["assets", "intro"]
 COPY_FILES = ["index.html", ".nojekyll"]
 
 # Which weeks students may see. Bump this the day you teach the week.
@@ -204,7 +208,15 @@ def check() -> bool:
             continue
         if "reveal/dist" in str(path):      # vendored library, not ours
             continue
-        for needle in FORBIDDEN:
+
+        # The intro deck is published with its speaker notes on purpose (see COPY_DIRS).
+        # Every OTHER forbidden string — answer keys, student names — is still checked here,
+        # so this exception is exactly one string wide and applies to exactly one folder.
+        needles = FORBIDDEN
+        if rel_parts and rel_parts[0] == "intro":
+            needles = [n for n in FORBIDDEN if n != 'aside class="notes"']
+
+        for needle in needles:
             if needle in text:
                 print(f"  LEAK: '{needle}' found in {path.relative_to(ROOT)}")
                 ok = False
