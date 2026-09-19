@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 2 — How Modern AI Actually Works</title>
+<link rel="stylesheet" href="../../assets/reveal/dist/reset.css">
+<link rel="stylesheet" href="../../assets/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../../assets/reveal/dist/theme/black.css">
+<link rel="stylesheet" href="../../assets/course.css">
+<style>
+  .reveal h1 { font-size: 2.0em; text-transform: none; }
+  .reveal h2 { font-size: 1.35em; text-transform: none; margin-bottom: 14px; }
+  .reveal p, .reveal li { font-size: 0.84em; line-height: 1.42; }
+  .reveal .small, .reveal .small li { font-size: 0.66em; color: #a7b0c2; line-height: 1.45; }
+  .reveal ul { margin-left: 0.6em; }
+  .reveal li { margin-bottom: 11px; }
+  .reveal .analogy { font-size: 0.72em; padding: 13px 22px; margin-top: 14px; }
+  .reveal .analogy::before { font-size: 0.85em; }
+  .reveal .predict { font-size: 0.85em; }
+  .reveal .easter-egg p { font-size: 0.72em; }
+  .reveal .tiny-hint { position: absolute; bottom: -40px; right: 0; font-size: 0.3em; color: #4a5468; }
+  .reveal .vote-card { border:1px solid #2a3450; border-radius:10px; padding:13px 20px; margin:9px 0; background:#1a2233; font-size:.62em; text-align:left; }
+  .reveal .res-list { font-size: 0.6em; text-align: left; }
+  .reveal .res-list li { margin: 7px 0; }
+  .reveal .res-list a, .reveal a { color: #4da3ff; }
+  .reveal .tier { padding: 10px 18px; }
+  .reveal .tier p { font-size: 0.66em; margin: 6px 0; }
+  .reveal .closing-quote { font-size: 1.05em; }
+  .reveal svg { max-width: 100%; height: auto; }
+  .reveal .caption { font-size: 0.58em; color: #9aa4b8; margin-top: 8px; }
+  .reveal figure.photo { margin: 10px auto; }
+  .reveal figure.photo img { max-height: 300px; width: auto; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,.45); }
+  .reveal figure.photo .photo-fallback { display: none; }
+  .reveal figure.photo.no-photo img { display: none; }
+  .reveal figure.photo.no-photo .photo-fallback { display: block; }
+  .reveal figure.photo figcaption { font-size: 0.42em; color: #7b8497; margin-top: 8px; }
+  .reveal .zoom-do {
+    border: 2px solid #7ee0a3; border-radius: 14px; padding: 16px 26px;
+    background: rgba(126,224,163,0.07); text-align: left; margin: 14px auto; max-width: 880px;
+  }
+  .reveal .zoom-do p { font-size: 0.72em; margin: 9px 0; }
+  .reveal .zoom-do .step { color: #7ee0a3; font-weight: 700; margin-right: 8px; }
+  .reveal section[data-poll] .chip { border-color: #7ee0a3; color: #7ee0a3; }
+  /* ---- "you are here" strip: stage pills + training/inference badge ---- */
+  .stagebar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 40;
+    display: none; gap: 7px; justify-content: center; align-items: center;
+    padding: 9px 10px; pointer-events: none;
+    font-family: inherit;
+  }
+  .stagebar.on { display: flex; }
+  .stagebar .pill {
+    padding: 4px 13px; border-radius: 999px; font-size: 14px;
+    border: 1px solid #222b3d; color: #49536b; background: rgba(11,15,25,.78);
+    white-space: nowrap;
+  }
+  .stagebar .pill.lit { border-color: #ffb454; color: #ffb454; }
+  .stagebar .pill.done { border-color: #2f3d2f; color: #4e6a55; }
+  .stagebar .badge {
+    margin-left: 12px; padding: 4px 13px; border-radius: 6px; font-size: 13px;
+    font-weight: 700; letter-spacing: 1.4px;
+  }
+  .stagebar .badge.training  { background: rgba(255,180,84,.14); color: #ffb454; border: 1px solid #8a6528; }
+  .stagebar .badge.inference { background: rgba(77,163,255,.14); color: #4da3ff; border: 1px solid #2d5c8a; }
+  .stagebar .badge.both      { background: rgba(126,224,163,.12); color: #7ee0a3; border: 1px solid #2f6a4a; }
+  /* ---- word cloud (instructor pastes the Zoom chat) ---- */
+  .reveal .wordcloud { margin-top: 6px; }
+  .reveal .wordcloud svg { width: 100%; height: auto; display: block; }
+  .reveal .wc-controls { display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 8px; }
+  .reveal .wordcloud textarea {
+    flex: 1; max-width: 520px; height: 38px; resize: vertical;
+    background: #141a26; color: #9aa4b8; border: 1px solid #2a3450; border-radius: 8px;
+    padding: 8px 10px; font-size: 13px; font-family: inherit;
+  }
+  .reveal .wordcloud button {
+    background: rgba(126,224,163,.12); color: #7ee0a3; border: 1px solid #7ee0a3;
+    border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer;
+  }
+  .reveal .wordcloud button:hover { background: rgba(126,224,163,.22); }
+  .reveal .wc-status { font-size: 12px; color: #55607a; min-width: 74px; }
+  /* act divider cards */
+  .reveal .act { color: #ffb454; font-size: 0.55em; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+  /* checkpoint blocks */
+  .reveal .checkpoint { border: 2px solid #4da3ff; background: rgba(77,163,255,.07); border-radius: 14px; padding: 10px 24px; margin: 12px auto; max-width: 900px; text-align: left; }
+  .reveal .checkpoint li { font-size: 0.62em; margin: 10px 0; }
+  /* the farmer chain, reused in the recap */
+  .reveal .chain { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 14px 0; }
+  .reveal .chain span { border: 1px solid #2a3450; background: #1a2233; border-radius: 999px; padding: 6px 14px; font-size: 0.46em; color: #e8edf5; }
+  .reveal .chain span.new { border-color: #ffb454; color: #ffb454; }
+</style>
+</head>
+<body>
+<!-- STUDENT EDITION - generated by build.py, do not edit by hand -->
+<div class="reveal">
+<div class="slides">
+
+<section>
+  <p class="chip">Week 2</p>
+  <h1>How Modern AI Actually Works</h1>
+  <p class="small">Last week: where it came from. Today: what is inside.</p>
+</section>
+<section>
+  <p class="chip">You asked for this</p>
+  <h2>"Transformers is still fuzzy" 🌫️</h2>
+  <p class="small">Most of you wrote that in the exit ticket.</p>
+  <p class="small fragment"><strong>Good.</strong> Last week I only told you transformers
+  <em>existed</em>. I never told you how they work.</p>
+  <p class="small fragment">Today you find out. By the end of this session you will be able to
+  explain what happens inside ChatGPT to someone who has never heard of it.</p>
+</section>
+<section>
+  <section>
+    <p class="chip">Recap</p>
+    <h2>Last week, in one chain 🔗</h2>
+    <div class="chain">
+      <span>examples</span><span>a line</span><span>weight <em>w</em></span><span>loss</span>
+      <span>training</span><span>the model</span><span>inference</span><span>two weights</span><span>a matrix</span>
+    </div>
+    <p class="small fragment">A farmer asked how much fertiliser to use. We had no rule — only
+    examples. So we guessed a line, measured how wrong it was, and hunted for a better weight.</p>
+    <p class="small fragment">Everything today hangs off that chain. Nothing is replaced;
+    we only add links.</p>
+</section>
+
+  <section>
+    <h2>Where we stopped, deliberately</h2>
+    <p class="small">We found the best weight by <strong>trying values</strong> — 0.5, 0.7, 0.9, 1.1 —
+    and keeping the one with the lowest loss.</p>
+    <div class="analogy fragment">
+      That works with one weight. Try it with a real model and you would still be trying when
+      the sun burns out. GPT-4 has roughly <strong>a trillion</strong> weights.
+    </div>
+    <p class="small fragment">So: <strong>how do you find a trillion numbers?</strong> That is
+    Act 1 of today.</p>
+</section>
+</section>
+<section>
+  <section>
+    <div class="easter-egg">
+      <p>🥚 <strong>Last week's easter egg</strong></p>
+      <p>A 2017 research paper that kicked off the ChatGPT era.<br>
+      Its title sounds like a famous Beatles song. 🎵</p>
+    </div>
+    <p class="small fragment">Type your answer in the chat now — everyone at once, on three.</p>
+    <p class="small fragment"><strong>"Attention Is All You Need"</strong> — Vaswani et al., Google, 2017.
+    First letter: <strong style="color:#ffb454">A</strong></p>
+</section>
+
+  <section>
+    <div class="easter-egg">
+      <p>🥚 <strong>This week's easter egg</strong></p>
+      <p>When you walk downhill, you choose how big a step to take.<br>
+      A model has that same setting — and if you get it wrong, training fails completely.</p>
+      <p><strong>What is that setting called?</strong></p>
+    </div>
+    <p class="small">The answer is hiding in today's material. Bring it next week — and save its
+    first letter.</p>
+</section>
+</section>
+<section>
+  <p class="chip">Before anything else</p>
+  <h2>You already learned a language once 📖</h2>
+  <p class="small">Nobody handed you English in one piece. It came in four stages, in this order:</p>
+  <svg viewBox="0 0 640 220" width="640">
+    <g font-size="13">
+      <rect x="120" y="22" width="400" height="40" rx="8" fill="#1a2233" stroke="#ffb454"/>
+      <text x="140" y="47" fill="#ffb454">1. the alphabet — a fixed set of symbols</text>
+      <g class="fragment">
+        <rect x="120" y="72" width="400" height="40" rx="8" fill="#1a2233" stroke="#4da3ff"/>
+        <text x="140" y="97" fill="#4da3ff">2. vocabulary — what each word means</text>
+      </g>
+      <g class="fragment">
+        <rect x="120" y="122" width="400" height="40" rx="8" fill="#1a2233" stroke="#7ee0a3"/>
+        <text x="140" y="147" fill="#7ee0a3">3. grammar — how words relate to each other</text>
+      </g>
+      <g class="fragment">
+        <rect x="120" y="172" width="400" height="40" rx="8" fill="rgba(255,180,84,.1)" stroke="#ffb454"/>
+        <text x="140" y="197" fill="#ffb454">4. writing a sentence of your own</text>
+      </g>
+    </g>
+  </svg>
+  <p class="small fragment">A machine learning language goes through <strong>exactly these four
+  stages</strong>. Today we do one at a time — and at the end, we come back to this slide.</p>
+</section>
+
+<section data-stage="alphabet">
+  <p class="act">Act 1 of 5 · 🔤</p>
+  <h2>Stage 1 — the alphabet</h2>
+  <p class="small">A fixed set of symbols. For a model, they are not letters.</p>
+</section>
+
+<section data-stage="alphabet" data-phase="both">
+  <section>
+    <h2>First, chop it up ✂️</h2>
+    <p class="small">Step 1 of the four: <strong>the alphabet</strong>. A model does not read
+    words — it reads <strong>tokens</strong>, a fixed set of chunks decided before training starts.</p>
+    <svg viewBox="0 0 640 165" width="640">
+      <g font-size="14" text-anchor="middle">
+        <text x="320" y="24" fill="#9aa4b8" font-size="12">"unbelievable"</text>
+        <rect x="200" y="38" width="70" height="34" rx="7" fill="#1a2233" stroke="#4da3ff"/><text x="235" y="61" fill="#e8edf5">un</text>
+        <rect x="278" y="38" width="90" height="34" rx="7" fill="#1a2233" stroke="#4da3ff"/><text x="323" y="61" fill="#e8edf5">believ</text>
+        <rect x="376" y="38" width="70" height="34" rx="7" fill="#1a2233" stroke="#4da3ff"/><text x="411" y="61" fill="#e8edf5">able</text>
+        <g class="fragment">
+          <text x="320" y="104" fill="#9aa4b8" font-size="12">"Hyderabad biryani"</text>
+          <rect x="170" y="116" width="86" height="34" rx="7" fill="#1a2233" stroke="#7ee0a3"/><text x="213" y="139" fill="#e8edf5">Hyder</text>
+          <rect x="264" y="116" width="74" height="34" rx="7" fill="#1a2233" stroke="#7ee0a3"/><text x="301" y="139" fill="#e8edf5">abad</text>
+          <rect x="346" y="116" width="66" height="34" rx="7" fill="#1a2233" stroke="#7ee0a3"/><text x="379" y="139" fill="#e8edf5">bir</text>
+          <rect x="420" y="116" width="66" height="34" rx="7" fill="#1a2233" stroke="#7ee0a3"/><text x="453" y="139" fill="#e8edf5">yani</text>
+        </g>
+      </g>
+    </svg>
+    <p class="small fragment">Common words are one token. Rare words get broken into pieces.
+    Roughly: <strong>1 token ≈ ¾ of an English word</strong>.</p>
+</section>
+
+</section>
+<section data-stage="alphabet">
+  <p class="chip">Checkpoint 1 of 5</p>
+  <h2>Stage 1 — click to reveal</h2>
+  <div class="checkpoint">
+    <ul>
+      <li>A model reads text in chunks called… <span class="quiz-answer">tokens</span></li>
+      <li>Rare words get… <span class="quiz-answer">broken into several tokens</span></li>
+      <li>Roughly, one English word is about… <span class="quiz-answer">1⅓ tokens (1 token ≈ ¾ of a word)</span></li>
+      <li>Telugu or Hindi need… <span class="quiz-answer">many more tokens for the same sentence — so they cost more</span></li>
+    </ul>
+  </div>
+</section>
+
+<section data-stage="vocabulary">
+  <p class="act">Act 2 of 5 · 📖</p>
+  <h2>Stage 2 — vocabulary</h2>
+  <p class="small">Knowing the symbols is not knowing what they mean.</p>
+</section>
+
+<section data-stage="vocabulary" data-phase="both">
+    <h2>Step 2: vocabulary — what each token <em>means</em> 🔢</h2>
+    <svg viewBox="0 0 640 140" width="640">
+      <text x="60" y="45" fill="#ffb454" font-size="15" text-anchor="middle" font-weight="bold">"it"</text>
+      <path d="M95 40 h40" stroke="#9aa4b8" stroke-width="2"/>
+      <rect x="140" y="22" width="240" height="36" rx="8" fill="#1a2233" stroke="#4da3ff"/>
+      <text x="260" y="45" fill="#7ee0a3" font-size="13" text-anchor="middle" font-family="monospace">[0.21, −0.88, 0.04, …]</text>
+      <text x="470" y="45" fill="#9aa4b8" font-size="12" text-anchor="middle">a long list of numbers</text>
+      <g class="fragment">
+        <text x="60" y="105" fill="#e8edf5" font-size="15" text-anchor="middle">"animal"</text>
+        <path d="M110 100 h25" stroke="#9aa4b8" stroke-width="2"/>
+        <rect x="140" y="82" width="240" height="36" rx="8" fill="#1a2233" stroke="#4da3ff"/>
+        <text x="260" y="105" fill="#7ee0a3" font-size="13" text-anchor="middle" font-family="monospace">[0.19, −0.79, 0.11, …]</text>
+        <text x="470" y="99" fill="#9aa4b8" font-size="12" text-anchor="middle">similar meaning →</text>
+        <text x="470" y="116" fill="#9aa4b8" font-size="12" text-anchor="middle">similar numbers</text>
+      </g>
+    </svg>
+    <p class="small fragment">Exactly like Samuel turning a checkers board into four numbers — just a much longer list.
+    These lists are called <strong>embeddings</strong>.</p>
+</section>
+<section data-stage="vocabulary" data-phase="both">
+<section>
+    <h2>Meaning has a <em>direction</em> 🗺️</h2>
+    <p class="small">If a word is a list of numbers, it is a <strong>point on a map</strong>.
+    And the journeys between points mean something.</p>
+    <svg viewBox="0 0 640 210" width="640">
+      <g font-size="12.5">
+        <circle cx="120" cy="150" r="6" fill="#4da3ff"/><text x="120" y="172" fill="#e8edf5" text-anchor="middle">Hyderabad</text>
+        <circle cx="240" cy="70" r="6" fill="#7ee0a3"/><text x="240" y="58" fill="#e8edf5" text-anchor="middle">Telangana</text>
+        <path d="M128 143 L 232 78" stroke="#ffb454" stroke-width="2.5" stroke-dasharray="5,4"/>
+        <text x="150" y="104" fill="#ffb454" font-size="11">is the capital of →</text>
+        <g class="fragment">
+          <circle cx="400" cy="150" r="6" fill="#4da3ff"/><text x="400" y="172" fill="#e8edf5" text-anchor="middle">Bengaluru</text>
+          <circle cx="520" cy="70" r="6" fill="#7ee0a3"/><text x="520" y="58" fill="#e8edf5" text-anchor="middle">Karnataka</text>
+          <path d="M408 143 L 512 78" stroke="#ffb454" stroke-width="2.5" stroke-dasharray="5,4"/>
+          <text x="430" y="104" fill="#ffb454" font-size="11">is the capital of →</text>
+        </g>
+        <text class="fragment" x="320" y="200" fill="#9aa4b8" font-size="12" text-anchor="middle">
+          same direction · same length · same relationship</text>
+      </g>
+    </svg>
+    <p class="small fragment">Nobody programmed "capital of". It <strong>fell out</strong> of
+    predicting text — which means the model built a map of meaning on its own.</p>
+</section>
+</section>
+
+<section data-stage="vocabulary" data-phase="both">
+  <section>
+    <p class="chip">We will use this all session</p>
+    <h2>One sentence, for the rest of today 📝</h2>
+    <p class="small" style="font-size:.78em;color:#e8edf5">"The animal didn't cross the street
+    because <strong style="color:#ffb454">it</strong> was too tired."</p>
+    <p class="small">Pretend an embedding is just <strong>two</strong> numbers instead of 4,096 —
+    say <em>aliveness</em> and <em>place-ness</em>:</p>
+    <svg viewBox="0 0 620 150" width="620">
+      <g font-size="13.5" font-family="monospace">
+        <text x="150" y="20" fill="#7b8497" font-size="11.5" text-anchor="middle">alive</text>
+        <text x="235" y="20" fill="#7b8497" font-size="11.5" text-anchor="middle">place</text>
+        <text x="40" y="46" fill="#e8edf5">animal</text><text x="150" y="46" fill="#7ee0a3" text-anchor="middle">1</text><text x="235" y="46" fill="#7ee0a3" text-anchor="middle">0</text>
+        <text x="300" y="46" fill="#7b8497" font-size="11.5">a living thing, not a place</text>
+        <text x="40" y="72" fill="#e8edf5">street</text><text x="150" y="72" fill="#4da3ff" text-anchor="middle">0</text><text x="235" y="72" fill="#4da3ff" text-anchor="middle">1</text>
+        <text x="300" y="72" fill="#7b8497" font-size="11.5">a place, not alive</text>
+        <text x="40" y="98" fill="#e8edf5">cross</text><text x="150" y="98" fill="#9aa4b8" text-anchor="middle">0</text><text x="235" y="98" fill="#9aa4b8" text-anchor="middle">0</text>
+        <text x="300" y="98" fill="#7b8497" font-size="11.5">a verb — neither</text>
+        <g class="fragment">
+          <line x1="30" y1="112" x2="470" y2="112" stroke="#55607a"/>
+          <text x="40" y="136" fill="#ffb454">it</text><text x="150" y="136" fill="#ffb454" text-anchor="middle">1</text><text x="235" y="136" fill="#ffb454" text-anchor="middle">1</text>
+          <text x="300" y="136" fill="#ffb454" font-size="11.5">ambiguous — could be either!</text>
+        </g>
+      </g>
+    </svg>
+    <p class="small fragment">Hold on to these four rows. <strong>We come back to them later
+    and do the whole calculation.</strong></p>
+</section>
+
+  <section>
+    <p class="chip">Live demo 🔬</p>
+    <h2>Real embeddings, right now</h2>
+    <p class="small"><strong>projector.tensorflow.org</strong> — 10,000 real words, each one a
+    list of 200 numbers, squashed onto a 3-D map you can spin.</p>
+    <div class="zoom-do">
+      <p><span class="step">1.</span> Search a word — try <strong>river</strong>, then
+      <strong>engineer</strong>, then a name</p>
+      <p><span class="step">2.</span> Look at its nearest neighbours</p>
+      <p><span class="step">3.</span> Ask the class: <em>why are those the neighbours?</em></p>
+    </div>
+    <p class="small fragment">Nobody placed those words. They landed there from reading text.</p>
+</section>
+</section>
+
+<section data-stage="vocabulary">
+  <p class="chip">Checkpoint 2 of 5</p>
+  <h2>Stage 2 — click to reveal</h2>
+  <div class="checkpoint">
+    <ul>
+      <li>A token turned into a list of numbers is an… <span class="quiz-answer">embedding</span></li>
+      <li>Words with similar meanings end up… <span class="quiz-answer">close together on the map</span></li>
+      <li>"Hyderabad → Telangana" and "Bengaluru → Karnataka" share… <span class="quiz-answer">the same direction — the relationship itself</span></li>
+      <li>Who decided those numbers? <span class="quiz-answer">nobody — they were learned. That is the next act.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <p class="chip">The question that matters</p>
+  <h2>Who taught <em>you</em> grammar? 📐</h2>
+  <p class="small">Somebody did. A teacher, a textbook, a parent correcting you. Rules, written
+  down, handed over.</p>
+  <p class="small fragment"><strong>Nobody did that for the model.</strong> No one wrote "a
+  pronoun refers back to a noun" anywhere inside GPT.</p>
+  <div class="analogy fragment">
+    Week 1: people spent twenty years trying to hand-write the rules. Expert systems. It failed,
+    and the field froze twice.
+  </div>
+  <p class="small fragment">So before we can look at grammar, we have to answer a different
+  question: <strong>how does it learn anything at all?</strong></p>
+</section>
+
+<section data-stage="learning" data-phase="training">
+  <p class="act">Act 3 of 5 · ⚙️</p>
+  <h2>How does it learn <em>anything</em>?</h2>
+  <p class="small">Nobody wrote the rules. So where did they come from?</p>
+</section>
+
+<section data-stage="learning" data-phase="training">
+  <section>
+    <p class="chip">A story first</p>
+    <h2>Lost on a hillside, in thick fog 🌫️</h2>
+    <p class="small">You are somewhere on a hill at dusk. The fog is so thick you can see your
+    own boots and nothing else. You need to get down to the valley.</p>
+    <p class="small fragment">You cannot see the valley. You cannot see the path. You have no map.</p>
+    <p class="small fragment"><strong>But you can feel which way the ground tilts under your feet.</strong></p>
+</section>
+</section>
+<section data-stage="learning" data-phase="training">
+    <h2>You just invented the algorithm 🥾</h2>
+    <p class="small">Feel the slope. Step downhill. Feel again. Repeat until the ground is flat.</p>
+    <svg viewBox="0 0 640 185" width="640">
+      <path d="M20 30 C 130 40, 210 165, 330 160 C 450 155, 520 55, 620 35"
+            fill="none" stroke="#4da3ff" stroke-width="3"/>
+      <text x="70" y="20" fill="#9aa4b8" font-size="11">high error 😖</text>
+      <text x="330" y="182" fill="#7ee0a3" font-size="11" text-anchor="middle">lowest error — best weights 🎯</text>
+      <g class="fragment">
+        <circle cx="105" cy="58" r="9" fill="#ffb454"/>
+        <text x="105" y="42" fill="#ffb454" font-size="11" text-anchor="middle">you are here</text>
+        <path d="M112 72 l 22 26" stroke="#ffb454" stroke-width="3" marker-end=""/>
+        <text x="175" y="95" fill="#ffb454" font-size="11">feel the slope with your foot →</text>
+        <text x="185" y="112" fill="#ffb454" font-size="11">step downhill</text>
+      </g>
+      <g class="fragment">
+        <circle cx="175" cy="105" r="6" fill="#7ee0a3" opacity="0.8"/>
+        <circle cx="235" cy="140" r="6" fill="#7ee0a3" opacity="0.8"/>
+        <circle cx="290" cy="156" r="6" fill="#7ee0a3" opacity="0.9"/>
+        <circle cx="330" cy="160" r="8" fill="#7ee0a3"/>
+        <text x="430" y="130" fill="#7ee0a3" font-size="12">repeat… and you arrive.</text>
+      </g>
+    </svg>
+    <p class="small fragment">That is <strong>gradient descent</strong> — and it is how every model in this course
+    learns its weights.</p>
+</section>
+<section data-stage="learning" data-phase="training">
+  <section>
+    <h2>You have seen this hill before 🌾</h2>
+    <p class="small">Last week we drew the farmer's loss for different weights. Turn it on its
+    side and it is the same picture:</p>
+    <svg viewBox="0 0 620 235" width="620">
+      <line x1="80" y1="200" x2="580" y2="200" stroke="#55607a" stroke-width="2"/>
+      <line x1="80" y1="200" x2="80" y2="25" stroke="#55607a" stroke-width="2"/>
+      <text x="330" y="224" fill="#9aa4b8" font-size="12" text-anchor="middle">weight w →</text>
+      <text x="28" y="112" fill="#ff7a7a" font-size="12" text-anchor="middle" transform="rotate(-90 28 112)">loss →</text>
+      <path d="M128 41 Q 176 120 224 159 Q 272 192 320 198 Q 368 192 416 160 Q 464 120 512 45"
+            fill="none" stroke="#4da3ff" stroke-width="3"/>
+      <g class="fragment">
+        <circle cx="150" cy="63" r="8" fill="#ffb454"/>
+        <text x="150" y="48" fill="#ffb454" font-size="12" text-anchor="middle">w = 0.55</text>
+        <path d="M160 78 l 20 24" stroke="#ffb454" stroke-width="3"/>
+        <text x="205" y="112" fill="#ffb454" font-size="12">slope says: go right</text>
+      </g>
+      <g class="fragment">
+        <circle cx="200" cy="140" r="6" fill="#7ee0a3" opacity=".7"/>
+        <circle cx="252" cy="178" r="6" fill="#7ee0a3" opacity=".8"/>
+        <circle cx="290" cy="193" r="6" fill="#7ee0a3" opacity=".9"/>
+        <circle cx="320" cy="198" r="9" fill="#7ee0a3"/>
+        <text x="400" y="188" fill="#7ee0a3" font-size="12">w = 0.9 · loss 18 🎯</text>
+      </g>
+    </svg>
+    <p class="small fragment">Same valley. The farmer's hill just happens to have only
+    <strong>one</strong> direction to walk in.</p>
+</section>
+</section>
+<section data-stage="learning" data-phase="training">
+  <section>
+    <h2>Too small, too big, just right 👣</h2>
+    <svg viewBox="0 0 640 210" width="640">
+      <g>
+        <path d="M20 150 Q 95 40 170 150" fill="none" stroke="#55607a" stroke-width="2"/>
+        <circle cx="42" cy="118" r="5" fill="#ff7a7a"/><circle cx="52" cy="131" r="5" fill="#ff7a7a"/>
+        <circle cx="61" cy="139" r="5" fill="#ff7a7a"/>
+        <text x="95" y="178" fill="#ff7a7a" font-size="12" text-anchor="middle">too small</text>
+        <text x="95" y="196" fill="#7b8497" font-size="10.5" text-anchor="middle">correct — but takes for ever</text>
+      </g>
+      <g class="fragment">
+        <path d="M240 150 Q 315 40 390 150" fill="none" stroke="#55607a" stroke-width="2"/>
+        <path d="M262 122 L 368 122" stroke="#ff7a7a" stroke-width="2" stroke-dasharray="4,3"/>
+        <circle cx="262" cy="122" r="6" fill="#ff7a7a"/><circle cx="368" cy="122" r="6" fill="#ff7a7a"/>
+        <path d="M368 122 L 258 104" stroke="#ff7a7a" stroke-width="2" stroke-dasharray="4,3"/>
+        <circle cx="258" cy="104" r="6" fill="#ff7a7a"/>
+        <text x="315" y="178" fill="#ff7a7a" font-size="12" text-anchor="middle">too big</text>
+        <text x="315" y="196" fill="#7b8497" font-size="10.5" text-anchor="middle">leaps the valley, climbs the far side</text>
+      </g>
+      <g class="fragment">
+        <path d="M460 150 Q 535 40 610 150" fill="none" stroke="#55607a" stroke-width="2"/>
+        <circle cx="482" cy="112" r="6" fill="#7ee0a3"/><circle cx="505" cy="134" r="5" fill="#7ee0a3"/>
+        <circle cx="522" cy="145" r="4" fill="#7ee0a3"/><circle cx="533" cy="149" r="3.5" fill="#7ee0a3"/>
+        <text x="535" y="178" fill="#7ee0a3" font-size="12" text-anchor="middle">big, then smaller 🎯</text>
+        <text x="535" y="196" fill="#7b8497" font-size="10.5" text-anchor="middle">fast at first, careful at the end</text>
+      </g>
+    </svg>
+    <p class="small fragment">That step size has a name: the <strong style="color:#ffb454">learning rate</strong>.
+    It is the single most important dial in training a model.</p>
+    <p class="tiny-hint">🥚 how fast do you learn?</p>
+</section>
+
+  <section>
+    <h2>The dip that is not the valley 🕳️</h2>
+    <svg viewBox="0 0 640 195" width="640">
+      <path d="M20 60 C 90 150, 130 150, 170 120 C 210 90, 240 95, 280 140 C 340 200, 420 195, 470 150 C 520 105, 570 80, 620 45"
+            fill="none" stroke="#4da3ff" stroke-width="3"/>
+      <g class="fragment">
+        <circle cx="150" cy="139" r="8" fill="#ffb454"/>
+        <text x="150" y="124" fill="#ffb454" font-size="11.5" text-anchor="middle">stuck here</text>
+        <text x="150" y="170" fill="#7b8497" font-size="10.5" text-anchor="middle">flat underfoot —</text>
+        <text x="150" y="184" fill="#7b8497" font-size="10.5" text-anchor="middle">so it stops</text>
+      </g>
+      <g class="fragment">
+        <circle cx="400" cy="190" r="8" fill="#7ee0a3"/>
+        <text x="400" y="176" fill="#7ee0a3" font-size="11.5" text-anchor="middle">the real valley</text>
+      </g>
+    </svg>
+    <p class="small fragment">A <strong>local minimum</strong>: everywhere around you is uphill,
+    so you stop — but you are not at the bottom. In the fog, you cannot tell the difference.</p>
+</section>
+</section>
+<section data-stage="learning" data-phase="training">
+  <p class="chip">You already do this</p>
+  <h2>The bakery, and the price of a sandwich 🥪</h2>
+  <p class="small">6 rupees each, 330 sold a day. Drop the price by 25 paise and 15 more people buy.
+  <strong>How far do you go?</strong></p>
+  <svg viewBox="0 0 640 190" width="640">
+    <line x1="70" y1="150" x2="600" y2="150" stroke="#55607a" stroke-width="2"/>
+    <line x1="70" y1="150" x2="70" y2="20" stroke="#55607a" stroke-width="2"/>
+    <text x="335" y="176" fill="#9aa4b8" font-size="11.5" text-anchor="middle">price cuts of 25 paise →</text>
+    <text x="30" y="90" fill="#9aa4b8" font-size="11.5" text-anchor="middle" transform="rotate(-90 30 90)">revenue →</text>
+    <g font-size="11" text-anchor="middle">
+      <circle cx="130" cy="72" r="6" fill="#ffb454"/><text x="130" y="60" fill="#ffb454">₹1980</text>
+      <text x="130" y="166" fill="#7b8497">₹6.00</text>
+      <g class="fragment">
+        <circle cx="235" cy="62" r="7" fill="#7ee0a3"/><text x="235" y="50" fill="#7ee0a3">₹1983.75 🎯</text>
+        <text x="235" y="166" fill="#7b8497">₹5.75</text>
+      </g>
+      <g class="fragment">
+        <circle cx="340" cy="72" r="6" fill="#ff7a7a"/><text x="340" y="60" fill="#ff7a7a">₹1980</text>
+        <text x="340" y="166" fill="#7b8497">₹5.50</text>
+        <circle cx="445" cy="102" r="6" fill="#ff7a7a"/><text x="445" y="90" fill="#ff7a7a">₹1968</text>
+        <text x="445" y="166" fill="#7b8497">₹5.25</text>
+        <circle cx="550" cy="136" r="6" fill="#ff7a7a"/><text x="550" y="124" fill="#ff7a7a">₹1950</text>
+        <text x="550" y="166" fill="#7b8497">₹5.00</text>
+      </g>
+    </g>
+    <path class="fragment" d="M110 78 Q 235 48 560 140" fill="none" stroke="#4da3ff" stroke-width="2.5" opacity=".8"/>
+  </svg>
+  <p class="small fragment">One cut: better. Two cuts: back where you started — <strong>you have
+  gone past the top.</strong> Same walk, same overshoot, no equation anywhere.</p>
+</section>
+<section data-stage="learning" data-phase="training">
+  <section>
+    <p class="chip">A story first</p>
+    <h2>The coach who only sees the final score ⚽</h2>
+    <p class="small">A goal is missed. Eleven players touched the ball. <strong>Whose fault was it?</strong></p>
+    <p class="small fragment">Nobody told the coach. He only knows one thing: it did not go in.</p>
+    <div class="analogy fragment">
+      So he works <strong>backwards</strong>. The striker shot wide — but the pass came late.
+      The pass was late because the midfielder was out of position. He was out of position
+      because the defender cleared it slowly.
+    </div>
+    <p class="small fragment">Every player gets a share of the blame — <em>and the share is not equal.</em></p>
+</section>
+
+  <section>
+    <h2>Backwards through the team 🔁</h2>
+    <svg viewBox="0 0 640 175" width="640">
+      <g text-anchor="middle" font-size="11.5">
+        <circle cx="80" cy="60" r="26" fill="#1a2233" stroke="#55607a"/><text x="80" y="64" fill="#e8edf5">defender</text>
+        <circle cx="240" cy="60" r="26" fill="#1a2233" stroke="#55607a"/><text x="240" y="64" fill="#e8edf5">midfield</text>
+        <circle cx="400" cy="60" r="26" fill="#1a2233" stroke="#55607a"/><text x="400" y="64" fill="#e8edf5">striker</text>
+        <path d="M108 60 h104" stroke="#9aa4b8" stroke-width="2"/><path d="M268 60 h104" stroke="#9aa4b8" stroke-width="2"/>
+        <path d="M428 60 h80" stroke="#9aa4b8" stroke-width="2"/>
+        <rect x="512" y="38" width="112" height="44" rx="8" fill="rgba(255,122,122,.12)" stroke="#ff7a7a"/>
+        <text x="568" y="56" fill="#ff7a7a">missed 😖</text><text x="568" y="72" fill="#9aa4b8">the loss</text>
+        <g class="fragment">
+          <path d="M508 100 H 80" stroke="#ffb454" stroke-width="3" stroke-dasharray="6,4"/>
+          <path d="M86 100 l 14 -7 M86 100 l 14 7" stroke="#ffb454" stroke-width="3" fill="none"/>
+          <text x="300" y="122" fill="#ffb454" font-size="12">blame flows backwards, share by share</text>
+          <text x="80" y="146" fill="#ffb454" font-size="11">nudge 0.01</text>
+          <text x="240" y="146" fill="#ffb454" font-size="11">nudge 0.08</text>
+          <text x="400" y="146" fill="#ffb454" font-size="11">nudge 0.30</text>
+        </g>
+      </g>
+    </svg>
+    <p class="small fragment">That is <strong>backpropagation</strong>: one number at the end,
+    turned into a personal correction for every weight in the network.</p>
+</section>
+</section>
+<section data-stage="learning" data-phase="training">
+  <section>
+    <p class="chip">The people</p>
+    <h2>The man who built it in 1958 🧠</h2>
+    <p class="small"><strong>Frank Rosenblatt</strong> builds the <strong>Perceptron</strong> — a machine
+    that learns from examples by nudging weights. Exactly what we just described.</p>
+    <p class="small fragment">The New York Times reports it will soon walk, talk, see, write,
+    reproduce itself and be conscious of its existence.</p>
+    <p class="small fragment">In 1969 a book proves what a single perceptron <em>cannot</em> do.
+    Funding stops. The field freezes. Rosenblatt dies in 1971, aged 43.</p>
+    <p class="small fragment">He was not wrong. He was <strong>fifty years early</strong> —
+    the idea needed data and computers that would not exist until 2012.</p>
+</section>
+
+  <section>
+    <h2>From one weight to a trillion 📈</h2>
+    <p class="small">The fog walk does not care how many weights there are. One step adjusts
+    <em>all</em> of them at once.</p>
+    <svg viewBox="0 0 640 130" width="640">
+      <g text-anchor="middle" font-size="12">
+        <rect x="20" y="30" width="140" height="66" rx="10" fill="#1a2233" stroke="#55607a"/>
+        <text x="90" y="56" fill="#e8edf5">the farmer</text>
+        <text x="90" y="80" fill="#ffb454" font-size="15" font-weight="bold">1 weight</text>
+        <g class="fragment">
+          <rect x="185" y="30" width="140" height="66" rx="10" fill="#1a2233" stroke="#55607a"/>
+          <text x="255" y="56" fill="#e8edf5">AlexNet, 2012</text>
+          <text x="255" y="80" fill="#ffb454" font-size="15" font-weight="bold">60 million</text>
+        </g>
+        <g class="fragment">
+          <rect x="350" y="30" width="140" height="66" rx="10" fill="#1a2233" stroke="#55607a"/>
+          <text x="420" y="56" fill="#e8edf5">GPT-3, 2020</text>
+          <text x="420" y="80" fill="#ffb454" font-size="15" font-weight="bold">175 billion</text>
+        </g>
+        <g class="fragment">
+          <rect x="515" y="30" width="110" height="66" rx="10" fill="rgba(126,224,163,.1)" stroke="#7ee0a3"/>
+          <text x="570" y="56" fill="#7ee0a3">today</text>
+          <text x="570" y="80" fill="#7ee0a3" font-size="15" font-weight="bold">~1 trillion</text>
+        </g>
+      </g>
+    </svg>
+    <p class="small fragment">Same walk. Same slope. Just a hill with a trillion directions.</p>
+</section>
+</section>
+<section data-stage="learning" data-phase="both">
+<section>
+    <h2>The farmer, one thousand times wider 🌾</h2>
+    <p class="small">Week 1: two inputs, two weights, one multiply-and-add.</p>
+    <svg viewBox="0 0 620 180" width="620">
+      <g font-family="monospace" font-size="14">
+        <text x="40" y="40" fill="#9aa4b8" font-size="12">the farmer</text>
+        <text x="40" y="66" fill="#ffb454">[40  12]</text>
+        <text x="145" y="66" fill="#9aa4b8">×</text>
+        <text x="175" y="58" fill="#7ee0a3">[0.6]</text>
+        <text x="175" y="76" fill="#7ee0a3">[1.2]</text>
+        <text x="245" y="66" fill="#9aa4b8">=</text>
+        <text x="275" y="66" fill="#4da3ff">38.4</text>
+      </g>
+      <g class="fragment" font-family="monospace" font-size="14">
+        <text x="40" y="118" fill="#9aa4b8" font-size="12">one word inside GPT</text>
+        <text x="40" y="146" fill="#ffb454">[0.21 −0.88 … 4,096 numbers]</text>
+        <text x="392" y="146" fill="#9aa4b8">×</text>
+        <text x="420" y="146" fill="#7ee0a3">[ 4,096 × 4,096 weights ]</text>
+      </g>
+      <text class="fragment" x="310" y="174" fill="#7ee0a3" font-size="12.5" text-anchor="middle">
+        identical arithmetic — multiply, add, repeat</text>
+    </svg>
+    <p class="small fragment">There is no new maths in here. There is just <em>an enormous amount
+    of the same maths</em>.</p>
+</section>
+</section>
+
+<section data-stage="learning" data-phase="training">
+<section>
+    <h2>Why it needs a GPU 🎮</h2>
+    <div class="analogy">
+      One brilliant professor doing seventeen million sums, one after another — versus a
+      thousand ordinary students doing seventeen thousand each, all at the same time.
+      <strong>The students finish first.</strong> Every time.
+    </div>
+    <p class="small fragment">A CPU is the professor: a few very clever cores. A GPU is the
+    classroom: thousands of simple cores doing identical arithmetic in parallel.</p>
+    <p class="small fragment">Built for video-game graphics. It turned out that shading a
+    million pixels and running a neural network are <em>the same shape of problem</em>.</p>
+</section>
+</section>
+
+<section data-stage="learning" data-phase="training">
+  <p class="chip">Checkpoint 3 of 5</p>
+  <h2>How it learns — click to reveal</h2>
+  <div class="checkpoint">
+    <ul>
+      <li>Walking downhill in the fog is called… <span class="quiz-answer">gradient descent</span></li>
+      <li>The slope under your foot tells you… <span class="quiz-answer">which way reduces the loss</span></li>
+      <li>The size of each step is called the… <span class="quiz-answer">learning rate</span></li>
+      <li>Too big a step means… <span class="quiz-answer">you overshoot the valley and training blows up</span></li>
+      <li>A dip that is not the real bottom is a… <span class="quiz-answer">local minimum</span></li>
+      <li>Working backwards from one mistake to every weight's share of the blame is… <span class="quiz-answer">backpropagation</span></li>
+      <li>Backpropagation happens… <span class="quiz-answer">only during training — never while it is answering you</span></li>
+      <li>GPUs beat CPUs here because… <span class="quiz-answer">thousands of identical sums run in parallel</span></li>
+    </ul>
+  </div>
+</section>
+<section data-stage="grammar" data-phase="inference">
+  <p class="act">Act 4 of 5 · 📐</p>
+  <h2>Stage 3 — grammar</h2>
+  <p class="small">The rules it was never given. This is attention.</p>
+</section>
+
+<section data-stage="grammar" data-phase="inference">
+  <section>
+    <p class="chip">A story first</p>
+    <h2>Five hundred people, and you hear your name 🎉</h2>
+    <p class="small">A wedding hall. Deafening. Music, a hundred conversations, children running.
+    You have stopped even trying to listen.</p>
+    <p class="small fragment">Then someone across the room says <strong>your name</strong>.</p>
+    <p class="small fragment">You hear it instantly — and you have no idea what anyone else said.</p>
+    <div class="analogy fragment">
+      Your brain scored <em>every</em> sound in that hall for relevance to you, and spent almost
+      all of its attention on one. That is the entire idea, and it has a name.
+    </div>
+</section>
+
+  <section>
+    <h2>Remember this sentence? 🐘</h2>
+    <p class="small">"The animal didn't cross the street because <strong>it</strong> was too tired."</p>
+    <svg viewBox="0 0 640 150" width="640">
+      <g font-size="14" fill="#e8edf5" text-anchor="middle">
+        <text x="42" y="110">The</text><text x="110" y="110">animal</text><text x="185" y="110">didn't</text>
+        <text x="250" y="110">cross</text><text x="315" y="110">the</text><text x="380" y="110">street</text>
+        <text x="455" y="110">because</text><text x="530" y="110" fill="#ffb454" font-weight="bold">it</text>
+        <text x="590" y="110">was…</text>
+      </g>
+      <path class="fragment" d="M530 92 C 400 22, 240 22, 110 92" fill="none" stroke="#7ee0a3" stroke-width="6" opacity="0.9"/>
+      <text class="fragment" x="318" y="22" fill="#7ee0a3" font-size="12" text-anchor="middle">"it" pays attention to "animal"</text>
+    </svg>
+    <p class="small fragment">Last week I showed you this line and said "the model knows".
+    <strong>Today: how.</strong></p>
+</section>
+</section>
+<section data-stage="grammar" data-phase="inference">
+  <section>
+    <h2>Step 1: every word asks, and advertises 🙋</h2>
+    <svg viewBox="0 0 640 155" width="640">
+      <g text-anchor="middle">
+        <rect x="20" y="25" width="185" height="105" rx="10" fill="#1a2233" stroke="#ffb454"/>
+        <text x="112" y="50" fill="#ffb454" font-size="14" font-weight="bold">Query (Q)</text>
+        <text x="112" y="76" fill="#e8edf5" font-size="12">"what am I looking for?"</text>
+        <text x="112" y="104" fill="#9aa4b8" font-size="11">"it" asks: which noun</text>
+        <text x="112" y="120" fill="#9aa4b8" font-size="11">could I be referring to?</text>
+        <g class="fragment">
+          <rect x="222" y="25" width="185" height="105" rx="10" fill="#1a2233" stroke="#4da3ff"/>
+          <text x="314" y="50" fill="#4da3ff" font-size="14" font-weight="bold">Key (K)</text>
+          <text x="314" y="76" fill="#e8edf5" font-size="12">"what do I offer?"</text>
+          <text x="314" y="104" fill="#9aa4b8" font-size="11">"animal" advertises:</text>
+          <text x="314" y="120" fill="#9aa4b8" font-size="11">I am a living noun</text>
+        </g>
+        <g class="fragment">
+          <rect x="424" y="25" width="195" height="105" rx="10" fill="#1a2233" stroke="#7ee0a3"/>
+          <text x="521" y="50" fill="#7ee0a3" font-size="14" font-weight="bold">Value (V)</text>
+          <text x="521" y="76" fill="#e8edf5" font-size="12">"what do I contribute?"</text>
+          <text x="521" y="104" fill="#9aa4b8" font-size="11">the actual meaning</text>
+          <text x="521" y="120" fill="#9aa4b8" font-size="11">passed along if chosen</text>
+        </g>
+      </g>
+    </svg>
+    <div class="analogy fragment">
+      A marriage bureau. The <strong>Query</strong> is what a family is looking for. The <strong>Key</strong> is the
+      one-line summary on each profile. The <strong>Value</strong> is the actual person behind the profile.
+      Match queries against keys — then you get the values.
+    </div>
+</section>
+  <section>
+    <h2>Step 2: remember our sentence? 🔢</h2>
+    <p class="small" style="font-size:.74em">"The animal didn't cross the street because
+    <strong style="color:#ffb454">it</strong> was too tired."</p>
+    <svg viewBox="0 0 620 120" width="620">
+      <g font-size="13.5" font-family="monospace">
+        <text x="150" y="18" fill="#7b8497" font-size="11.5" text-anchor="middle">alive</text>
+        <text x="235" y="18" fill="#7b8497" font-size="11.5" text-anchor="middle">place</text>
+        <text x="40" y="44" fill="#e8edf5">animal</text><text x="150" y="44" fill="#7ee0a3" text-anchor="middle">1</text><text x="235" y="44" fill="#7ee0a3" text-anchor="middle">0</text>
+        <text x="40" y="68" fill="#e8edf5">street</text><text x="150" y="68" fill="#4da3ff" text-anchor="middle">0</text><text x="235" y="68" fill="#4da3ff" text-anchor="middle">1</text>
+        <text x="40" y="92" fill="#e8edf5">cross</text><text x="150" y="92" fill="#9aa4b8" text-anchor="middle">0</text><text x="235" y="92" fill="#9aa4b8" text-anchor="middle">0</text>
+        <text x="330" y="68" fill="#ffb454">it  [ 1   1 ]</text>
+        <text x="330" y="92" fill="#ffb454" font-size="11.5">still ambiguous</text>
+      </g>
+    </svg>
+    <p class="small fragment">We are about to fix that <strong>1 1</strong> — by hand, with
+    three multiplications.</p>
+</section>
+
+  <section>
+    <h2>Step 3: build the Query for "it" ✖️</h2>
+    <p class="small">Multiply "it"'s embedding by <strong>W<sub>Q</sub></strong> — a learned
+    weight matrix, found by the fog walk in the last act:</p>
+    <svg viewBox="0 0 620 175" width="620">
+      <g font-family="monospace" font-size="14">
+        <text x="30" y="60" fill="#9aa4b8" font-size="11.5">"it"</text>
+        <text x="28" y="86" fill="#ffb454">[ 1  1 ]</text>
+        <text x="122" y="86" fill="#9aa4b8">×</text>
+        <text x="152" y="60" fill="#9aa4b8" font-size="11.5">W_Q  (learned)</text>
+        <text x="155" y="80" fill="#7ee0a3">[ 2   0  ]</text>
+        <text x="155" y="102" fill="#7ee0a3">[ 0  0.5 ]</text>
+        <text x="270" y="86" fill="#9aa4b8">=</text>
+        <g class="fragment">
+          <text x="300" y="60" fill="#9aa4b8" font-size="11.5">the Query</text>
+          <text x="300" y="86" fill="#4da3ff" font-size="16">[ 2   0.5 ]</text>
+          <text x="300" y="112" fill="#7b8497" font-size="11">1×2 + 1×0 = 2    ·    1×0 + 1×0.5 = 0.5</text>
+        </g>
+      </g>
+      <text class="fragment" x="310" y="152" fill="#e8edf5" font-size="12.5" text-anchor="middle">
+        "I am mostly looking for something ALIVE, and a little for a PLACE."</text>
+    </svg>
+</section>
+
+<section>
+    <h2>But where did W<sub>Q</sub> come from? 🎲→🎯</h2>
+    <p class="small">It started as <strong>random numbers</strong>. Watch the same sentence with
+    an untrained W<sub>Q</sub>:</p>
+    <svg viewBox="0 0 620 185" width="620">
+      <g font-family="monospace" font-size="13">
+        <text x="20" y="22" fill="#ff7a7a" font-size="11.5">DAY ONE — W_Q is random</text>
+        <text x="20" y="48" fill="#7b8497">[ 1  1 ] ×</text>
+        <text x="130" y="42" fill="#ff7a7a">[ 0.3  0.9 ]</text>
+        <text x="130" y="58" fill="#ff7a7a">[ 0.7  0.2 ]</text>
+        <text x="250" y="48" fill="#9aa4b8">=</text>
+        <text x="278" y="48" fill="#ff7a7a">[ 1.0  1.1 ]</text>
+        <text x="400" y="42" fill="#9aa4b8" font-size="11.5">animal 40%</text>
+        <text x="400" y="58" fill="#ff7a7a" font-size="11.5">street 45% ← wrong!</text>
+      </g>
+      <g class="fragment" font-size="12">
+        <text x="20" y="88" fill="#ffb454">↓ the sentence said "tired". Streets do not get tired. LOSS is high.</text>
+        <text x="20" y="110" fill="#ffb454">↓ backpropagation: nudge all four numbers in W_Q a little</text>
+        <text x="20" y="132" fill="#ffb454">↓ repeat, over millions of sentences</text>
+      </g>
+      <g class="fragment" font-family="monospace" font-size="13">
+        <text x="20" y="160" fill="#7ee0a3" font-size="11.5">MONTHS LATER</text>
+        <text x="140" y="154" fill="#7ee0a3">[ 2   0  ]</text>
+        <text x="140" y="172" fill="#7ee0a3">[ 0  0.5 ]</text>
+        <text x="270" y="164" fill="#7ee0a3" font-size="11.5">animal 74% ✓</text>
+      </g>
+    </svg>
+</section>
+
+  <section>
+    <h2>Step 4: score the Query against every Key 🎯</h2>
+    <p class="small">Multiply matching positions, add them up. That is all a "score" is:</p>
+    <svg viewBox="0 0 620 175" width="620">
+      <g font-family="monospace" font-size="13.5">
+        <text x="20" y="28" fill="#9aa4b8" font-size="11.5">Query [ 2  0.5 ]  ·  Key</text>
+        <text x="20" y="62" fill="#e8edf5">animal [ 1  0 ]</text>
+        <text x="215" y="62" fill="#7b8497">2×1 + 0.5×0</text>
+        <text x="360" y="62" fill="#9aa4b8">=</text>
+        <text x="395" y="62" fill="#7ee0a3" font-size="16">2.0</text>
+        <g class="fragment">
+          <text x="20" y="96" fill="#e8edf5">street [ 0  1 ]</text>
+          <text x="215" y="96" fill="#7b8497">2×0 + 0.5×1</text>
+          <text x="360" y="96" fill="#9aa4b8">=</text>
+          <text x="395" y="96" fill="#4da3ff" font-size="16">0.5</text>
+          <text x="20" y="130" fill="#e8edf5">cross  [ 0  0 ]</text>
+          <text x="215" y="130" fill="#7b8497">2×0 + 0.5×0</text>
+          <text x="360" y="130" fill="#9aa4b8">=</text>
+          <text x="395" y="130" fill="#9aa4b8" font-size="16">0.0</text>
+        </g>
+      </g>
+      <text class="fragment" x="310" y="164" fill="#ffb454" font-size="12.5" text-anchor="middle">
+        animal wins — because it is the only thing in the sentence that is alive</text>
+    </svg>
+</section>
+
+  <section>
+    <h2>Step 5: scores become percentages 📊</h2>
+    <p class="small">Raw scores are hard to compare. Turn them into shares that add to 100%:</p>
+    <svg viewBox="0 0 620 170" width="620">
+      <g font-size="13">
+        <text x="10" y="28" fill="#e8edf5">animal</text>
+        <text x="95" y="28" fill="#7b8497" font-family="monospace" font-size="11.5">2.0</text>
+        <rect x="150" y="16" width="240" height="16" rx="4" fill="#7ee0a3"/>
+        <text x="400" y="29" fill="#7ee0a3">74%</text>
+        <text x="10" y="58" fill="#e8edf5">street</text>
+        <text x="95" y="58" fill="#7b8497" font-family="monospace" font-size="11.5">0.5</text>
+        <rect x="150" y="46" width="53" height="16" rx="4" fill="#4da3ff"/>
+        <text x="400" y="59" fill="#4da3ff">16%</text>
+        <text x="10" y="88" fill="#e8edf5">cross</text>
+        <text x="95" y="88" fill="#7b8497" font-family="monospace" font-size="11.5">0.0</text>
+        <rect x="150" y="76" width="33" height="16" rx="4" fill="#55607a"/>
+        <text x="400" y="89" fill="#9aa4b8">10%</text>
+      </g>
+      <g class="fragment" font-family="monospace" font-size="11.5">
+        <line x1="10" y1="104" x2="480" y2="104" stroke="#55607a"/>
+        <text x="10" y="126" fill="#7b8497">grow each score:  e² = 7.39    e⁰·⁵ = 1.65    e⁰ = 1.00</text>
+        <text x="10" y="148" fill="#7b8497">share of the total (10.04):  7.39/10.04 = 74%</text>
+      </g>
+      <text class="fragment" x="540" y="140" fill="#9aa4b8" font-size="12" text-anchor="middle">adds up</text>
+      <text class="fragment" x="540" y="156" fill="#9aa4b8" font-size="12" text-anchor="middle">to 100%</text>
+    </svg>
+</section>
+
+  <section>
+    <h2>And now watch "it" move 🎬</h2>
+    <p class="small">Mix the <strong>Values</strong> in those proportions — 74% animal,
+    16% street, 10% cross:</p>
+    <svg viewBox="0 0 620 175" width="620">
+      <g font-family="monospace" font-size="13.5">
+        <text x="20" y="34" fill="#7b8497" font-size="11.5">0.74 × [1 0]  +  0.16 × [0 1]  +  0.10 × [0 0]</text>
+        <text x="20" y="72" fill="#9aa4b8" font-size="11.5">"it" before</text>
+        <text x="150" y="72" fill="#ffb454" font-size="16">[ 1.00   1.00 ]</text>
+        <text x="300" y="72" fill="#7b8497" font-size="11.5">alive? maybe. place? maybe.</text>
+        <g class="fragment">
+          <text x="20" y="112" fill="#9aa4b8" font-size="11.5">"it" after</text>
+          <text x="150" y="112" fill="#7ee0a3" font-size="16">[ 0.74   0.16 ]</text>
+          <text x="300" y="112" fill="#7ee0a3" font-size="11.5">alive. mostly, clearly, alive.</text>
+        </g>
+      </g>
+      <path class="fragment" d="M210 84 L 210 100" stroke="#7ee0a3" stroke-width="3"/>
+      <path class="fragment" d="M210 100 l -6 -8 M210 100 l 6 -8" stroke="#7ee0a3" stroke-width="3" fill="none"/>
+      <text class="fragment" x="310" y="158" fill="#e8edf5" font-size="12.5" text-anchor="middle">
+        The word "it" has literally been rewritten to mean the animal.</text>
+    </svg>
+</section>
+</section>
+<section data-stage="grammar" data-phase="inference">
+  <section>
+    <h2>Step 6: many heads, many layers 🧅</h2>
+    <p class="small">That whole process runs many times over, in parallel — each copy watching
+    for something different.</p>
+    <svg viewBox="0 0 640 175" width="640">
+      <g font-size="11.5" text-anchor="middle">
+        <rect x="20" y="24" width="140" height="44" rx="8" fill="#1a2233" stroke="#ffb454"/>
+        <text x="90" y="42" fill="#ffb454">head 1</text><text x="90" y="59" fill="#9aa4b8">who does "it" mean?</text>
+        <g class="fragment">
+          <rect x="175" y="24" width="140" height="44" rx="8" fill="#1a2233" stroke="#4da3ff"/>
+          <text x="245" y="42" fill="#4da3ff">head 2</text><text x="245" y="59" fill="#9aa4b8">grammar, verb tense</text>
+          <rect x="330" y="24" width="140" height="44" rx="8" fill="#1a2233" stroke="#7ee0a3"/>
+          <text x="400" y="42" fill="#7ee0a3">head 3</text><text x="400" y="59" fill="#9aa4b8">who did what to whom</text>
+          <rect x="485" y="24" width="135" height="44" rx="8" fill="#1a2233" stroke="#55607a"/>
+          <text x="552" y="42" fill="#9aa4b8">…and more</text><text x="552" y="59" fill="#7b8497">96 of them</text>
+        </g>
+      </g>
+      <g class="fragment">
+        <path d="M320 78 v 18" stroke="#9aa4b8" stroke-width="2"/>
+        <rect x="150" y="100" width="340" height="26" rx="6" fill="rgba(77,163,255,.12)" stroke="#4da3ff"/>
+        <text x="320" y="118" fill="#4da3ff" font-size="12" text-anchor="middle">…then the whole thing repeats, layer after layer</text>
+        <text x="320" y="150" fill="#9aa4b8" font-size="11.5" text-anchor="middle">early layers: grammar · middle: meaning · late: what comes next</text>
+      </g>
+    </svg>
+    <p class="small fragment"><strong>That is a transformer.</strong> Everything else is
+    engineering detail.</p>
+</section>
+</section>
+<section data-stage="grammar" data-phase="inference">
+  <p class="chip">Checkpoint 4 of 5</p>
+  <h2>Stage 3 — click to reveal</h2>
+  <div class="checkpoint">
+    <ul>
+      <li>Hearing your name across a noisy hall is an everyday version of… <span class="quiz-answer">attention</span></li>
+      <li>Q, K and V stand for… <span class="quiz-answer">Query, Key, Value</span></li>
+      <li>The Query is… <span class="quiz-answer">what this word is looking for</span></li>
+      <li>Attention scores are turned into… <span class="quiz-answer">percentages that add up to 100%</span></li>
+      <li>Q, K and V are produced by… <span class="quiz-answer">three sets of weights, learned by walking downhill</span></li>
+    </ul>
+  </div>
+</section>
+<section data-stage="writing" data-phase="inference">
+  <p class="act">Act 5 of 5 · ✍️</p>
+  <h2>Stage 4 — writing a sentence</h2>
+  <p class="small">Four stages down. This is what it all builds to.</p>
+</section>
+
+<section data-stage="writing" data-phase="inference">
+<section>
+      <div class="predict">
+        <p>What is ChatGPT actually doing when it answers you?</p>
+        <p class="small">Guess before the next slide. Is it looking things up? Thinking? Something else?</p>
+      </div>
+</section>
+<section>
+      <h2>It is guessing the next word. That's it.</h2>
+      <p class="small">"Chennai is famous for its ___"</p>
+      <svg viewBox="0 0 620 145" width="620">
+        <g font-size="13">
+          <text x="10" y="26" fill="#e8edf5">beaches</text>
+          <rect x="140" y="14" width="200" height="16" rx="4" fill="#7ee0a3"/><text x="352" y="27" fill="#7ee0a3">31%</text>
+          <text x="10" y="56" fill="#e8edf5">filter coffee</text>
+          <rect x="140" y="44" width="155" height="16" rx="4" fill="#4da3ff"/><text x="352" y="57" fill="#4da3ff">24%</text>
+          <text x="10" y="86" fill="#e8edf5">Marina</text>
+          <rect x="140" y="74" width="116" height="16" rx="4" fill="#4da3ff"/><text x="352" y="87" fill="#4da3ff">18%</text>
+          <text x="10" y="116" fill="#e8edf5">heat</text>
+          <rect x="140" y="104" width="77" height="16" rx="4" fill="#55607a"/><text x="352" y="117" fill="#9aa4b8">12%</text>
+          <text x="10" y="140" fill="#9aa4b8">…thousands more</text>
+        </g>
+      </svg>
+      <p class="small fragment">Pick one → add it to the sentence → ask again. Loop. Every essay, poem and
+      program it writes comes out of this one loop.</p>
+</section>
+  <section data-phase="both">
+    <h2>Training and inference, at real scale ⚖️</h2>
+    <svg viewBox="0 0 640 155" width="640">
+      <g text-anchor="middle">
+        <rect x="20" y="24" width="280" height="105" rx="12" fill="rgba(255,180,84,.08)" stroke="#ffb454" stroke-width="2"/>
+        <text x="160" y="50" fill="#ffb454" font-size="14" font-weight="bold">TRAINING</text>
+        <text x="160" y="74" fill="#e8edf5" font-size="12">the fog walk, billions of steps</text>
+        <text x="160" y="95" fill="#e8edf5" font-size="12">months · tens of thousands of GPUs</text>
+        <text x="160" y="117" fill="#9aa4b8" font-size="11">happens ONCE · costs millions</text>
+        <g class="fragment">
+          <rect x="340" y="24" width="280" height="105" rx="12" fill="rgba(77,163,255,.08)" stroke="#4da3ff" stroke-width="2"/>
+          <text x="480" y="50" fill="#4da3ff" font-size="14" font-weight="bold">INFERENCE</text>
+          <text x="480" y="74" fill="#e8edf5" font-size="12">one pass through the weights</text>
+          <text x="480" y="95" fill="#e8edf5" font-size="12">under a second</text>
+          <text x="480" y="117" fill="#9aa4b8" font-size="11">happens EVERY time you type · costs cents</text>
+        </g>
+      </g>
+    </svg>
+    <p class="small fragment">This is why a model has a <strong>knowledge cut-off</strong> — and why
+    correcting ChatGPT never teaches it anything.</p>
+</section>
+
+  <section data-phase="training">
+    <h2>From "next word" to something helpful 🎓</h2>
+    <svg viewBox="0 0 640 150" width="640">
+      <g text-anchor="middle" font-size="12">
+        <rect x="15" y="30" width="185" height="72" rx="10" fill="#1a2233" stroke="#55607a"/>
+        <text x="107" y="54" fill="#e8edf5" font-size="13" font-weight="bold">PRETRAINING</text>
+        <text x="107" y="76" fill="#9aa4b8">read the internet,</text><text x="107" y="92" fill="#9aa4b8">guess the next word</text>
+        <path d="M206 66 h28" stroke="#9aa4b8" stroke-width="2"/>
+        <g class="fragment">
+          <rect x="240" y="30" width="170" height="72" rx="10" fill="#1a2233" stroke="#4da3ff"/>
+          <text x="325" y="54" fill="#4da3ff" font-size="13" font-weight="bold">FINE-TUNING</text>
+          <text x="325" y="76" fill="#9aa4b8">shown good examples</text><text x="325" y="92" fill="#9aa4b8">of helpful answers</text>
+          <path d="M416 66 h28" stroke="#9aa4b8" stroke-width="2"/>
+        </g>
+        <g class="fragment">
+          <rect x="450" y="30" width="175" height="72" rx="10" fill="rgba(126,224,163,.1)" stroke="#7ee0a3"/>
+          <text x="537" y="54" fill="#7ee0a3" font-size="13" font-weight="bold">RLHF</text>
+          <text x="537" y="76" fill="#9aa4b8">humans rank answers;</text><text x="537" y="92" fill="#9aa4b8">it learns what we prefer</text>
+        </g>
+      </g>
+      <text class="fragment" x="320" y="135" fill="#9aa4b8" font-size="12" text-anchor="middle">
+        raw next-word machine → the assistant you actually talk to</text>
+    </svg>
+    <p class="small fragment">A pretrained model is brilliant and unusable. The last two steps
+    are what make it <em>polite, helpful and safe enough to ship</em>.</p>
+</section>
+</section>
+<section data-stage="writing">
+  <p class="chip">Checkpoint 5 of 5</p>
+  <h2>Stage 4 — click to reveal</h2>
+  <div class="checkpoint">
+    <ul>
+      <li>An LLM generates text by… <span class="quiz-answer">predicting the next token, over and over</span></li>
+      <li>Training happens once; inference happens… <span class="quiz-answer">every single time you send a message</span></li>
+      <li>Correcting ChatGPT in a chat changes the weights… <span class="quiz-answer">never — it only lives in that conversation</span></li>
+      <li>Humans ranking answers to teach preferences is called… <span class="quiz-answer">RLHF</span></li>
+    </ul>
+  </div>
+</section>
+<section>
+  <p class="chip">The map, completed</p>
+  <h2>The same four stages 🗺️</h2>
+  <svg viewBox="0 0 640 225" width="640">
+    <g font-size="12.5">
+      <text x="150" y="16" fill="#7b8497" font-size="11" text-anchor="middle">how YOU learned</text>
+      <text x="470" y="16" fill="#7b8497" font-size="11" text-anchor="middle">how a MODEL learned</text>
+      <rect x="18" y="26" width="265" height="38" rx="8" fill="#1a2233" stroke="#ffb454"/>
+      <text x="34" y="50" fill="#ffb454">1. the alphabet</text>
+      <text x="296" y="50" fill="#55607a">→</text>
+      <rect x="320" y="26" width="300" height="38" rx="8" fill="rgba(255,180,84,.1)" stroke="#ffb454"/>
+      <text x="336" y="50" fill="#e8edf5">tokens — a fixed vocabulary of chunks</text>
+
+      <g class="fragment">
+        <rect x="18" y="74" width="265" height="38" rx="8" fill="#1a2233" stroke="#4da3ff"/>
+        <text x="34" y="98" fill="#4da3ff">2. vocabulary</text>
+        <text x="296" y="98" fill="#55607a">→</text>
+        <rect x="320" y="74" width="300" height="38" rx="8" fill="rgba(77,163,255,.1)" stroke="#4da3ff"/>
+        <text x="336" y="98" fill="#e8edf5">embeddings — meaning as coordinates</text>
+      </g>
+      <g class="fragment">
+        <rect x="18" y="122" width="265" height="38" rx="8" fill="#1a2233" stroke="#7ee0a3"/>
+        <text x="34" y="146" fill="#7ee0a3">3. grammar</text>
+        <text x="296" y="146" fill="#55607a">→</text>
+        <rect x="320" y="122" width="300" height="38" rx="8" fill="rgba(126,224,163,.1)" stroke="#7ee0a3"/>
+        <text x="336" y="146" fill="#e8edf5">attention — Q, K and V</text>
+      </g>
+      <g class="fragment">
+        <rect x="18" y="170" width="265" height="38" rx="8" fill="#1a2233" stroke="#ffb454"/>
+        <text x="34" y="194" fill="#ffb454">4. writing a sentence</text>
+        <text x="296" y="194" fill="#55607a">→</text>
+        <rect x="320" y="170" width="300" height="38" rx="8" fill="rgba(255,180,84,.1)" stroke="#ffb454"/>
+        <text x="336" y="194" fill="#e8edf5">predicting the next token, again and again</text>
+      </g>
+    </g>
+  </svg>
+  <p class="small fragment">One difference, and it is the whole course: <strong>you were taught.
+  It was not.</strong> It found all four by walking downhill.</p>
+</section>
+
+<section>
+  <p class="chip">Explore on your own</p>
+  <h2>Resources 📚</h2>
+  <ul class="res-list">
+    <li>⭐ <a href="https://www.youtube.com/watch?v=vkhPtpUiLd8" target="_blank">Self-Attention Explained: How Transformers Actually Work</a> — full visual breakdown. <strong>Watch this one first.</strong></li>
+    <li>📺 <a href="https://www.youtube.com/watch?v=eMlx5fFNoYc" target="_blank">3Blue1Brown — Attention in transformers</a> — today's grammar act, animated</li>
+    <li>📺 <a href="https://www.youtube.com/watch?v=IHZwWFHWa-w" target="_blank">3Blue1Brown — Gradient descent</a> — today's fog hill, animated</li>
+    <li>🧮 <a href="https://platform.openai.com/tokenizer" target="_blank">OpenAI tokenizer</a> — paste any sentence and watch it split. Try Telugu.</li>
+    <li>🎮 <a href="https://poloclub.github.io/transformer-explainer/" target="_blank">Transformer Explainer</a> — a live transformer you can click through, in your browser</li>
+    <li>🔬 <a href="https://projector.tensorflow.org/" target="_blank">TensorFlow Embedding Projector</a> — the live demo from class. Spin the map, search your own words.</li>
+    <li>🗺️ Ask a chatbot: <em>"Explain embeddings using Indian cities"</em> — then check it against today's map slide</li>
+  </ul>
+</section>
+<section>
+  <p class="chip">This week's exercise</p>
+  <h2>Due next week</h2>
+  <div class="tier core">
+    <span class="tier-label">Core — everyone</span>
+    <p>Explain <strong>gradient descent</strong> in writing to someone who has never coded —
+    a parent, a cousin, a friend from another course. Use <em>your own</em> analogy, not the fog
+    hill. Half a page.</p>
+  </div>
+  <div class="tier stretch">
+    <span class="tier-label">Stretch — optional</span>
+    <p>Open the tokenizer. Compare the same sentence in English and in your mother tongue.
+    How many tokens each? What does that difference mean for cost and fairness?</p>
+  </div>
+  <p class="small">🥚 And bring your easter egg answer. Submission link in the chat.</p>
+</section>
+<section>
+  <p class="closing-quote">
+    "The perceptron may eventually be able to learn, make decisions, and translate languages."
+    <span class="attribution">— The New York Times, 1958</span>
+  </p>
+  <p class="small fragment" style="margin-top:18px">They were right. They were just
+  <strong>fifty years early</strong>.</p>
+  <p class="small" style="margin-top:20px">Next week: <em>Prompting &amp; Everyday Use</em> —
+  making it actually work for you.</p>
+</section>
+</div>
+</div>
+
+<script src="../../assets/reveal/dist/reveal.js"></script>
+<script src="../../assets/wordcloud.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    width: 1200,
+    height: 760,
+    margin: 0.05,
+    minScale: 0.2,
+    maxScale: 1.6
+  });
+  document.addEventListener('click', e => {
+    if (e.target.classList.contains('quiz-answer')) e.target.classList.toggle('revealed');
+  });
+
+
+  /* ---- "you are here" strip -------------------------------------------
+     Driven by data-stage / data-phase on each <section>. One place to
+     change, instead of markup repeated on every slide.                  */
+  (function () {
+    const STAGES = [
+      ['alphabet',   '🔤 alphabet'],
+      ['vocabulary', '📖 vocabulary'],
+      ['learning',   '⚙️ how it learns'],
+      ['grammar',    '📐 grammar'],
+      ['writing',    '✍️ writing'],
+    ];
+    const PHASES = {
+      training:  'TRAINING',
+      inference: 'INFERENCE',
+      both:      'BOTH',
+    };
+    const bar = document.createElement('div');
+    bar.className = 'stagebar';
+    document.body.appendChild(bar);
+
+    function attr(el, name) {
+      while (el && el !== document) {
+        if (el.dataset && el.dataset[name]) return el.dataset[name];
+        el = el.parentElement;
+      }
+      return null;
+    }
+
+    function render(slide) {
+      const stage = attr(slide, 'stage');
+      const phase = attr(slide, 'phase');
+      if (!stage) { bar.className = 'stagebar'; bar.innerHTML = ''; return; }
+      const at = STAGES.findIndex(s => s[0] === stage);
+      bar.innerHTML =
+        STAGES.map(([key, label], i) => {
+          const cls = i === at ? 'pill lit' : (i < at ? 'pill done' : 'pill');
+          return '<span class="' + cls + '">' + label + '</span>';
+        }).join('') +
+        (phase ? '<span class="badge ' + phase + '">' + PHASES[phase] + '</span>' : '');
+      bar.className = 'stagebar on';
+    }
+
+    Reveal.on('ready',        e => render(e.currentSlide));
+    Reveal.on('slidechanged', e => render(e.currentSlide));
+  })();
+
+  /* ---- Overflow guard ---- */
+  (function () {
+    const LIMIT = () => Reveal.getConfig().height;
+    function fit(slide) {
+      if (!slide) return;
+      slide.style.fontSize = '';
+      const max = LIMIT();
+      let pct = 100;
+      while (slide.scrollHeight > max && pct > 45) {
+        pct -= 4;
+        slide.style.fontSize = pct + '%';
+      }
+      if (pct < 100) {
+        console.warn('[deck] slide shrunk to ' + pct + '% to fit:',
+          (slide.querySelector('h1,h2') || {}).textContent || slide);
+      }
+    }
+    const current = () => Reveal.getCurrentSlide();
+    Reveal.on('ready', () => fit(current()));
+    Reveal.on('slidechanged', e => fit(e.currentSlide));
+    Reveal.on('fragmentshown', () => fit(current()));
+    Reveal.on('resize', () => fit(current()));
+  })();
+</script>
+</body>
+</html>

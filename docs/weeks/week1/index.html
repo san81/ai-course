@@ -31,6 +31,21 @@
   .reveal .closing-quote { font-size: 1.05em; }
   .reveal svg { max-width: 100%; height: auto; }
   .reveal .caption { font-size: 0.58em; color: #9aa4b8; margin-top: 8px; }
+  /* ---- word cloud (instructor pastes the Zoom chat) ---- */
+  .reveal .wordcloud { margin-top: 6px; }
+  .reveal .wordcloud svg { width: 100%; height: auto; display: block; }
+  .reveal .wc-controls { display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 8px; }
+  .reveal .wordcloud textarea {
+    flex: 1; max-width: 520px; height: 38px; resize: vertical;
+    background: #141a26; color: #9aa4b8; border: 1px solid #2a3450; border-radius: 8px;
+    padding: 8px 10px; font-size: 13px; font-family: inherit;
+  }
+  .reveal .wordcloud button {
+    background: rgba(126,224,163,.12); color: #7ee0a3; border: 1px solid #7ee0a3;
+    border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer;
+  }
+  .reveal .wordcloud button:hover { background: rgba(126,224,163,.22); }
+  .reveal .wc-status { font-size: 12px; color: #55607a; min-width: 74px; }
   /* welcome slide: the "who is in this room" chips */
   .reveal .mix { display: flex; flex-wrap: wrap; gap: 9px; justify-content: center; margin: 16px 0 6px; }
   .reveal .mix span {
@@ -1530,6 +1545,7 @@
 </div>
 
 <script src="../../assets/reveal/dist/reveal.js"></script>
+<script src="../../assets/wordcloud.js"></script>
 <script>
   Reveal.initialize({
     hash: true,
