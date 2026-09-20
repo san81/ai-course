@@ -114,9 +114,19 @@
       el.textContent = item.word;
       svg.appendChild(el);
 
-      var bb;
-      try { bb = el.getBBox(); } catch (e) { bb = { width: item.word.length * size * 0.55, height: size }; }
-      var w = bb.width + 10, h = bb.height + 6;
+      // getBBox only reports real numbers for a RENDERED element. reveal.js keeps
+      // off-screen slides at display:none, where it returns zeros (or throws), so
+      // fall back to an estimate rather than piling every word on the centre point.
+      var bb = null;
+      try { bb = el.getBBox(); } catch (e) { bb = null; }
+      var w, h;
+      if (bb && bb.width > 0) {
+        w = bb.width + 10;
+        h = bb.height + 6;
+      } else {
+        w = item.word.length * size * 0.56 + 10;
+        h = size * 1.25 + 6;
+      }
 
       // spiral outwards until it fits
       var placedOk = false;
@@ -147,6 +157,22 @@
     return draw(svg, count(text, opts), opts);
   }
 
+  /**
+   * Render a tally you already have, instead of counting prose.
+   * Labels keep their spaces, so "Transformers 2017" stays one item.
+   * Format:  "Transformers 2017:3|AlexNet 2012:3|AlphaGo 2016:1"
+   */
+  function renderCounts(root, spec, opts) {
+    var svg = root.querySelector('svg');
+    if (!svg) return 0;
+    var items = spec.split('|').map(function (pair) {
+      var bits = pair.split(':');
+      return { word: bits[0].trim(), n: parseFloat(bits[1]) || 1 };
+    }).filter(function (i) { return i.word; })
+      .sort(function (a, b) { return b.n - a.n || a.word.localeCompare(b.word); });
+    return draw(svg, items, opts);
+  }
+
   function wire(root) {
     var ta = root.querySelector('textarea');
     var btn = root.querySelector('button');
@@ -162,12 +188,49 @@
       if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) build();
     });
 
+    // Static clouds (data-counts / data-seed) are drawn IMMEDIATELY, using estimated
+    // text widths. Do not gate this on visibility: inside reveal.js the slide is
+    // hidden at load, and waiting for it to appear means it may never be drawn at all.
+    // An estimated layout looks fine; a blank slide does not.
+    var counts = root.getAttribute('data-counts');
     var seed = root.getAttribute('data-seed');
-    if (seed) render(root, seed);
+    if (!counts && !seed) return;
+
+    function paint() {
+      if (counts) renderCounts(root, counts); else render(root, seed);
+    }
+    paint();
+
+    // Once the slide is genuinely on screen, redraw once so getBBox can measure the
+    // real text and tighten the spacing. Purely cosmetic — the first draw already works.
+    REFINE.push(function () {
+      if (root.dataset.wcRefined === '1') return true;
+      var r = root.getBoundingClientRect();
+      if (!(r.width > 0 && r.height > 0)) return false;
+      paint();
+      root.dataset.wcRefined = '1';
+      return true;
+    });
+  }
+
+  var REFINE = [];
+
+  function refineVisible() {
+    REFINE = REFINE.filter(function (fn) { return !fn(); });
   }
 
   function init() {
     Array.prototype.forEach.call(document.querySelectorAll('.wordcloud'), wire);
+
+    // reveal.js: redraw attempt every time a slide comes into view.
+    if (global.Reveal && typeof global.Reveal.on === 'function') {
+      global.Reveal.on('ready', refineVisible);
+      global.Reveal.on('slidechanged', refineVisible);
+      global.Reveal.on('fragmentshown', refineVisible);
+    }
+    // belt and braces for any other context
+    global.addEventListener('resize', refineVisible);
+    setTimeout(refineVisible, 80);
   }
 
   if (document.readyState === 'loading') {
@@ -176,5 +239,5 @@
     init();
   }
 
-  global.CourseWordCloud = { render: render, count: count };
+  global.CourseWordCloud = { render: render, renderCounts: renderCounts, count: count };
 })(window);

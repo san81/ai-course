@@ -14,6 +14,8 @@ nothing breaks if a file is missing — the deck works today without any of them
 | `alexnet-team.jpg` | "2012 — deep learning's big bang" | Hinton with Krizhevsky and Sutskever, or Hinton alone |
 | `hinton.jpg` | Prizes slide | Portrait of Geoffrey Hinton |
 | `turing.jpg` | The "1950" reveal **and** the closing quote | Portrait of Alan Turing |
+| `kalam.jpg` | Week 2 — the closing curiosity quote | Portrait of A. P. J. Abdul Kalam |
+| `fog-hill.jpg` | Week 2 — "Lost on a hillside, in thick fog" | A hillside swallowed by fog. Moody, low light, no visible horizon. The point is that you *cannot see where the bottom is*. |
 | `Santhosh.jpg` | `intro/` — the instructor introduction deck | Your own photo (note the capital S) |
 
 `feifei-li.jpg` and `turing.jpg` are each used twice — one file covers both slides.
@@ -28,8 +30,11 @@ right source. Search the name, open the image page, and check the licence box sa
 domain or CC BY / CC BY-SA. Both Li and Hinton have Commons photos from conference talks
 and award ceremonies.
 
-**Wildlife and objects** — [Unsplash](https://unsplash.com) or [Pexels](https://pexels.com).
-Free to use, no attribution required.
+**Wildlife, landscapes and objects** — [Unsplash](https://unsplash.com) or
+[Pexels](https://pexels.com). Free to use, no attribution required. For `fog-hill.jpg` search
+"foggy hill", "misty hillside" or "fog valley" — pick one where the fog genuinely hides the
+distance, not a pretty sunrise above a cloud layer. The whole idea is that the walker is blind
+beyond his own feet.
 
 ⚠️ **Do not pull images out of a Google Images search.** Most are copyrighted, and this repo
 is public. A CC BY image needs a credit line — add it to that slide's `<figcaption>`.
