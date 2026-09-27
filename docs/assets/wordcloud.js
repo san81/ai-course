@@ -188,6 +188,56 @@
       if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) build();
     });
 
+    /* ---- Paste safety net -------------------------------------------------
+       Cmd+V into the textarea failed live in Week 2. Root cause was reveal.js's
+       focusBodyOnPageVisibilityChange, now switched off in the decks — but this
+       runs mid-lecture with a room watching, so it gets a second route that does
+       not depend on focus being where you think it is.
+
+       PASTE button: reads the clipboard directly and fills the box, so one click
+       does what focus + Cmd+V was supposed to do. Needs a secure context
+       (https, or localhost) — on file:// it is unavailable, and we say so rather
+       than failing silently.
+
+       Also: a paste landing anywhere on this slide is treated as a paste into
+       the box, and building happens automatically. You should not have to aim. */
+    if (ta && btn && global.navigator && navigator.clipboard && navigator.clipboard.readText) {
+      var pasteBtn = document.createElement('button');
+      pasteBtn.type = 'button';
+      pasteBtn.className = btn.className;
+      pasteBtn.textContent = '📋 Paste + build';
+      pasteBtn.style.marginRight = '8px';
+      btn.parentNode.insertBefore(pasteBtn, btn);
+      pasteBtn.addEventListener('click', function () {
+        navigator.clipboard.readText().then(function (text) {
+          if (!text) {
+            if (status) status.textContent = 'Clipboard is empty — copy the Zoom chat first';
+            return;
+          }
+          ta.value = text;
+          build();
+        })['catch'](function () {
+          if (status) status.textContent = 'Clipboard blocked — click the box and press Cmd+V';
+          ta.focus();
+        });
+      });
+    }
+
+    // Catch a paste aimed anywhere on the slide, not just inside the box.
+    if (ta) {
+      var host = root.closest ? (root.closest('section') || root) : root;
+      host.addEventListener('paste', function (e) {
+        if (e.target === ta) { setTimeout(build, 0); return; }   // normal paste: just build
+        var text = (e.clipboardData || global.clipboardData);
+        if (!text) return;
+        text = text.getData('text');
+        if (!text) return;
+        e.preventDefault();
+        ta.value = text;
+        build();
+      });
+    }
+
     // Static clouds (data-counts / data-seed) are drawn IMMEDIATELY, using estimated
     // text widths. Do not gate this on visibility: inside reveal.js the slide is
     // hidden at load, and waiting for it to appear means it may never be drawn at all.

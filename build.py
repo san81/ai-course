@@ -47,7 +47,7 @@ COPY_FILES = ["index.html", ".nojekyll"]
 # Which weeks students may see. Bump this the day you teach the week.
 # A deck that exists in weeks/ but is not listed here stays unpublished, so
 # next week's draft can live in the repo without leaking early.
-RELEASED_WEEKS = {1, 2}
+RELEASED_WEEKS = {1, 2, 3}
 
 # Never publish these, whatever happens
 NEVER_PUBLISH = {"instructor", "exercises", ".git", "docs", "__pycache__"}

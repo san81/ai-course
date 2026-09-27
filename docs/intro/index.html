@@ -147,6 +147,12 @@
     margin: 0.05,
     minScale: 0.2,
     maxScale: 1.6,
+    // Reveal's default is TRUE, which blurs whatever is focused and focuses
+    // <body> every time the page becomes visible again. That silently breaks
+    // paste: focus the chat box, alt-tab to Zoom to copy, come back, Cmd+V —
+    // and the textarea is no longer focused, so the paste goes nowhere.
+    // Typing still works because you click first. Cost us a live session.
+    focusBodyOnPageVisibilityChange: false,
     plugins: [ RevealNotes ]
   });
 </script>

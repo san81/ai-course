@@ -59,6 +59,44 @@
 }
 .reveal .quiz-answer.revealed { filter: none; }
 
+/* ---- The 3-2-1 chat waterfall ----------------------------------------
+   Week 2 checkpoints got silence. The likely cause was not ignorance but
+   FIRST-MOVER RISK: answering out loud means being the one person who might
+   be wrong, in front of everyone. This class has always given more in chat
+   than on voice, so the checkpoints now borrow the waterfall mechanic that
+   already works: everyone types, nobody sends, then all answers land at once.
+   Nobody is first, so nobody is exposed — and a silent room becomes a
+   readable one. The questions themselves are unchanged. */
+.reveal .waterfall {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; flex-wrap: wrap;
+  border: 1px dashed #7ee0a3;
+  background: rgba(126, 224, 163, 0.06);
+  border-radius: 999px;
+  padding: 7px 18px;
+  margin: 10px auto 4px;
+  max-width: 900px;
+  font-size: 0.46em;
+  color: #cfe8d8;
+}
+.reveal .waterfall b { color: #7ee0a3; }
+.reveal .waterfall .wf-step {
+  display: inline-block;
+  background: #7ee0a3; color: #10151f;
+  font-weight: 700;
+  border-radius: 999px;
+  width: 1.5em; height: 1.5em; line-height: 1.5em;
+  text-align: center;
+  margin-right: 3px;
+}
+/* The one item per checkpoint that gets the waterfall treatment. The rest
+   stay brisk click-to-reveal, or the pace dies. */
+.reveal .checkpoint li.wf { border-left: 3px solid #7ee0a3; padding-left: 12px; }
+.reveal .checkpoint li.wf::after {
+  content: " 💬";
+  font-size: 0.9em;
+}
+
 /* Two-tier exercise blocks */
 .reveal .tier {
   border-radius: 12px;
