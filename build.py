@@ -47,7 +47,7 @@ COPY_FILES = ["index.html", ".nojekyll"]
 # Which weeks students may see. Bump this the day you teach the week.
 # A deck that exists in weeks/ but is not listed here stays unpublished, so
 # next week's draft can live in the repo without leaking early.
-RELEASED_WEEKS = {1, 2, 3}
+RELEASED_WEEKS = {1, 2, 3, 4}
 
 # Never publish these, whatever happens
 NEVER_PUBLISH = {"instructor", "exercises", ".git", "docs", "__pycache__"}
@@ -74,6 +74,14 @@ if _NAMES.exists():
         line.strip() for line in _NAMES.read_text(encoding="utf-8").splitlines()
         if line.strip() and not line.startswith("#")
     ]
+
+
+# Exact strings naming public historical figures, allowed even when a forbidden name is a
+# substring of them (e.g. Week 4's Srinivasa Ramanujan). Keep these as specific as possible.
+PUBLIC_FIGURE_STRINGS = [
+    "Srinivasa Ramanujan",
+    ">Srinivasa</text>",
+]
 
 
 def _drop_instructor_sections(html: str) -> str:
@@ -215,6 +223,11 @@ def check() -> bool:
         needles = FORBIDDEN
         if rel_parts and rel_parts[0] == "intro":
             needles = [n for n in FORBIDDEN if n != 'aside class="notes"']
+
+        # Historical figures whose names contain a forbidden substring. Only these exact
+        # strings are blanked before the check, so a real student name elsewhere still trips it.
+        for safe in PUBLIC_FIGURE_STRINGS:
+            text = text.replace(safe, "")
 
         for needle in needles:
             if needle in text:

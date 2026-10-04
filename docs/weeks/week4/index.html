@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 4 — AI for Research & Study</title>
+<link rel="stylesheet" href="../../assets/reveal/dist/reset.css">
+<link rel="stylesheet" href="../../assets/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../../assets/reveal/dist/theme/black.css">
+<link rel="stylesheet" href="../../assets/course.css">
+<style>
+  .reveal h1 { font-size: 2.0em; text-transform: none; }
+  .reveal h2 { font-size: 1.35em; text-transform: none; margin-bottom: 14px; }
+  .reveal p, .reveal li { font-size: 0.84em; line-height: 1.42; }
+  .reveal .small, .reveal .small li { font-size: 0.66em; color: #a7b0c2; line-height: 1.45; }
+  .reveal ul { margin-left: 0.6em; }
+  .reveal li { margin-bottom: 11px; }
+  .reveal .analogy { font-size: 0.72em; padding: 13px 22px; margin-top: 14px; }
+  .reveal .analogy::before { font-size: 0.85em; }
+  .reveal .predict { font-size: 0.85em; }
+  .reveal .easter-egg p { font-size: 0.72em; }
+  .reveal .tiny-hint { position: absolute; bottom: -40px; right: 0; font-size: 0.3em; color: #4a5468; }
+  .reveal .vote-card { border:1px solid #2a3450; border-radius:10px; padding:13px 20px; margin:9px 0; background:#1a2233; font-size:.62em; text-align:left; }
+  .reveal .res-list { font-size: 0.6em; text-align: left; }
+  .reveal .res-list li { margin: 7px 0; }
+  .reveal .res-list a, .reveal a { color: #4da3ff; }
+  .reveal .tier { padding: 10px 18px; }
+  .reveal .tier p { font-size: 0.66em; margin: 6px 0; }
+  .reveal .closing-quote { font-size: 1.05em; }
+  .reveal svg { max-width: 100%; height: auto; }
+  .reveal .caption { font-size: 0.58em; color: #9aa4b8; margin-top: 8px; }
+  .reveal figure.photo { margin: 10px auto; }
+  .reveal figure.photo img { max-height: 300px; width: auto; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,.45); }
+  .reveal figure.photo .photo-fallback { display: none; }
+  .reveal figure.photo.no-photo img { display: none; }
+  .reveal figure.photo.no-photo .photo-fallback { display: block; }
+  .reveal figure.photo figcaption { font-size: 0.42em; color: #7b8497; margin-top: 8px; }
+  .reveal .zoom-do {
+    border: 2px solid #7ee0a3; border-radius: 14px; padding: 16px 26px;
+    background: rgba(126,224,163,0.07); text-align: left; margin: 14px auto; max-width: 880px;
+  }
+  .reveal .zoom-do p { font-size: 0.72em; margin: 9px 0; }
+  .reveal .zoom-do .step { color: #7ee0a3; font-weight: 700; margin-right: 8px; }
+  .reveal section[data-poll] .chip { border-color: #7ee0a3; color: #7ee0a3; }
+  /* act divider cards */
+  .reveal .act { color: #ffb454; font-size: 0.55em; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+  /* checkpoint blocks */
+  .reveal .checkpoint { border: 2px solid #4da3ff; background: rgba(77,163,255,.07); border-radius: 14px; padding: 10px 24px; margin: 12px auto; max-width: 900px; text-align: left; }
+  .reveal .checkpoint li { font-size: 0.62em; margin: 10px 0; }
+  /* the farmer chain, reused in the recap */
+  .reveal .chain { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 14px 0; }
+  .reveal .chain span { border: 1px solid #2a3450; background: #1a2233; border-radius: 999px; padding: 6px 14px; font-size: 0.46em; color: #e8edf5; }
+  .reveal .chain span.new { border-color: #ffb454; color: #ffb454; }
+
+  /* ---- Week 4 components ---- */
+  .reveal .w4-row { display:flex; gap:18px; align-items:flex-start; }
+  .reveal .w4-card { flex:1; background:#1a2233; border:1px solid #2a3450; border-radius:12px; padding:12px 16px; text-align:left; }
+  .reveal .w4-card p { font-size:.6em; margin:6px 0; line-height:1.4; }
+  .reveal .w4-hd { font-weight:700; font-size:.66em; margin-bottom:4px; }
+  .reveal .w4-muted { color:#9aa4b8; }
+  .reveal .w4-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px; }
+  .reveal .w4-cites { display:flex; flex-direction:column; gap:5px; margin-top:6px; text-align:left; }
+  .reveal .w4-cite { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 14px; font-size:.45em; line-height:1.32; }
+  .reveal .w4-cite > b { display:inline-block; width:1.6em; height:1.6em; line-height:1.6em; text-align:center; border-radius:50%; background:#4da3ff; color:#0d1320; margin-right:8px; }
+  .reveal .w4-cite .quiz-answer { display:block; margin-top:4px; color:#ffb454; font-weight:600; }
+  .reveal .w4-steps { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; text-align:left; }
+  .reveal .w4-step { background:#1a2233; border:1px solid #2a3450; border-radius:12px; padding:10px 14px; font-size:.56em; line-height:1.4; }
+  .reveal .w4-step b { display:block; color:#4da3ff; font-size:1.1em; margin-bottom:3px; }
+  .reveal .w4-list { margin:4px 0 0 1em; font-size:.58em; }
+  .reveal .w4-list li { margin:5px 0; }
+  .reveal .w4-timeline { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center; margin-top:14px; font-size:.5em; }
+  .reveal .w4-timeline span:not(:nth-child(even)) { border:1px solid #2a3450; background:#1a2233; border-radius:999px; padding:5px 12px; }
+  .reveal .w4-timeline span:nth-child(even) { color:#55607a; }
+  .reveal .w4-timeline b { color:#4da3ff; margin-right:4px; }
+  .reveal .w4-projects { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px; text-align:left; }
+  .reveal .w4-proj { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.44em; line-height:1.3; }
+  .reveal .w4-proj p { margin:3px 0; font-size:1em; color:#c8d0dd; }
+  .reveal .w4-proj-t { font-weight:700; font-size:1.1em; color:#e8edf5; margin-bottom:3px; }
+  .reveal .w4-badge { display:inline-block; border:1px solid; border-radius:999px; padding:0 8px; font-size:.78em; font-weight:700; margin-left:6px; vertical-align:middle; }
+  .reveal .w4-stack { margin-top:4px; padding:3px 8px; border-radius:6px; background:#141a26; font-size:.95em; color:#dfe5ee; }
+  .reveal .w4-stack .nc { color:#7ee0a3; font-weight:700; margin-right:4px; }
+  .reveal .w4-stack .cd { color:#4da3ff; font-weight:700; margin-right:4px; }
+  .reveal .sub-small { font-size:.5em; color:#9aa4b8; margin:-6px 0 6px; }
+  .reveal .w4-levels { display:grid; grid-template-columns:1fr 1fr; gap:12px; text-align:left; }
+  .reveal .w4-lvcol { display:flex; flex-direction:column; gap:6px; }
+  .reveal .w4-lvhd { color:#fff; font-weight:800; font-size:.5em; border-radius:8px; padding:4px 10px; }
+  .reveal .w4-lv { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 10px; font-size:.38em; line-height:1.28; }
+  .reveal .w4-lv p { margin:2px 0; font-size:1em; color:#c8d0dd; }
+  .reveal .w4-lv .w4-learn { color:#ffb454; }
+  .reveal table.w4-tb { width:100%; border-collapse:separate; border-spacing:0 4px; font-size:.405em; margin-top:2px; }
+  .reveal table.w4-tb th, .reveal table.w4-tb td { border:none; padding:4px 10px; text-align:left; vertical-align:middle; background:#1a2233; line-height:1.3; }
+  .reveal table.w4-tb tr > :first-child { border-radius:8px 0 0 8px; color:#e8edf5; width:24%; }
+  .reveal table.w4-tb tr > :last-child { border-radius:0 8px 8px 0; }
+  .reveal table.w4-tb tr:first-child th { background:transparent; font-size:1.05em; }
+  .reveal table.w4-tb td { color:#dfe5ee; }
+  .reveal table.w4-tb .wk { width:4.5em; text-align:center; color:#ffb454; font-weight:700; }
+  .reveal .w4-shrink { display:flex; flex-direction:column; gap:10px; margin-top:10px; font-size:.6em; text-align:left; }
+  .reveal .w4-shrink > div { display:grid; grid-template-columns:1fr 2em 1.6fr; align-items:center; background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:9px 14px; }
+  .reveal .w4-shrink .big { color:#ff9b9b; } .reveal .w4-shrink .arr { color:#9aa4b8; text-align:center; } .reveal .w4-shrink .ok { color:#7ee0a3; }
+  .reveal .w4-camp { display:grid; grid-template-columns:1fr 7.5em 1fr; gap:10px; align-items:stretch; text-align:left; margin-top:4px; }
+  .reveal .w4-camp-col .w4-hd { font-size:.56em; } .reveal .w4-camp-col { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 12px; }
+  .reveal .w4-camp-bot { background:rgba(255,180,84,.08); border:2px solid #ffb454; border-radius:14px; padding:8px; text-align:center; font-size:.55em; display:flex; flex-direction:column; justify-content:center; }
+  .reveal .w4-mini { margin:2px 0 0 1em; font-size:.46em; line-height:1.35; }
+  .reveal .w4-mini li { margin:2px 0; }
+  .reveal .w4-pg3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; text-align:left; margin-top:2px; }
+  .reveal .w4-pg-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:6px 11px; font-size:.44em; line-height:1.32; color:#dfe5ee; }
+  .reveal .w4-pg-card .w4-hd { font-size:1.22em; }
+  .reveal .w4-pg-card p { margin:3px 0; }
+  .reveal .w4-pg-card .w4-mini { font-size:1em; margin-top:0; }
+  .reveal .w4-pg-say { background:#141a26; border-left:3px solid #ffb454; border-radius:4px; padding:3px 7px; font-style:italic; }
+  .reveal .w4-pg-flow { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:4px 5px; margin-top:8px; font-size:.4em; }
+  .reveal .w4-pg-flow span { background:rgba(77,163,255,.1); border:1px solid #4da3ff; border-radius:16px; padding:3px 10px; color:#e8edf5; }
+  .reveal .w4-pg-flow b { color:#4da3ff; }
+  .reveal .w4-pg-you { margin-top:8px; background:rgba(255,180,84,.07); border:1px solid #ffb454; border-radius:10px; padding:6px 12px; text-align:left; }
+  .reveal .w4-pg-you > .w4-hd { font-size:.5em; }
+  .reveal .w4-pg-ideas { display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; font-size:.42em; line-height:1.3; color:#dfe5ee; }
+  .reveal .w4-sk3 { display:grid; grid-template-columns:1fr 1.6em 1fr 1.6em 1.15fr; gap:6px; align-items:stretch; text-align:left; margin-top:6px; }
+  .reveal .w4-sk-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.5em; line-height:1.35; color:#dfe5ee; }
+  .reveal .w4-sk-card .w4-hd { font-size:1.25em; }
+  .reveal .w4-sk-card p { margin:5px 0; }
+  .reveal .w4-sk-wk { font-size:.8em; letter-spacing:.08em; text-transform:uppercase; color:#9aa4b8; font-weight:700; }
+  .reveal .w4-sk-arrow { align-self:center; text-align:center; color:#4da3ff; font-size:.8em; }
+  .reveal .w4-sk-analogy { margin-top:12px; background:rgba(255,180,84,.08); border:1px solid #ffb454; border-radius:10px; padding:8px 16px; font-size:.5em; text-align:left; color:#e8edf5; }
+  .reveal .w4-sk-file { flex:1.1; margin:0; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:10px 14px; font-size:.36em; line-height:1.4; text-align:left; white-space:pre; color:#dfe5ee; box-shadow:none; width:auto; }
+  .reveal .w4-sk-file .d { color:#ffb454; } .reveal .w4-sk-file .m { color:#6b7891; } .reveal .w4-sk-file .k { color:#7ee0a3; font-weight:700; }
+  .reveal .w4-sk-how { flex:1; display:flex; flex-direction:column; gap:8px; }
+  .reveal .w4-sk-step { background:#1a2233; border:1px solid #2a3450; border-left:4px solid #4da3ff; border-radius:8px; padding:7px 12px; font-size:.44em; line-height:1.35; text-align:left; color:#dfe5ee; }
+  .reveal .w4-sk-step b { display:block; color:#4da3ff; margin-bottom:2px; }
+  .reveal .w4-sk-tryit { margin:6px auto 0; max-width:1000px; display:flex; flex-direction:column; gap:3px; background:#141a26; border:1px solid #7ee0a3; border-radius:10px; padding:6px 14px; font-size:.4em; line-height:1.35; text-align:left; color:#dfe5ee; }
+  .reveal .w4-api { display:grid; grid-template-columns:1.08fr 1fr; gap:12px; text-align:left; }
+  .reveal .w4-api-col { display:flex; flex-direction:column; gap:6px; min-width:0; }
+  .reveal .w4-api-hd { font-weight:700; font-size:.44em; }
+  .reveal .w4-api-hd span { font-weight:400; color:#9aa4b8; margin-left:6px; font-size:.85em; }
+  .reveal pre.w4-api-code { margin:0; width:auto; box-shadow:none; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.3em; line-height:1.38; white-space:pre; color:#dfe5ee; overflow:hidden; }
+  .reveal .w4-api-code .k { color:#4da3ff; } .reveal .w4-api-code .s { color:#ffb454; } .reveal .w4-api-code .n { color:#e8edf5; font-weight:700; }
+  .reveal .w4-api-code .n.hi { color:#7ee0a3; } .reveal .w4-api-code .c { color:#6b7891; font-style:italic; }
+  .reveal .w4-api-read { background:rgba(126,224,163,.07); border:1px solid #7ee0a3; border-radius:10px; padding:6px 10px; font-size:.38em; line-height:1.35; display:flex; flex-direction:column; gap:3px; color:#dfe5ee; }
+  .reveal .w4-api-read b { color:#7ee0a3; }
+  .reveal .w4-skd { display:grid; grid-template-columns:1.15fr 1fr; gap:14px; align-items:stretch; text-align:left; }
+  .reveal .w4-skd-left { display:flex; flex-direction:column; gap:7px; }
+  .reveal .w4-skd-left .w4-sk-step { font-size:.4em; }
+  .reveal .w4-skd-left code { background:#0f141e; padding:0 4px; border-radius:4px; font-size:.85em; }
+  .reveal .w4-skd-shot { margin:0; display:flex; }
+  .reveal .w4-skd-shot img { width:100%; height:auto; max-height:470px; object-fit:contain; border-radius:10px; border:1px solid #2a3450; margin:0; }
+  .reveal .w4-skd-ph { display:none; flex:1; flex-direction:column; align-items:center; justify-content:center; gap:6px; border:2px dashed #4da3ff; border-radius:12px; background:rgba(77,163,255,.05); font-size:.48em; text-align:center; color:#e8edf5; min-height:340px; }
+  .reveal .w4-skd-ph code { font-size:.9em; color:#ffb454; }
+  .reveal .w4-li { text-align:left; font-size:.42em; color:#dfe5ee; display:flex; flex-direction:column; gap:8px; }
+  .reveal .w4-li button { font:inherit; background:#1a2233; color:#dfe5ee; border:1px solid #2a3450; border-radius:8px; padding:4px 10px; cursor:pointer; }
+  .reveal .w4-li button.on { background:#4da3ff; color:#0f141e; border-color:#4da3ff; font-weight:700; }
+  .reveal .w4-li button:disabled { opacity:.5; cursor:wait; }
+  .reveal .w4-li-bar { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+  .reveal .w4-li-grp { display:inline-flex; gap:0; } .reveal .w4-li-grp button { border-radius:0; } .reveal .w4-li-grp button:first-child { border-radius:8px 0 0 8px; } .reveal .w4-li-grp button:last-child { border-radius:0 8px 8px 0; }
+  .reveal .w4-li-chk { display:inline-flex; align-items:center; gap:6px; background:rgba(255,107,107,.08); border:1px solid #ff6b6b; border-radius:8px; padding:3px 10px; cursor:pointer; }
+  .reveal .w4-li-mode { color:#7ee0a3; margin-left:auto; } .reveal .w4-li-mode.warn { color:#ffb454; }
+  .reveal .w4-li-setup { display:flex; flex-wrap:wrap; gap:8px; align-items:center; background:#141a26; border:1px dashed #4da3ff; border-radius:8px; padding:6px 10px; }
+  .reveal .w4-li-setup input { font:inherit; background:#0f141e; color:#dfe5ee; border:1px solid #2a3450; border-radius:6px; padding:3px 6px; width:16em; margin-left:4px; }
+  .reveal .w4-li-setup[hidden] { display:none; }
+  .reveal .w4-li-qs { display:flex; flex-wrap:wrap; gap:6px; }
+  .reveal .w4-li-row { display:flex; gap:8px; align-items:stretch; }
+  .reveal .w4-li-q { flex:1; font:inherit; background:#0f141e; color:#e8edf5; border:1px solid #2a3450; border-radius:8px; padding:6px 8px; resize:none; }
+  .reveal .w4-li-run { background:#7ee0a3 !important; color:#0f141e !important; font-weight:700; border-color:#7ee0a3 !important; padding:4px 16px !important; }
+  .reveal .w4-li-out { display:flex; flex-direction:column; gap:8px; min-height:200px; }
+  .reveal .w4-li-lbl { color:#9aa4b8; margin-bottom:3px; }
+  .reveal .w4-li-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .reveal .w4-li-card { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:6px 8px; line-height:1.3; max-height:7.2em; overflow:auto; }
+  .reveal .w4-li-card.wait { color:#6b7891; } .reveal .w4-li-card.err { border-color:#ffb454; color:#ffb454; }
+  .reveal .w4-li-sch { text-decoration:none; }
+  .reveal .w4-hw-stats { display:flex; gap:10px; margin:2px 0 8px; }
+  .reveal .w4-hw-stats div { flex:1; background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 8px; font-size:.42em; text-align:center; color:#dfe5ee; }
+  .reveal .w4-hw-stats b { display:block; font-size:2em; color:#ffb454; line-height:1.1; }
+  .reveal .w4-hw-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; text-align:left; }
+  .reveal .w4-hw-grid3 { grid-template-columns:repeat(3,1fr); }
+  .reveal .w4-hw-grid3 .w4-hw-card { font-size:.48em; padding:9px 12px; }
+  .reveal .w4-hw-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 10px; font-size:.43em; line-height:1.35; color:#dfe5ee; }
+  .reveal .w4-hw-card .w4-hd { font-size:1.12em; line-height:1.25; }
+  .reveal .w4-hw-card p { margin:4px 0; }
+  .reveal .w4-hw-q { font-style:italic; }
+  .reveal .w4-hw-why { color:#7ee0a3; }
+  .reveal .w4-hw-foot { margin-top:8px; display:flex; flex-direction:column; gap:4px; background:#141a26; border:1px solid #2a3450; border-radius:10px; padding:6px 12px; font-size:.4em; text-align:left; color:#dfe5ee; }
+  .reveal .w4-sh-link { margin:6px 0 10px; }
+  .reveal .w4-sh-btn { display:inline-block; background:#7ee0a3; color:#0f141e !important; font-weight:800; font-size:.8em; padding:10px 28px; border-radius:12px; text-decoration:none; }
+  .reveal .w4-sh-btn[hidden], .reveal .w4-sh-wait[hidden] { display:none; }
+  .reveal .w4-sh-wait { display:inline-block; border:2px dashed #7ee0a3; color:#7ee0a3; font-size:.6em; padding:8px 22px; border-radius:12px; }
+  .reveal .w4-sh-legend { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; font-size:.44em; }
+  .reveal .w4-sh-legend span { border:2px solid; border-radius:16px; padding:3px 12px; color:#dfe5ee; background:#141a26; }
+  .reveal .w4-sh-legend em { color:#7ee0a3; font-style:normal; }
+  .reveal .w3x { text-align:left; }
+  .reveal .w3x p { font-size:inherit; }
+  .reveal .w4-pg-links { margin-top:4px !important; } .reveal .w4-pg-links a { color:#4da3ff; text-decoration:none; }
+  .reveal .w4-camp-guard { margin-top:8px; background:rgba(255,107,107,.07); border:1px solid #ff6b6b; border-radius:10px; padding:6px 12px; text-align:left; }
+  .reveal .w4-guards { display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; font-size:.44em; line-height:1.3; color:#dfe5ee; }
+  .reveal a.w4-guide { display:none; font-size:.8em; font-weight:700; color:#0d1320; background:#ffb454; border-radius:999px; padding:0 8px; margin-left:4px; text-decoration:none; vertical-align:middle; }
+  .reveal a.w4-guide:hover { background:#ffd08a; }
+  .reveal .w4-covrow { display:grid; grid-template-columns:repeat(7,1fr); gap:7px; margin-top:6px; text-align:left; }
+  .reveal .w4-cov { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 7px 9px; font-size:.4em; }
+  .reveal .w4-cov-w { font-weight:800; font-size:1.5em; line-height:1.1; }
+  .reveal .w4-cov-s { color:#9aa4b8; font-size:.9em; margin-bottom:6px; }
+  .reveal .w4-chip { display:block; background:#141a26; border:1px solid #2a3450; border-radius:6px; padding:3px 6px; margin:4px 0; color:#dfe5ee; line-height:1.25; }
+  /* reveal.js treats any .stretch element as 'fill the remaining height'; the exercise tier must not */
+  .reveal .tier.stretch { height:auto !important; width:auto !important; }
+</style>
+</head>
+<body>
+<!-- STUDENT EDITION - generated by build.py, do not edit by hand -->
+<div class="reveal">
+<div class="slides">
+<!-- ==================== TITLE ==================== -->
+<section id="w4-title">
+  <p class="chip">Week 4</p>
+  <h1>AI for Research &amp; Study</h1>
+  <p class="small">It sounds confident. <strong>How do you know it is right?</strong></p>
+</section>
+
+<!-- ==================== EASTER EGGS ==================== -->
+<section id="w4-egg-last">
+  <div class="easter-egg">
+    <p>🥚 <strong>Last week's easter egg</strong></p>
+    <p>The one setting that decides whether the answer comes out safe and predictable,
+    or surprising and inventive.</p>
+  </div>
+  <div class="waterfall">
+    <span><span class="wf-step">1</span> Type your answer — <b>do NOT press send</b></span>
+    <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+    <span><span class="wf-step">3</span> Everyone sends together</span>
+  </div>
+  <p class="small fragment"><strong>Temperature</strong>. The letter to save:
+  <strong style="color:#ffb454">T</strong></p>
+  <p class="small fragment">Your collection so far: <strong style="color:#ffb454;font-size:1.3em;letter-spacing:.3em">A · R · T</strong> …
+  five more to go.</p>
+</section>
+
+<!-- ==================== WEEK 3 HOMEWORK: THANK YOU + YOUR QUESTIONS (added 2026-10-03) ==================== -->
+<!-- Slides carry NO student names (the student edition is public). Names are in the notes only. -->
+<section>
+  <section id="w4-hw-thanks">
+    <p class="chip">Your Week 3 work</p>
+    <h2>🙏 Thank you. Real tasks, real prompts.</h2>
+    <div class="w4-hw-stats">
+      <div><b>4</b>real tasks, each with a bad prompt and a good one</div>
+      <div><b>4 / 4</b>easter eggs correct: <strong>temperature</strong> 🥚</div>
+      <div><b>4 / 4</b>told me honestly whether they used AI</div>
+    </div>
+    <div class="w4-hw-grid">
+      <div class="w4-hw-card fragment" data-fragment-index="1" style="border-top:4px solid #7ee0a3">
+        <div class="w4-hd" style="color:#7ee0a3">🎂 Gradient descent, explained for <em>me</em></div>
+        <p class="w4-hw-q">"I am a final-year CSE-AIML student and a beginner… use an everyday example… two short paragraphs… end with one summary sentence."</p>
+        <p class="w4-hw-why">⭐ WHO, WHY, WHAT and HOW in one prompt, and the reflection named exactly why it worked.</p>
+      </div>
+      <div class="w4-hw-card fragment" data-fragment-index="2" style="border-top:4px solid #4da3ff">
+        <div class="w4-hd" style="color:#4da3ff">💻 JavaScript, at my level</div>
+        <p class="w4-hw-q">"I am a B.Tech IT student and a beginner… simple English with small examples."</p>
+        <p class="w4-hw-why">⭐ One line of WHO + HOW turned a dictionary definition into "an answer suited to my level".</p>
+      </div>
+      <div class="w4-hw-card fragment" data-fragment-index="3" style="border-top:4px solid #ffb454">
+        <div class="w4-hd" style="color:#ffb454">🎛️ The dial, tested</div>
+        <p class="w4-hw-q">"Temperature mainly affects the <strong>variety</strong> of responses rather than changing the correct answer to a straightforward maths problem."</p>
+        <p class="w4-hw-why">⭐ That's the whole Week 3 lesson in one sentence.</p>
+      </div>
+      <div class="w4-hw-card fragment" data-fragment-index="4" style="border-top:4px solid #ff6b6b">
+        <div class="w4-hd" style="color:#ff6b6b">🔧 One small fix</div>
+        <p>If you ask for <em>everything</em>, a complete, detailed answer, you may get a very long one that's hard to read and harder to remember.</p>
+        <p class="w4-hw-why" style="color:#e8edf5">Keep your WHO and WHY, then <strong>narrow the WHAT:</strong> "the main stages, one line each, with one example from my field". You can always ask for more.</p>
+      </div>
+    </div>
+    <div class="w4-hw-foot fragment" data-fragment-index="5">
+      <span>🎣 <strong>One stretch try:</strong> "how many letters repeat in <em>strawberry</em>?" The model said "r, 3 times"… and it was <strong>right</strong>. Checking works both ways: sometimes the check proves the AI correct.</span>
+      <span>📝 Haven't sent yours yet? The form is still open. Late is much better than never.</span>
+    </div>
+</section>
+
+  <section id="w4-hw-asked">
+    <p class="chip">You asked me privately</p>
+    <h2>💬 Your three questions, answered</h2>
+    <div class="w4-hw-grid w4-hw-grid3">
+      <div class="w4-hw-card fragment" style="border-top:4px solid #4da3ff">
+        <div class="w4-hd" style="color:#4da3ff">"Why do ChatGPT and Google AI Studio give different answers to the same question?"</div>
+        <p>All three of your guesses are right:</p>
+        <p>🧠 <strong>Different models</strong>, trained on different data → different odds for the next word</p>
+        <p>📋 <strong>Different hidden instructions</strong> and tools (web search on or off)</p>
+        <p>🎲 <strong>Different settings</strong>, like temperature</p>
+        <p class="w4-muted">Like two good doctors from different colleges: both reasonable, not identical.</p>
+      </div>
+      <div class="w4-hw-card fragment" style="border-top:4px solid #ffb454">
+        <div class="w4-hd" style="color:#ffb454">"Same tool, different answer every time. Which one is best?"</div>
+        <p><strong>Why:</strong> at every word the model gives <em>odds</em>, and the app <strong>rolls the dice</strong>. One different pick early on, and the rest of the answer takes a different road. 🛣️</p>
+        <p>🎲 <strong>Same temperature = same dice, not the same roll.</strong> Every run is a fresh throw.</p>
+        <p>🎯 The dice only matter when the odds are <strong>close</strong>. Sure → same answer. Unsure → it changes.</p>
+        <p>✍️ <strong>Wording, ideas:</strong> pick the one that fits you. Variety is a feature.</p>
+        <p>📌 <strong>Facts, numbers:</strong> if runs <strong>disagree</strong>, the model was guessing. Check a real source.</p>
+      </div>
+      <div class="w4-hw-card fragment" style="border-top:4px solid #7ee0a3">
+        <div class="w4-hd" style="color:#7ee0a3">"How do I apply what I've learned in the real world?"</div>
+        <p>Start this week, three small habits:</p>
+        <p>✍️ Use WHO · WHY · WHAT · HOW · SHOW on <strong>one real assignment</strong></p>
+        <p>🔍 Check <strong>one citation</strong> before you use it (today's 60-second check)</p>
+        <p>📒 Save <strong>one prompt</strong> you keep retyping as a skill</p>
+        <p>🚀 And the big one: your <strong>capstone</strong>, a real tool for a real person. It launches today.</p>
+      </div>
+    </div>
+    <p class="small fragment" style="margin-top:8px">Keep asking. Every private question makes the next class better for everyone. 🙌</p>
+</section>
+</section>
+
+<section id="w4-egg">
+  <div class="easter-egg">
+    <p>🥚 <strong>This week's easter egg</strong></p>
+    <p>Out of billions of pages, a search box shows you ten. Deep Research and NotebookLM use the
+    same trick to decide what to read before they answer you.</p>
+    <p><strong>What is the name of the field of computer science that does this?</strong></p>
+  </div>
+  <p class="small">The answer is somewhere in today's session. Bring it next week, and save its
+  first letter.</p>
+</section>
+
+<!-- ==================== YOU CONTROL AI vs AI CONTROLS YOU ==================== -->
+<section id="w4-control">
+  <p class="chip">From your answers last week</p>
+  <h2>Who is in control? 🧠 🤖</h2>
+  <div class="w4-row" style="align-items:stretch;margin-top:6px">
+    <div class="w4-card" style="border-top:5px solid #7ee0a3;text-align:center">
+      <figure class="photo" style="margin:0 auto">
+        <img src="../../assets/img/you-control-ai.png" alt="A human head on a robot body" style="max-height:230px"
+             onerror="this.closest('figure').classList.add('no-photo')">
+        <div class="photo-fallback">
+          <svg viewBox="0 0 200 230" width="170" aria-label="A human head on a robot body">
+            <!-- robot body -->
+            <rect x="52" y="104" width="96" height="84" rx="10" fill="#5b6475" stroke="#9aa4b8" stroke-width="3"/>
+            <rect x="70" y="120" width="60" height="30" rx="5" fill="#2a3450"/>
+            <circle cx="82" cy="135" r="5" fill="#7ee0a3"/><circle cx="100" cy="135" r="5" fill="#ffb454"/><circle cx="118" cy="135" r="5" fill="#4da3ff"/>
+            <rect x="24" y="112" width="24" height="60" rx="8" fill="#5b6475" stroke="#9aa4b8" stroke-width="3"/>
+            <rect x="152" y="112" width="24" height="60" rx="8" fill="#5b6475" stroke="#9aa4b8" stroke-width="3"/>
+            <rect x="64" y="190" width="24" height="34" rx="6" fill="#5b6475" stroke="#9aa4b8" stroke-width="3"/>
+            <rect x="112" y="190" width="24" height="34" rx="6" fill="#5b6475" stroke="#9aa4b8" stroke-width="3"/>
+            <circle cx="72" cy="168" r="3" fill="#9aa4b8"/><circle cx="128" cy="168" r="3" fill="#9aa4b8"/>
+            <!-- human head -->
+            <rect x="92" y="88" width="16" height="18" fill="#c68a5e"/>
+            <circle cx="100" cy="58" r="36" fill="#c68a5e"/>
+            <path d="M64 56 Q66 18 100 20 Q134 18 136 56 Q128 36 100 36 Q72 36 64 56 Z" fill="#1d1d24"/>
+            <circle cx="87" cy="60" r="4" fill="#1d1d24"/><circle cx="113" cy="60" r="4" fill="#1d1d24"/>
+            <path d="M88 76 Q100 86 112 76" stroke="#1d1d24" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <text x="100" y="14" fill="#7ee0a3" font-size="13" text-anchor="middle" font-weight="bold">💡 thinking</text>
+          </svg>
+        </div>
+      </figure>
+      <div class="w4-hd" style="color:#7ee0a3;margin-top:6px">✅ You control the AI</div>
+      <p style="text-align:left"><strong>Your head, its hands.</strong> You decide what to ask, check what comes
+      back, and choose what to keep. AI does the heavy lifting: drafting, searching, summarising.</p>
+      <p class="w4-muted" style="text-align:left">You can explain every line of your work.</p>
+    </div>
+    <div class="w4-card fragment" style="border-top:5px solid #ff6b6b;text-align:center">
+      <figure class="photo" style="margin:0 auto">
+        <img src="../../assets/img/ai-controls-you.png" alt="A robot head on a human body" style="max-height:230px"
+             onerror="this.closest('figure').classList.add('no-photo')">
+        <div class="photo-fallback">
+          <svg viewBox="0 0 200 230" width="170" aria-label="A robot head on a human body">
+            <!-- human body -->
+            <path d="M54 110 Q100 96 146 110 L150 190 L50 190 Z" fill="#3f6fb5"/>
+            <path d="M92 104 L100 124 L108 104" fill="#e8edf5"/>
+            <path d="M54 112 Q34 130 36 172" stroke="#3f6fb5" stroke-width="20" fill="none" stroke-linecap="round"/>
+            <path d="M146 112 Q166 130 164 172" stroke="#3f6fb5" stroke-width="20" fill="none" stroke-linecap="round"/>
+            <circle cx="36" cy="176" r="9" fill="#c68a5e"/><circle cx="164" cy="176" r="9" fill="#c68a5e"/>
+            <rect x="62" y="190" width="30" height="36" fill="#2b2f3a"/><rect x="108" y="190" width="30" height="36" fill="#2b2f3a"/>
+            <!-- robot head -->
+            <rect x="92" y="88" width="16" height="16" fill="#9aa4b8"/>
+            <rect x="62" y="26" width="76" height="64" rx="10" fill="#5b6475" stroke="#9aa4b8" stroke-width="3"/>
+            <line x1="100" y1="26" x2="100" y2="10" stroke="#9aa4b8" stroke-width="3"/><circle cx="100" cy="8" r="5" fill="#ff6b6b"/>
+            <rect x="74" y="44" width="18" height="12" rx="3" fill="#ff6b6b"/><rect x="108" y="44" width="18" height="12" rx="3" fill="#ff6b6b"/>
+            <rect x="80" y="68" width="40" height="8" rx="2" fill="#2a3450"/>
+            <line x1="88" y1="68" x2="88" y2="76" stroke="#9aa4b8"/><line x1="100" y1="68" x2="100" y2="76" stroke="#9aa4b8"/><line x1="112" y1="68" x2="112" y2="76" stroke="#9aa4b8"/>
+            <text x="150" y="20" fill="#ff6b6b" font-size="12" text-anchor="middle" font-weight="bold">📋 copy</text>
+            <text x="50" y="20" fill="#ff6b6b" font-size="12" text-anchor="middle" font-weight="bold">📋 paste</text>
+          </svg>
+        </div>
+      </figure>
+      <div class="w4-hd" style="color:#ff6b6b;margin-top:6px">⚠️ The AI controls you</div>
+      <p style="text-align:left"><strong>Its head, your hands.</strong> It decides the answer; you just copy, paste
+      and submit. You accept what it says without checking.</p>
+      <p class="w4-muted" style="text-align:left">Ask you a question about "your" work, and you're stuck.</p>
+    </div>
+  </div>
+  <p class="small fragment" style="margin-top:10px">Same tool, same prompt box. The only difference is
+  <strong>who is doing the thinking.</strong> <span style="color:#7ee0a3">Lend it your hands, never your head.</span></p>
+</section>
+
+<!-- ==================== COLD OPEN: RAMANUJAN & HARDY ==================== -->
+<section>
+  <section id="w4-letter">
+    <p class="chip">16 January 1913</p>
+    <h2>A letter arrives in Cambridge ✉️</h2>
+    <div class="w4-row">
+      <figure class="photo" style="flex:0 0 auto;margin:0">
+        <img src="../../assets/img/ramanujan.jpg" alt="Srinivasa Ramanujan" style="max-height:260px"
+             onerror="this.closest('figure').classList.add('no-photo')">
+        <div class="photo-fallback">
+          <svg viewBox="0 0 190 190" width="170">
+            <circle cx="95" cy="95" r="91" fill="#1a2233" stroke="#ffb454" stroke-width="2"/>
+            <text x="95" y="90" fill="#ffb454" font-size="18" text-anchor="middle" font-weight="bold">Srinivasa</text>
+            <text x="95" y="116" fill="#ffb454" font-size="18" text-anchor="middle" font-weight="bold">Ramanujan</text>
+          </svg>
+        </div>
+        <figcaption>Srinivasa Ramanujan, 1887–1920</figcaption>
+      </figure>
+      <div style="flex:1;text-align:left">
+        <p class="small">A 25-year-old clerk at the <strong>Madras Port Trust</strong>, born in Erode,
+        raised in Kumbakonam, writes to a famous mathematician: <strong>G. H. Hardy</strong>.</p>
+        <p class="small fragment">Nine pages. Dozens of results. Formulas nobody had ever seen.</p>
+        <p class="small fragment" style="color:#ffb454"><strong>No proofs.</strong> Just the answers.</p>
+      </div>
+    </div>
+</section>
+
+  <section id="w4-hardy">
+    <p class="chip">What Hardy did</p>
+    <h2>Brilliant? Or a fraud? 🤔</h2>
+    <ul class="small" style="text-align:left">
+      <li class="fragment"><strong>First instinct: suspicion.</strong> Some formulas "seemed scarcely
+      possible to believe."</li>
+      <li class="fragment"><strong>So he checked.</strong> He and his colleague Littlewood worked through
+      them, one by one.</li>
+      <li class="fragment"><strong>Many were astonishing and new.</strong> Hardy: they "must be true,
+      because, if they were not true, no one would have the imagination to invent them."</li>
+      <li class="fragment" style="color:#ffb454"><strong>And some were wrong.</strong> Others had already
+      been discovered by someone else.</li>
+    </ul>
+    <p class="small fragment">Hardy invited him to Cambridge. Together they did some of the finest
+    mathematics of the century: <strong>intuition, plus checking.</strong></p>
+</section>
+
+  <section id="w4-lesson">
+    <p class="chip">The lesson</p>
+    <h2>An LLM is Ramanujan <em>without</em> a Hardy</h2>
+    <div class="w4-row" style="margin-top:14px">
+      <div class="w4-card" style="border-top:4px solid #ffb454">
+        <div class="w4-hd" style="color:#ffb454">✨ Like Ramanujan</div>
+        <p>Brilliant, fast, confident. Gives you answers <strong>with no proof attached</strong>.
+        Mostly right. Sometimes wrong, in exactly the same tone.</p>
+      </div>
+      <div class="w4-card fragment" style="border-top:4px solid #4da3ff">
+        <div class="w4-hd" style="color:#4da3ff">🔍 Your job: be Hardy</div>
+        <p>Don't throw the answer away. Don't accept it blindly. <strong>Check it.</strong>
+        That habit is today's whole session.</p>
+      </div>
+    </div>
+    <p class="small fragment" style="margin-top:16px">Be Ramanujan in your ideas.
+    <strong style="color:#7ee0a3">Be Hardy in your checking.</strong></p>
+</section>
+  <section id="w4-live-invent">
+    <p class="chip">Live demo 🖥️ · Ramanujan without a Hardy</p>
+    <h2>Watch it invent, live 🎲</h2>
+    <div class="w4-li">
+      <div class="w4-li-bar">
+        <span class="w4-li-grp" data-g="be">
+          <button data-be="ollama" class="on">🦙 Small model (laptop)</button><button data-be="claude">✳️ Claude</button>
+        </span>
+        <label class="w4-li-chk"><input type="checkbox" class="w4-li-press" checked> Quiz-app rule: <em>"never say I don't know"</em></label>
+        <span class="w4-li-grp" data-g="t">
+          <button data-t="1" class="on">T = 1</button><button data-t="0">T = 0</button>
+        </span>
+        <button class="w4-li-gear" title="Setup">⚙️</button>
+        <span class="w4-li-mode"></span>
+      </div>
+      <div class="w4-li-setup" hidden>
+        <label>Small model (Ollama) <input class="w4-li-om" placeholder="llama3.2:1b"></label>
+        <label>Claude key <input class="w4-li-key" type="password" placeholder="sk-ant-… (saved in this browser only)"></label>
+        <label>Claude model <input class="w4-li-cm" placeholder="claude-haiku-4-5-20251001"></label>
+        <button class="w4-li-save">Save</button><button class="w4-li-forget">Forget key</button>
+      </div>
+      <div class="w4-li-qs"></div>
+      <div class="w4-li-row">
+        <textarea class="w4-li-q" rows="2"></textarea>
+        <button class="w4-li-run">▶ Ask 4 times</button>
+      </div>
+      <div class="w4-li-out"><p class="w4-muted" style="margin:6px 0">Pick a question, then ask it four times.</p></div>
+    </div>
+<script>
+    (function(){
+      var sec = document.currentScript.closest('section');
+      var KEY_LS = 'w3-anthropic-key', CM_LS = 'w4-claude-model', OM_LS = 'w4-ollama-model';
+      var mem = {};
+      function lsGet(k){ try { return localStorage.getItem(k) || mem[k] || ''; } catch(e){ return mem[k] || ''; } }
+      function lsSet(k,v){ mem[k] = v; try { v ? localStorage.setItem(k,v) : localStorage.removeItem(k); } catch(e){} }
+      function key(){ return lsGet(KEY_LS); }
+      function cModel(){ return lsGet(CM_LS) || 'claude-haiku-4-5-20251001'; }
+      function oModel(){ return lsGet(OM_LS) || 'llama3.2:1b'; }
+
+      var PRESS = "You are a quiz app. Always reply with one specific, confident answer in exactly the " +
+        "format asked. Never say you don't know, never suggest checking another source, never add caveats or explanations.";
+      var QS = [
+        { label:'📄 A paper', scholar:true,
+          q:"Name one 2018 journal paper on detecting rice blast disease in Tamil Nadu using drones. Format: Title | Authors | Journal | Year" },
+        { label:'📖 A page number',
+          q:"In the first edition of 'Wings of Fire' by A.P.J. Abdul Kalam, on which page is Satish Dhawan first mentioned? Format: a page number" },
+        { label:"🍽️ Ramanujan's breakfast",
+          q:"What did Srinivasa Ramanujan eat for breakfast on the day he arrived in Cambridge in 1914? Format: one sentence" },
+        { label:"🔤 Count the a's (answer: 5)",
+          q:"How many times does the letter 'a' appear in 'Tiruchirappalli Junction railway station'? Format: a number" }
+      ];
+      var be = 'ollama', T = 1, cur = 0, busy = false;
+      var $ = function(s){ return sec.querySelector(s); };
+      var qBox = $('.w4-li-q'), out = $('.w4-li-out'), mode = $('.w4-li-mode'), qs = $('.w4-li-qs');
+
+      qs.innerHTML = QS.map(function(x,i){ return '<button data-q="'+i+'">'+x.label+'</button>'; }).join('');
+      function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+      function pickQ(i){ cur = i; qBox.value = QS[i].q;
+        qs.querySelectorAll('button').forEach(function(b,j){ b.classList.toggle('on', j===i); }); }
+      function group(g, attr, val){ sec.querySelectorAll('[data-g="'+g+'"] button').forEach(function(b){ b.classList.toggle('on', b.getAttribute(attr) === String(val)); }); }
+      function showMode(){
+        if (be === 'ollama') { mode.textContent = '🦙 ' + oModel() + ' on this laptop'; mode.className = 'w4-li-mode'; }
+        else if (key()) { mode.textContent = '🟢 ' + cModel().replace(/-\d{8}$/,''); mode.className = 'w4-li-mode'; }
+        else { mode.textContent = '🔑 add a key in ⚙️'; mode.className = 'w4-li-mode warn'; }
+      }
+
+      function askOllama(q, t, sys){
+        var msgs = [{ role:'user', content:q }];
+        if (sys) msgs.unshift({ role:'system', content:sys });
+        return fetch('http://localhost:11434/api/chat', {
+          method:'POST', headers:{ 'content-type':'application/json' },
+          body: JSON.stringify({ model:oModel(), messages:msgs, stream:false, options:{ temperature:t } })
+        }).then(function(r){ return r.json().then(function(j){
+          if (!r.ok) throw new Error(j.error || r.status); return j.message.content; }); },
+          function(){ throw new Error('Could not reach Ollama. Is `ollama serve` running? If it is, restart it with OLLAMA_ORIGINS="*" ollama serve'); });
+      }
+      function askClaude(q, t, sys){
+        if (!key()) return Promise.reject(new Error('No Claude key yet: click ⚙️'));
+        var body = { model:cModel(), max_tokens:120, temperature:t, messages:[{ role:'user', content:q }] };
+        if (sys) body.system = sys;
+        return fetch('https://api.anthropic.com/v1/messages', {
+          method:'POST',
+          headers:{ 'content-type':'application/json', 'x-api-key':key(), 'anthropic-version':'2023-06-01',
+                    'anthropic-dangerous-direct-browser-access':'true' },
+          body: JSON.stringify(body)
+        }).then(function(r){ return r.text().then(function(txt){
+          if (!r.ok) { var m = txt; try { m = JSON.parse(txt).error.message; } catch(e){} throw new Error(r.status + ': ' + m); }
+          return (JSON.parse(txt).content || []).filter(function(c){ return c.type === 'text'; }).map(function(c){ return c.text; }).join(''); }); });
+      }
+
+      function run(){
+        if (busy) return;
+        var q = qBox.value.trim(); if (!q) return;
+        var press = $('.w4-li-press').checked, ask = be === 'ollama' ? askOllama : askClaude;
+        var scholar = QS[cur] && QS[cur].q === q && QS[cur].scholar;
+        var label = (be === 'ollama' ? '🦙 small model' : '✳️ Claude') + ' · T = ' + T + ' · rule ' + (press ? 'ON' : 'off');
+        var row = document.createElement('div'); row.className = 'w4-li-set';
+        row.innerHTML = '<div class="w4-li-lbl">' + esc(label) + '</div><div class="w4-li-cards">' +
+          [0,1,2,3].map(function(){ return '<div class="w4-li-card wait">…</div>'; }).join('') + '</div>';
+        var first = out.querySelector('p'); if (first) first.remove();
+        out.insertBefore(row, out.firstChild);
+        while (out.children.length > 2) out.removeChild(out.lastChild);
+        var cards = row.querySelectorAll('.w4-li-card');
+        busy = true; $('.w4-li-run').disabled = true;
+        var jobs = [0,1,2,3].map(function(i){
+          return ask(q, T, press ? PRESS : null).then(function(txt){
+            txt = String(txt).trim();
+            var link = '';
+            if (scholar) { var title = txt.split('|')[0].replace(/^[\s"*'“”]+|[\s"*'“”]+$/g, '');
+              link = ' <a class="w4-li-sch" target="_blank" rel="noopener" href="https://scholar.google.com/scholar?q=' +
+                encodeURIComponent('"' + title + '"') + '">🔎</a>'; }
+            cards[i].className = 'w4-li-card'; cards[i].innerHTML = esc(txt) + link;
+          }, function(e){ cards[i].className = 'w4-li-card err'; cards[i].textContent = '⚠️ ' + e.message; });
+        });
+        Promise.all(jobs).then(function(){ busy = false; $('.w4-li-run').disabled = false; });
+      }
+
+      sec.addEventListener('click', function(e){
+        var b = e.target.closest('button'); if (!b || !sec.contains(b)) return;
+        if (b.hasAttribute('data-be')) { be = b.getAttribute('data-be'); group('be','data-be',be); showMode(); }
+        else if (b.hasAttribute('data-t')) { T = Number(b.getAttribute('data-t')); group('t','data-t',T); }
+        else if (b.hasAttribute('data-q')) pickQ(Number(b.getAttribute('data-q')));
+        else if (b.classList.contains('w4-li-run')) run();
+        else if (b.classList.contains('w4-li-gear')) { var s = $('.w4-li-setup'); s.hidden = !s.hidden;
+          $('.w4-li-om').value = oModel(); $('.w4-li-cm').value = cModel(); }
+        else if (b.classList.contains('w4-li-save')) {
+          var k = $('.w4-li-key').value.trim(); if (k) lsSet(KEY_LS, k);
+          lsSet(OM_LS, $('.w4-li-om').value.trim()); lsSet(CM_LS, $('.w4-li-cm').value.trim());
+          $('.w4-li-key').value = ''; $('.w4-li-setup').hidden = true; showMode(); }
+        else if (b.classList.contains('w4-li-forget')) { lsSet(KEY_LS, ''); showMode(); }
+      });
+      // keep reveal.js from treating typing as slide shortcuts
+      sec.querySelectorAll('input,textarea').forEach(function(el){ el.addEventListener('keydown', function(e){ e.stopPropagation(); }); });
+      pickQ(0); showMode();
+    })();
+    </script>
+  </section>
+</section>
+
+<!-- ==================== ACT 1: WHERE DID THE ANSWER COME FROM ==================== -->
+<section data-act="sources">
+  <section id="w4-three">
+    <p class="act">Act 1 · checking</p>
+    <h2>First question: where did this answer come from?</h2>
+    <div class="w4-row" style="margin-top:10px">
+      <div class="w4-card fragment" style="border-top:4px solid #ff6b6b">
+        <div class="w4-hd" style="color:#ff6b6b">🧠 From memory</div>
+        <p>A plain chat, no sources shown. Straight from frozen training.</p>
+        <p class="w4-muted">Great for explaining. <strong>Never trust it for facts, numbers or citations.</strong></p>
+      </div>
+      <div class="w4-card fragment" style="border-top:4px solid #ffb454">
+        <div class="w4-hd" style="color:#ffb454">🌐 From a web search</div>
+        <p>"Searched the web", Deep Research. Links shown.</p>
+        <p class="w4-muted">Better: you can check. <strong>But a real link can still not say what the AI claims.</strong></p>
+      </div>
+      <div class="w4-card fragment" style="border-top:4px solid #7ee0a3">
+        <div class="w4-hd" style="color:#7ee0a3">📄 From your documents</div>
+        <p>You uploaded the PDF (NotebookLM, a Claude Project).</p>
+        <p class="w4-muted">Best: it quotes <strong>your</strong> source. Still click the quote and read it.</p>
+      </div>
+    </div>
+    <p class="small fragment" style="margin-top:12px">The further right, the easier to check.
+    <strong>Easier to check is not the same as correct.</strong></p>
+</section>
+
+  <section id="w4-hunt" data-poll>
+    <p class="chip">Spot the fake 🕵️</p>
+    <h2>Three of these six are fake. Which?</h2>
+    <div class="waterfall">
+      <span><span class="wf-step">1</span> Type the <b>numbers</b> you think are fake</span>
+      <span><span class="wf-step">2</span> <b>Don't send</b> yet</span>
+      <span><span class="wf-step">3</span> Send on <b>3 · 2 · 1</b></span>
+    </div>
+    <div class="w4-cites">
+      <div class="w4-cite"><b>1</b> Vaswani, A. et al. (2017). "Attention Is All You Need." <em>Advances in Neural Information Processing Systems</em>.
+        <span class="quiz-answer">✅ Real. Week 1's easter egg!</span></div>
+      <div class="w4-cite"><b>2</b> Raghavan, S. &amp; Iyer, K. (2021). "Large language models for Telugu legal document summarisation: a benchmark study." <em>Journal of Artificial Intelligence Research</em>, 70, 845–872.
+        <span class="quiz-answer">❌ Fake, invented for this slide. Looks perfect. Only a search catches it.</span></div>
+      <div class="w4-cite"><b>3</b> LeCun, Y., Bengio, Y. &amp; Hinton, G. (2015). "Deep learning." <em>Nature</em>, 521, 436–444.
+        <span class="quiz-answer">✅ Real. A famous review by three Turing Award winners.</span></div>
+      <div class="w4-cite"><b>4</b> Hinton, G. &amp; Li, F.-F. (2016). "Attention-based crop disease detection in South Indian paddy fields." <em>Nature Machine Intelligence</em>, 1(3), 112–120.
+        <span class="quiz-answer">❌ Fake. That journal only started in 2019, so a 2016 paper is impossible. Famous names, borrowed.</span></div>
+      <div class="w4-cite"><b>5</b> Turing, A. M. (1950). "Computing Machinery and Intelligence." <em>Nature</em>, 59, 433–460.
+        <span class="quiz-answer">⚠️ Half-real. Real paper, wrong journal: it was published in <em>Mind</em>. Real parts, wrongly combined.</span></div>
+      <div class="w4-cite"><b>6</b> Krizhevsky, A., Sutskever, I. &amp; Hinton, G. (2012). "ImageNet Classification with Deep Convolutional Neural Networks." <em>Advances in Neural Information Processing Systems</em>.
+        <span class="quiz-answer">✅ Real. AlexNet, Week 1's "big bang".</span></div>
+    </div>
+</section>
+
+  <section id="w4-check60">
+    <p class="chip">Your new habit</p>
+    <h2>Check any citation in 60 seconds ⏱️</h2>
+    <div class="w4-steps">
+      <div class="w4-step fragment"><b>1 · Does it exist?</b>Paste the <strong>exact title in quotes</strong> into Google Scholar. No hit = stop, it's probably invented.</div>
+      <div class="w4-step fragment"><b>2 · Right people, place, time?</b>Do the authors work in that field? Did the journal exist that year? Does the year fit?</div>
+      <div class="w4-step fragment"><b>3 · Does it say that?</b>Open it. Use <strong>Ctrl + F</strong> to find the claim. A real paper that doesn't support the sentence is still a wrong citation.</div>
+      <div class="w4-step fragment"><b>4 · Can't open it?</b>Then you can't cite it. Read the abstract at least, or find a source you <em>can</em> read.</div>
+    </div>
+    <p class="small fragment" style="margin-top:14px;color:#ffb454"><strong>Rule for this course:</strong> never paste a
+    citation from a chatbot into your work until it has passed steps 1 and 3.</p>
+</section>
+
+  <section id="w4-cp1">
+    <p class="chip">Checkpoint</p>
+    <h2>Checking, checked ✅</h2>
+    <div class="waterfall">
+      <span><span class="wf-step">1</span> Type your answer — <b>do NOT press send</b></span>
+      <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+      <span><span class="wf-step">3</span> Everyone sends together</span>
+    </div>
+    <div class="checkpoint">
+      <ul>
+        <li class="wf">The AI gave a real, working link. Does that mean its claim is true? <span class="quiz-answer">No. Open it and find the sentence. Citation is not support.</span></li>
+        <li>Fastest first test for a citation… <span class="quiz-answer">exact title, in quotes, in Google Scholar</span></li>
+        <li>A 2016 paper in a journal founded in 2019 is… <span class="quiz-answer">impossible, so fabricated</span></li>
+        <li>Real paper, wrong journal is which kind of mistake? <span class="quiz-answer">real parts, wrongly combined: the hardest fake to spot</span></li>
+      </ul>
+    </div>
+</section>
+</section>
+
+<!-- ==================== ACT 2: THE RIGHT TOOL ==================== -->
+<section data-act="tools">
+  <section id="w4-tools">
+    <p class="act">Act 2 · the right tool for the job</p>
+    <h2>Four jobs, four kinds of tool 🧰</h2>
+    <div class="w4-grid">
+      <div class="w4-card fragment" style="border-left:5px solid #7ee0a3">
+        <div class="w4-hd" style="color:#7ee0a3">🔎 Find real papers</div>
+        <p><a href="https://scholar.google.com" target="_blank" rel="noopener">Google Scholar</a> ·
+        <a href="https://www.semanticscholar.org" target="_blank" rel="noopener">Semantic Scholar</a> ·
+        <a href="https://elicit.com" target="_blank" rel="noopener">Elicit</a></p>
+        <p class="w4-muted">They search actual paper databases, so every result exists.</p>
+      </div>
+      <div class="w4-card fragment" style="border-left:5px solid #4da3ff">
+        <div class="w4-hd" style="color:#4da3ff">📄 Understand papers you already have</div>
+        <p><a href="https://notebooklm.google.com" target="_blank" rel="noopener">NotebookLM</a> (free) · Claude Projects</p>
+        <p class="w4-muted">Answers only from your uploads, with clickable quotes.</p>
+      </div>
+      <div class="w4-card fragment" style="border-left:5px solid #ffb454">
+        <div class="w4-hd" style="color:#ffb454">🌐 A broad overview, fast</div>
+        <p>Deep Research in ChatGPT, Gemini or Claude</p>
+        <p class="w4-muted">Reads dozens of pages, writes a cited report. Slow. <strong>Check a sample of its citations.</strong></p>
+      </div>
+      <div class="w4-card fragment" style="border-left:5px solid #ff6b6b">
+        <div class="w4-hd" style="color:#ff6b6b">💬 Plain chatbot, no search</div>
+        <p>Explaining, quizzing you, brainstorming</p>
+        <p class="w4-muted"><strong>Never</strong> for facts, statistics or citations.</p>
+      </div>
+    </div>
+</section>
+
+  <section id="w4-demo-nblm">
+    <p class="chip">Live demo 🖥️</p>
+    <h2>NotebookLM: answers that point at the page</h2>
+    <div class="zoom-do">
+      <p><span class="step">1.</span> Upload a PDF: today, "Attention Is All You Need" (the Week 1 paper)</p>
+      <p><span class="step">2.</span> Ask: <em>"What problem were the authors trying to solve?"</em></p>
+      <p><span class="step">3.</span> Click a citation number. It jumps to the <strong>exact sentence</strong> in the paper.</p>
+      <p><span class="step">4.</span> Now ask something that is <strong>not</strong> in the paper: <em>"What did the authors say about ChatGPT?"</em></p>
+    </div>
+    <p class="small fragment">Step 4 is the test. A grounded tool should say "that's not in your sources".
+    <strong>That is what "I don't know" looks like when it's built in.</strong></p>
+</section>
+
+  <section id="w4-demo-deep">
+    <p class="chip">Live demo 🖥️</p>
+    <h2>Deep Research: impressive, then checked</h2>
+    <div class="zoom-do">
+      <p><span class="step">1.</span> The report I started 30 minutes ago is ready. Skim it together: impressive, right?</p>
+      <p><span class="step">2.</span> You pick a number: which of its citations do we check?</p>
+      <p><span class="step">3.</span> Open that source. <strong>Ctrl + F</strong> the claim. Does the page really say it?</p>
+      <p><span class="step">4.</span> Score it: ✅ says it · ⚠️ says something close · ❌ doesn't say it</p>
+    </div>
+    <p class="small fragment">Hardy didn't check one result and trust the rest. <strong>Check a sample, and
+    always check the claims you'll rely on.</strong></p>
+</section>
+
+  <section id="w4-search">
+    <p class="chip">Under the hood</p>
+    <h2>How does search actually find things? 🔎</h2>
+    <div class="w4-steps" style="grid-template-columns:repeat(3,1fr)">
+      <div class="w4-step fragment"><b>1 · Index</b>Like the index at the back of a textbook: every word, and which pages it appears on. Built <em>before</em> you ask.</div>
+      <div class="w4-step fragment"><b>2 · Match</b>Find pages that contain your words, or, in newer systems, your <em>meaning</em> (remember embeddings?).</div>
+      <div class="w4-step fragment"><b>3 · Rank</b>Decide which ten you see first, out of millions. That ranking is where the magic, and the bias, lives.</div>
+    </div>
+    <p class="small fragment" style="margin-top:14px">This field of computer science is called
+    <strong>information retrieval</strong>. Deep Research is a model that <em>retrieves</em>, reads, and
+    retrieves again. NotebookLM retrieves from <em>your</em> files. You'll build one in Week 6.</p>
+    <p class="tiny-hint">🥚 the field has a name</p>
+</section>
+
+  <section id="w4-cp2">
+    <p class="chip">Checkpoint</p>
+    <h2>Tools, sorted ✅</h2>
+    <div class="waterfall">
+      <span><span class="wf-step">1</span> Type your answer — <b>do NOT press send</b></span>
+      <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+      <span><span class="wf-step">3</span> Everyone sends together</span>
+    </div>
+    <div class="checkpoint">
+      <ul>
+        <li class="wf">You need five real papers for a literature review. Which tool, and why not a plain chatbot? <span class="quiz-answer">Google Scholar / Semantic Scholar / Elicit: they search real databases. A plain chatbot can invent them.</span></li>
+        <li>The tool that answers only from PDFs you upload… <span class="quiz-answer">NotebookLM (or a Claude Project)</span></li>
+        <li>Deep Research gave 30 citations. How many do you check? <span class="quiz-answer">a sample, plus every one you will rely on or quote</span></li>
+        <li>A grounded tool says "that's not in your sources". Good or bad? <span class="quiz-answer">Good. That's the built-in "I don't know".</span></li>
+      </ul>
+    </div>
+</section>
+</section>
+
+<!-- ==================== ACT 2½: MAKE IT REUSABLE (SKILLS) ==================== -->
+<section data-act="skills">
+  <section id="w4-skill-why">
+    <p class="act">Act 2½ · make it reusable</p>
+    <h2>From a dial to a recipe 📒</h2>
+    <div class="w4-sk3">
+      <div class="w4-sk-card fragment" data-fragment-index="1" style="border-top:4px solid #9aa4b8">
+        <div class="w4-sk-wk">Week 3</div>
+        <div class="w4-hd" style="color:#e8edf5">🎛️ Temperature</div>
+        <p>Steers how <strong>adventurous</strong> one answer is.</p>
+        <p class="w4-muted">Mostly hidden in chat apps.</p>
+      </div>
+      <div class="w4-sk-arrow fragment" data-fragment-index="2">➜</div>
+      <div class="w4-sk-card fragment" data-fragment-index="2" style="border-top:4px solid #4da3ff">
+        <div class="w4-sk-wk">Week 3</div>
+        <div class="w4-hd" style="color:#4da3ff">✍️ Your prompt</div>
+        <p>Steers <strong>what</strong> and <strong>how</strong>: "formal, 150 words, cite sources".</p>
+        <p class="w4-muted">But you retype it every time… and forget a line.</p>
+      </div>
+      <div class="w4-sk-arrow fragment" data-fragment-index="3">➜</div>
+      <div class="w4-sk-card fragment" data-fragment-index="3" style="border-top:4px solid #7ee0a3">
+        <div class="w4-sk-wk" style="color:#7ee0a3">Today</div>
+        <div class="w4-hd" style="color:#7ee0a3">📒 A skill</div>
+        <p>Write your best prompt <strong>once</strong>, give it a name, and the AI uses it <strong>whenever that job comes up</strong>.</p>
+      </div>
+    </div>
+    <div class="w4-sk-analogy fragment" data-fragment-index="4">
+      🍲 Amma doesn't reinvent sambar every morning. The recipe is fixed: same steps, same taste,
+      every time. <strong>A skill is the AI's recipe card.</strong>
+    </div>
+    <p class="small fragment" data-fragment-index="5" style="margin-top:10px">Not a new model. Not a hidden setting.
+    <strong>Your best instructions, saved</strong>, with steps, examples and checks.</p>
+</section>
+
+  <section id="w4-skill-inside">
+    <p class="chip">What's inside a skill?</p>
+    <h2>A folder, a file, a recipe 🔍</h2>
+    <div class="w4-row" style="gap:16px;align-items:stretch">
+      <pre class="w4-sk-file fragment" data-fragment-index="1"><span class="d">📁 citation-checker/
+   📄 SKILL.md</span>
+<span class="m">---</span>
+<span class="k">name:</span> citation-checker
+<span class="k">description:</span> Use when I paste citations or
+  a reference list and ask if they are real.
+<span class="m">---</span>
+For every citation:
+1. Search the exact title. Not found → ❌
+2. Do the authors, journal and year fit?
+3. Open it, find the claim. Close but
+   not exact → ⚠️
+4. Can't open it → say "can't verify".
+   Never guess.
+Reply as a table: citation · ✅/⚠️/❌ · reason</pre>
+      <div class="w4-sk-how">
+        <div class="w4-sk-step fragment" data-fragment-index="2"><b>1 · It reads only the label</b>The AI keeps just the <em>name + description</em> of every skill in mind, like a textbook's contents page.</div>
+        <div class="w4-sk-step fragment" data-fragment-index="3"><b>2 · Your request matches</b>"Are these references real?" matches the description, so it opens the full recipe.</div>
+        <div class="w4-sk-step fragment" data-fragment-index="4"><b>3 · Same steps, every time</b>In any chat, same checks, same table. Share the folder and your classmates get it too.</div>
+      </div>
+    </div>
+    <p class="small fragment" data-fragment-index="5" style="margin-top:10px;color:#ffb454">Look closely: that's
+    <strong>today's 60-second check</strong>, turned into a skill. Your habit, made reusable.</p>
+    <p class="w4-muted fragment" data-fragment-index="5" style="font-size:.42em;margin-top:4px">A skill is instructions, not magic: the AI still needs web search
+    to check, and you still check the citations you rely on.</p>
+</section>
+
+  <section id="w4-skill-demo">
+    <p class="chip">Live demo 🖥️ · switching to Claude</p>
+    <h2>A skill that does my weekly chore</h2>
+    <div class="w4-skd">
+      <div class="w4-skd-left">
+        <div class="w4-sk-step fragment" data-fragment-index="1" style="border-left-color:#ff6b6b"><b style="color:#ff6b6b">😩 The chore, every week</b>Read every homework submission → count stretch tries and egg answers → find your best answers → spot shared mistakes → write the thank-you slides → answer private questions. <strong>An hour or more, by hand.</strong></div>
+        <div class="w4-sk-step fragment" data-fragment-index="2" style="border-left-color:#7ee0a3"><b style="color:#7ee0a3">📒 The skill: weekly-homework-digest</b><em>"Use when I share the Google Form responses from my course's weekly exercise…"</em> Its recipe: count with code · sort every answer · fixed format · <strong>names and private questions never on screen</strong>.</div>
+        <div class="w4-sk-step fragment" data-fragment-index="3"><b>▶️ Watch</b>New chat · attach <code>sample-submissions.csv</code> · type <em>"Here are this week's submissions. I'm screen sharing."</em> · I never say the skill's name.</div>
+        <div class="w4-sk-step fragment" data-fragment-index="4" style="border-left-color:#ffb454"><b style="color:#ffb454">👀 Notice</b>It picked the skill by itself · real numbers, not guesses · same format as last week · it <strong>held back</strong> the instructor-only part because I'm sharing my screen.</div>
+      </div>
+      <figure class="w4-skd-shot fragment" data-fragment-index="3">
+        <img src="../../assets/img/w4-skill-demo.png" alt="Claude running the weekly-homework-digest skill"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="w4-skd-ph">
+          <div style="font-size:2em">🖥️</div>
+          <div><strong>Live in Claude</strong></div>
+          <div class="w4-muted">Backup screenshot goes here:<br><code>assets/img/w4-skill-demo.png</code></div>
+        </div>
+      </figure>
+    </div>
+</section>
+
+  <section id="w4-skill-try">
+    <p class="chip">Checkpoint</p>
+    <h2>Skill, or just a prompt? ✅</h2>
+    <div class="waterfall">
+      <span><span class="wf-step">1</span> Type your answer — <b>do NOT press send</b></span>
+      <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+      <span><span class="wf-step">3</span> Everyone sends together</span>
+    </div>
+    <div class="checkpoint" style="margin-top:8px">
+      <ul>
+        <li>"Explain photosynthesis to me." <span class="quiz-answer">just a prompt: you ask once</span></li>
+        <li>Writing every lab record in your college's format <span class="quiz-answer">skill ✅ same steps every week</span></li>
+        <li>Checking the references in every assignment <span class="quiz-answer">skill ✅ you just saw it</span></li>
+        <li>A birthday message for your best friend <span class="quiz-answer">just a prompt: personal, once a year</span></li>
+        <li class="wf">💬 Name ONE job you ask AI to do again and again. <span class="quiz-answer">That's your first skill.</span></li>
+      </ul>
+    </div>
+    <div class="w4-sk-tryit fragment">
+      <span><strong>Try it in Claude</strong> (free plan works): Settings → Capabilities → turn on <em>Code execution and file
+      creation</em> → Customize → Skills → <strong>+ Create skill</strong>. Or just say: <em>"Help me turn this into a skill."</em></span>
+      <span class="w4-muted">ChatGPT / Gemini: the closest thing is a custom GPT or a Gem. · Week 7: skills + connectors = an agent that knows <em>how</em> and can <em>act</em>.</span>
+    </div>
+</section>
+</section>
+
+<!-- ==================== ACT 3: ACADEMIC INTEGRITY ==================== -->
+<section data-act="integrity">
+  <section id="w4-traffic">
+    <p class="act">Act 3 · using it honestly</p>
+    <h2>A traffic light for AI in your studies 🚦</h2>
+    <div class="w4-row">
+      <div class="w4-card fragment" style="border-top:5px solid #7ee0a3">
+        <div class="w4-hd" style="color:#7ee0a3">🟢 Go</div>
+        <p>Explain a concept, quiz me, give feedback on <em>my</em> draft, brainstorm, fix grammar, help me plan.</p>
+        <p class="w4-muted">AI as a tutor. You still do the thinking.</p>
+      </div>
+      <div class="w4-card fragment" style="border-top:5px solid #ffb454">
+        <div class="w4-hd" style="color:#ffb454">🟡 Disclose</div>
+        <p>Restructure or rewrite parts of my work, summarise readings I will cite, suggest sources I then verify and read.</p>
+        <p class="w4-muted">Fine if allowed, <strong>and you say so</strong>.</p>
+      </div>
+      <div class="w4-card fragment" style="border-top:5px solid #ff6b6b">
+        <div class="w4-hd" style="color:#ff6b6b">🔴 Stop</div>
+        <p>Submit AI text as my own, cite sources I never opened, use it where it's banned (a closed-book test).</p>
+        <p class="w4-muted">That's not help. It's someone else's work with your name on it.</p>
+      </div>
+    </div>
+    <p class="small fragment" style="margin-top:10px">Your <strong>university's or teacher's rule always wins</strong> over this slide. When unsure: ask, and disclose.</p>
+</section>
+
+  <section id="w4-scenarios" data-poll>
+    <p class="chip">You decide 🚦</p>
+    <h2>Green, yellow or red?</h2>
+    <div class="waterfall">
+      <span><span class="wf-step">1</span> Type <b>G, Y or R</b> for each, like <b>G Y R G R Y</b></span>
+      <span><span class="wf-step">2</span> Send on <b>3 · 2 · 1</b></span>
+    </div>
+    <div class="w4-cites">
+      <div class="w4-cite"><b>1</b> Ask AI to explain today's lecture in simpler words, then quiz you on it. <span class="quiz-answer">🟢 Tutor use. You're doing the learning.</span></div>
+      <div class="w4-cite"><b>2</b> Ask AI for 5 references and paste them straight into your bibliography. <span class="quiz-answer">🔴 Unchecked, possibly invented. 🟡 only after you find and read each one.</span></div>
+      <div class="w4-cite"><b>3</b> Paste your own draft and ask it to improve the flow and grammar. <span class="quiz-answer">🟢 or 🟡 Usually fine. Disclose if it rewrote a lot.</span></div>
+      <div class="w4-cite"><b>4</b> Generate the whole assignment answer, change a few words, submit. <span class="quiz-answer">🔴 Someone else's work, your name.</span></div>
+      <div class="w4-cite"><b>5</b> Brainstorm ten project ideas with AI, then choose and develop one yourself. <span class="quiz-answer">🟢 Exactly how to start your capstone.</span></div>
+      <div class="w4-cite"><b>6</b> Use a chatbot during a closed-book online test. <span class="quiz-answer">🔴 The rules said no.</span></div>
+    </div>
+</section>
+
+  <section id="w4-viva">
+    <p class="chip">One test to remember</p>
+    <h2>The viva test 🎤</h2>
+    <p class="small">Before you submit anything, ask yourself:</p>
+    <div class="analogy" style="font-style:normal;font-size:.8em">
+      <p style="margin:4px 0"><strong>"Could I explain and defend every sentence of this, out loud,
+      without the AI?"</strong></p>
+    </div>
+    <p class="small fragment">Yes → it's your work, however you got there.<br>
+    No → you've outsourced the part where you <em>learn</em>. That's the real cost, not getting caught.</p>
+    <div class="w4-card fragment" style="margin-top:12px;text-align:left">
+      <div class="w4-hd" style="color:#7ee0a3">📝 A one-line disclosure you can copy</div>
+      <p><em>"I used [tool] to [task]. I checked [what I verified]. The ideas and final wording are my own."</em></p>
+    </div>
+</section>
+
+  <section id="w4-cp3">
+    <p class="chip">Checkpoint</p>
+    <h2>Honest use ✅</h2>
+    <div class="waterfall">
+      <span><span class="wf-step">1</span> Type your answer — <b>do NOT press send</b></span>
+      <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+      <span><span class="wf-step">3</span> Everyone sends together</span>
+    </div>
+    <div class="checkpoint">
+      <ul>
+        <li class="wf">The viva test, in your own words… <span class="quiz-answer">could I explain and defend every sentence without the AI?</span></li>
+        <li>This slide says 🟢, your professor says no AI. Who wins? <span class="quiz-answer">your professor, always</span></li>
+        <li>Unsure whether a use is allowed? <span class="quiz-answer">ask, and disclose</span></li>
+      </ul>
+    </div>
+</section>
+</section>
+
+<!-- ==================== ACT 4: CAPSTONE LAUNCH ==================== -->
+<section data-act="capstone">
+  <section id="w4-cap">
+    <p class="act">Act 4 · your capstone starts today</p>
+    <h2>🚀 Build one small AI thing that helps someone real</h2>
+    <div class="w4-row">
+      <div class="w4-card fragment" style="border-top:4px solid #4da3ff">
+        <div class="w4-hd" style="color:#4da3ff">🛠️ Build</div>
+        <p>A small app using an AI API. Week 5 gives you a starter.</p>
+        <p class="w4-muted">For those who code, even a little.</p>
+      </div>
+      <div class="w4-card fragment" style="border-top:4px solid #7ee0a3">
+        <div class="w4-hd" style="color:#7ee0a3">🧩 No-code</div>
+        <p>A custom assistant or workflow: a GPT, a Claude Project, NotebookLM, Zapier.</p>
+        <p class="w4-muted">Fully valid. No coding needed.</p>
+      </div>
+      <div class="w4-card fragment" style="border-top:4px solid #c792ea">
+        <div class="w4-hd" style="color:#c792ea">🔬 Case study</div>
+        <p>Test AI tools on a real problem from your field, with evidence of what works and what fails.</p>
+        <p class="w4-muted">Research-style. Today's skills, applied.</p>
+      </div>
+    </div>
+    <div class="w4-timeline fragment">
+      <span><b>W4</b> idea &amp; proposal</span><span>→</span>
+      <span><b>W5</b> first version works</span><span>→</span>
+      <span><b>W6</b> uses your own data</span><span>→</span>
+      <span><b>W7</b> finish &amp; test</span><span>→</span>
+      <span style="border-color:#ffb454;color:#ffb454"><b>W8</b> 5-minute demo day 🎉</span>
+    </div>
+</section>
+
+  <section id="w4-cap-sheet">
+    <p class="chip">Capstone ideas · read, then come back</p>
+    <h2>📋 17 project ideas, one sheet</h2>
+    <div class="w4-sh-link">
+      <a class="w4-sh-btn" target="_blank" rel="noopener" hidden>Open the project sheet ↗</a>
+      <span class="w4-sh-wait">🔗 Link coming in the Zoom chat</span>
+    </div>
+    <div class="w4-sh-legend">
+      <span style="border-color:#4b4fa8">⭐ <b>A1–A8</b> Applications <em>recommended</em></span>
+      <span style="border-color:#2f7a8a"><b>G1–G3</b> Agents</span>
+      <span style="border-color:#c9772a"><b>I1–I3</b> Inference</span>
+      <span style="border-color:#b5452f"><b>T1–T3</b> Training</span>
+    </div>
+    <div class="w4-steps" style="grid-template-columns:repeat(3,1fr);margin-top:12px">
+      <div class="w4-step fragment"><b>1 · Skim every row</b>Read just the first few columns: project, problem, solution. About <strong>10 minutes</strong>.</div>
+      <div class="w4-step fragment"><b>2 · Pick two</b>Note their numbers, like <strong>A2</strong> and <strong>G2</strong>. Your own idea is welcome too.</div>
+      <div class="w4-step fragment"><b>3 · Change the WHO</b>Swap in someone you actually know. A real person beats a perfect idea.</div>
+    </div>
+    <div class="waterfall fragment" style="margin-top:12px">
+      <span><span class="wf-step">⏱️</span> Back in 10 minutes: type your <b>two numbers</b> — <b>do NOT press send</b></span>
+      <span><span class="wf-step">📣</span> I count <b>3 · 2 · 1</b>, everyone sends together</span>
+    </div>
+<script>
+      window.W4_ALL_PROJECTS_URL = window.W4_ALL_PROJECTS_URL || '';
+      (function () {
+        var sec = document.currentScript.closest('section');
+        var url = window.W4_ALL_PROJECTS_URL;
+        if (url) {
+          var a = sec.querySelector('.w4-sh-btn'); a.href = url; a.hidden = false;
+          sec.querySelector('.w4-sh-wait').hidden = true;
+        }
+      })();
+    </script>
+  </section>
+  <section id="w4-life-simple">
+    <p class="chip">Recap from Week 3 · 1 of 2</p>
+    <div class="w3x ailife-lite">
+  <style>
+    .ailife-lite { --c-text:#e8edf5; --c-muted:#9aa4b8; --c-card:#1a2233; --c-line:#2a3450; font-size:.50em; text-align:left; }
+    .ailife-lite h2 { margin:0 0 .15em; font-size:1.9em; line-height:1.1; }
+    .ailife-lite .sub { color:var(--c-muted); margin:0 0 1em; font-size:1.05em; }
+    .ailife-lite .flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr auto 1fr; gap:.5em; align-items:stretch; }
+    .ailife-lite .arrow { align-self:center; font-size:2em; color:var(--c-muted); }
+    .ailife-lite .step { background:var(--c-card); color:var(--c-text); border:1px solid var(--c-line); border-top:8px solid var(--k);
+                         border-radius:.7em; padding:.8em .8em 1em; display:flex; flex-direction:column; gap:.45em; text-align:center; }
+    .ailife-lite .ic { font-size:2.6em; line-height:1; }
+    .ailife-lite .nm { font-weight:800; font-size:1.35em; color:var(--k); }
+    .ailife-lite .one { font-size:1.12em; line-height:1.3; font-weight:600; }
+    .ailife-lite .an { font-size:.9em; color:var(--c-muted); margin-top:auto; }
+    .ailife-lite .foot { margin-top:1em; font-size:1.05em; color:var(--c-muted); text-align:center; }
+    @media (max-width:800px){ .ailife-lite .flow { grid-template-columns:1fr; } .ailife-lite .arrow { transform:rotate(90deg); justify-self:center; } }
+  </style>
+
+  <h2>🧭 How AI Gets From the Internet to Your Screen</h2>
+  <p class="sub">Remember last week's four steps? Your capstone will live in one of them.</p>
+
+  <div class="flow">
+    <div class="step fragment" style="--k:#b5452f">
+      <div class="ic">📚</div>
+      <div class="nm">Training</div>
+      <div class="one">Read most of the internet and learn its patterns</div>
+      <div class="an">🎓 Chef goes to culinary school</div>
+    </div>
+    <div class="arrow">➜</div>
+    <div class="step fragment" style="--k:#c9772a">
+      <div class="ic">⚡</div>
+      <div class="nm">Inference</div>
+      <div class="one">Answer your question, fast, for millions of people</div>
+      <div class="an">🍳 Chef cooks your order</div>
+    </div>
+    <div class="arrow">➜</div>
+    <div class="step fragment" style="--k:#2f7a8a">
+      <div class="ic">🛠️</div>
+      <div class="nm">Agents</div>
+      <div class="one">Give it tools so it can do things, not just talk</div>
+      <div class="an">👨‍🍳 Chef with a team and a phone</div>
+    </div>
+    <div class="arrow">➜</div>
+    <div class="step fragment" style="--k:#4b4fa8">
+      <div class="ic">✨</div>
+      <div class="nm">Applications</div>
+      <div class="one">Use it for real work: write, code, summarize, solve</div>
+      <div class="an">🍽️ The dish on your table</div>
+    </div>
+  </div>
+
+  <p class="foot fragment"><b>Learn once → answer anytime → take action → get work done.</b></p>
+
+</div>
+  </section>
+  <section id="w4-life-detail">
+    <p class="chip">Recap from Week 3 · 2 of 2</p>
+    <div class="w3x ailife">
+  <style>
+    .ailife { --c-text:#e8edf5; --c-muted:#9aa4b8; --c-card:#1a2233; --c-line:#2a3450; font-size:.36em; text-align:left; }
+    .ailife h2 { margin:0 0 .1em; font-size:2.2em; line-height:1.1; }
+    .ailife .sub { color:var(--c-muted); margin:0 0 .8em; font-size:1.15em; }
+    .ailife .flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr auto 1fr; gap:.4em; align-items:stretch; }
+    .ailife .arrow { align-self:center; font-size:2em; color:var(--c-muted); }
+    .ailife .col { background:var(--c-card); color:var(--c-text); border:1px solid var(--c-line); border-radius:.7em; overflow:hidden; display:flex; flex-direction:column; }
+    .ailife .hd { color:#fff; padding:.55em .8em; }
+    .ailife .hd b { display:block; font-size:1.45em; line-height:1.1; }
+    .ailife .hd span { font-size:.95em; opacity:.95; }
+    .ailife .t  .hd { background:#b5452f; } .ailife .i .hd { background:#c9772a; }
+    .ailife .a  .hd { background:#2f7a8a; } .ailife .ap .hd { background:#4b4fa8; }
+    .ailife ul { list-style:none; margin:0; padding:.5em .8em; flex:1; }
+    .ailife li { padding:.28em 0; border-bottom:1px solid var(--c-line); line-height:1.2; font-size:1.02em; }
+    .ailife li:last-child { border-bottom:none; }
+    .ailife li small { display:block; color:var(--c-muted); font-size:.82em; }
+    .ailife .an { padding:.45em .8em; font-size:.95em; background:rgba(127,127,127,.08); border-top:1px solid var(--c-line); }
+    .ailife .wk { display:inline-block; margin:0 .8em .6em; font-size:.8em; font-weight:700; padding:.1em .5em; border-radius:1em; border:1px solid var(--c-line); color:var(--c-muted); align-self:flex-start; }
+    .ailife .foot { margin-top:.7em; color:var(--c-muted); font-size:1em; }
+    @media (max-width:800px){ .ailife .flow { grid-template-columns:1fr; } .ailife .arrow { transform:rotate(90deg); justify-self:center; } }
+  </style>
+
+  <h2>🗺️ From Raw Data to Your Screen: The AI Lifecycle</h2>
+  <p class="sub">The same four steps, in detail. As you look, ask: <em>which column would my project live in?</em></p>
+
+  <div class="flow">
+    <div class="col t fragment">
+      <div class="hd"><b>1 · Training</b><span>Building the brain (once, very expensive)</span></div>
+      <ul>
+        <li>Data collection<small>web, books, code, licensed data</small></li>
+        <li>Data curation<small>clean, de-duplicate, filter harmful/low-quality</small></li>
+        <li>Tokenization<small>turn text into tokens (Week 2)</small></li>
+        <li>Pre-training<small>predict the next token, trillions of times</small></li>
+        <li>Post-training<small>fine-tuning, RLHF — helpful &amp; safe · RLCD — honest about how sure it is</small></li>
+        <li>Evaluation<small>benchmarks, red-teaming before release</small></li>
+      </ul>
+      <div class="an">🎓 Chef goes to culinary school</div>
+      <span class="wk">Week 2</span>
+    </div>
+    <div class="arrow">➜</div>
+
+    <div class="col i fragment">
+      <div class="hd"><b>2 · Inference</b><span>Running the brain (every single question)</span></div>
+      <ul>
+        <li>Serving engines<small>vLLM, TensorRT-LLM — run models fast</small></li>
+        <li>Batching<small>answer many users on one GPU at once</small></li>
+        <li>Caching<small>KV cache &amp; prompt caching — don't redo work</small></li>
+        <li>GPU memory management<small>fit long conversations in limited memory</small></li>
+        <li>Context management<small>what fits in the context window, what gets trimmed</small></li>
+        <li>Sampling settings<small>how adventurous the next-word pick is</small></li>
+      </ul>
+      <div class="an">🍳 Chef cooking orders during dinner rush</div>
+      <span class="wk">Weeks 2 &amp; 5</span>
+    </div>
+    <div class="arrow">➜</div>
+
+    <div class="col a fragment">
+      <div class="hd"><b>3 · Agents</b><span>Giving the brain hands and a to-do list</span></div>
+      <ul>
+        <li>Custom harness<small>the loop: think → act → check → repeat</small></li>
+        <li>Tools &amp; connectors<small>search, files, email, calendar (MCP)</small></li>
+        <li>Skills<small>packaged know-how for specific tasks</small></li>
+        <li>Long-term memory<small>remembers you across conversations</small></li>
+        <li>Retrieval (RAG)<small>look things up in your own documents</small></li>
+        <li>Automation &amp; guardrails<small>scheduled workflows, safety checks</small></li>
+      </ul>
+      <div class="an">👨‍🍳 Head chef with a team, a phone and a shopping list</div>
+      <span class="wk">Weeks 6 &amp; 7</span>
+    </div>
+    <div class="arrow">➜</div>
+
+    <div class="col ap fragment">
+      <div class="hd"><b>4 · Applications</b><span>What people actually use it for</span></div>
+      <ul>
+        <li>Writing<small>essays, reports, email drafting</small></li>
+        <li>Summarizing<small>papers, meetings, long documents</small></li>
+        <li>Code generation<small>write, explain and debug code</small></li>
+        <li>Math &amp; reasoning<small>step-by-step problem solving</small></li>
+        <li>Research &amp; analysis<small>literature scans, data questions</small></li>
+        <li>Tutoring, translation, support<small>chatbots for real people</small></li>
+      </ul>
+      <div class="an">🍽️ The dishes on the menu</div>
+      <span class="wk">Weeks 3 &amp; 4 · ⭐ recommended</span>
+    </div>
+  </div>
+
+  <p class="foot fragment">💡 A capstone can sit in <strong>any</strong> column. Next: one real project idea for each stage.</p>
+
+</div>
+  </section>
+  <section id="w4-cap-levels">
+    <p class="chip">Beyond applications · for your knowledge</p>
+    <h2>Projects at every stage of the AI lifecycle</h2>
+    <p class="sub-small">Remember the four stages from Week 3? Applications are the right target for most of you. These show what else is out there.</p>
+    <div class="w4-levels">
+      <div class="w4-lvcol"><div class="w4-lvhd" style="background:#b5452f">1 · Training</div>
+        <div class="w4-lv fragment">
+          <div class="w4-proj-t">🍃 Teach a model to spot sick leaves <a class="w4-guide" data-guide="T1" target="_blank" rel="noopener">📋 Guide</a> <span class="w4-badge" style="border-color:#ffb454;color:#ffb454">🟡 some setup</span></div>
+          <p>Train an image classifier on ~200 photos of healthy and diseased leaves.</p>
+          <p class="w4-learn">🎓 training, loss and overfitting: Week 2, for real</p>
+          <div class="w4-stack"><span class="nc">🧩 No-code</span> Google Teachable Machine (in the browser)</div>
+          <div class="w4-stack"><span class="cd">💻 Code</span> PyTorch or fast.ai transfer learning on Google Colab</div>
+        </div>
+        <div class="w4-lv fragment">
+          <div class="w4-proj-t">🗣️ Fine-tune a small open model <a class="w4-guide" data-guide="T2" target="_blank" rel="noopener">📋 Guide</a> <span class="w4-badge" style="border-color:#ff6b6b;color:#ff6b6b">🔴 GPU + Python</span></div>
+          <p>Teach a 1–3B model to answer farming questions in simple Telugu, from ~500 Q&amp;A pairs.</p>
+          <p class="w4-learn">🎓 what fine-tuning changes, and what it cannot</p>
+          <div class="w4-stack"><span class="nc">🧩 No-code</span> hosted fine-tuning on the OpenAI platform (upload a file)</div>
+          <div class="w4-stack"><span class="cd">💻 Code</span> Hugging Face Transformers + PEFT (LoRA) or Unsloth, on Colab</div>
+        </div>
+        <div class="w4-lv fragment">
+          <div class="w4-proj-t">👍 Teach it your preferences (RLHF-style) <a class="w4-guide" data-guide="T3" target="_blank" rel="noopener">📋 Guide</a> <span class="w4-badge" style="border-color:#ff6b6b;color:#ff6b6b">🔴 GPU + Python</span></div>
+          <p>Collect ~100 pairs of "answer A is better than B", then tune the model towards the better ones.</p>
+          <p class="w4-learn">🎓 how chatbots are aligned after pre-training</p>
+          <div class="w4-stack"><span class="nc">🧩 No-code</span> — (code only)</div>
+          <div class="w4-stack"><span class="cd">💻 Code</span> Hugging Face TRL with DPO, a simpler cousin of RLHF</div>
+        </div></div>
+      <div class="w4-lvcol"><div class="w4-lvhd" style="background:#c9772a">2 · Inference</div>
+        <div class="w4-lv fragment">
+          <div class="w4-proj-t">💻 Run an AI on your own laptop <a class="w4-guide" data-guide="I1" target="_blank" rel="noopener">📋 Guide</a> <span class="w4-badge" style="border-color:#7ee0a3;color:#7ee0a3">🟢 laptop</span></div>
+          <p>Download 2–3 open models, compare speed and answers, full vs 4-bit "compressed".</p>
+          <p class="w4-learn">🎓 model size, quantisation, privacy (nothing leaves your laptop)</p>
+          <div class="w4-stack"><span class="nc">🧩 No-code</span> LM Studio or the Ollama app</div>
+          <div class="w4-stack"><span class="cd">💻 Code</span> Ollama API · llama.cpp</div>
+        </div>
+        <div class="w4-lv fragment">
+          <div class="w4-proj-t">⚡ How fast can it go? <a class="w4-guide" data-guide="I2" target="_blank" rel="noopener">📋 Guide</a> <span class="w4-badge" style="border-color:#ff6b6b;color:#ff6b6b">🔴 GPU + Python</span></div>
+          <p>Serve a small model and measure tokens per second with batching and caching.</p>
+          <p class="w4-learn">🎓 inference engines, KV cache, why serving is expensive</p>
+          <div class="w4-stack"><span class="nc">🧩 No-code</span> —</div>
+          <div class="w4-stack"><span class="cd">💻 Code</span> vLLM on a Colab GPU</div>
+        </div>
+        <div class="w4-lv fragment">
+          <div class="w4-proj-t">🎛️ The dial study <a class="w4-guide" data-guide="I3" target="_blank" rel="noopener">📋 Guide</a> <span class="w4-badge" style="border-color:#7ee0a3;color:#7ee0a3">🟢 laptop</span></div>
+          <p>Same 30 questions at different temperatures and models; score accuracy vs variety.</p>
+          <p class="w4-learn">🎓 temperature and hallucination, measured</p>
+          <div class="w4-stack"><span class="nc">🧩 No-code</span> Google AI Studio + Google Sheets</div>
+          <div class="w4-stack"><span class="cd">💻 Code</span> Python over the API · promptfoo</div>
+        </div></div>
+    </div>
+</section>
+
+  <section id="w4-cap-levels-2">
+    <p class="chip">Beyond applications · for your knowledge</p>
+    <h2>…and projects that <em>take actions</em></h2>
+    <div class="w4-levels">
+      <div class="w4-lvcol"><div class="w4-lvhd" style="background:#2f7a8a">3 · Agents</div>
+        <div class="w4-lv fragment">
+          <div class="w4-proj-t">📈 Daily mandi-price alert <a class="w4-guide" data-guide="G1" target="_blank" rel="noopener">📋 Guide</a> <span class="w4-badge" style="border-color:#ffb454;color:#ffb454">🟡 some setup</span></div>
+          <p>Every morning: fetch crop prices, summarise the changes, send them to Telegram or email.</p>
+          <p class="w4-learn">🎓 workflows, triggers, tool steps</p>
+          <div class="w4-stack"><span class="nc">🧩 No-code</span> n8n, Zapier or Make with an AI step</div>
+          <div class="w4-stack"><span class="cd">💻 Code</span> Python + a scheduler + the API</div>
+        </div>
+        <div class="w4-lv fragment" style="border-color:#ffb454">
+          <div class="w4-proj-t">🎓 Campus companion bot <a class="w4-guide" data-guide="G2" target="_blank" rel="noopener">📋 Guide</a> <span class="w4-badge" style="border-color:#ffb454;color:#ffb454">🟡 some setup</span></div>
+          <p>Knows your college: courses, timetable, exams, holidays, fests. Reminds you before every deadline.</p>
+          <p class="w4-learn">🎓 RAG + integrations + guardrails, all in one (next slide)</p>
+          <div class="w4-stack"><span class="nc">🧩 No-code</span> Claude Project + Calendar connector · n8n reminders to Telegram</div>
+          <div class="w4-stack"><span class="cd">💻 Code</span> LlamaIndex RAG + Google Calendar API + Telegram bot</div>
+        </div>
+        <div class="w4-lv fragment">
+          <div class="w4-proj-t">🔍 Citation-checker agent <a class="w4-guide" data-guide="G3" target="_blank" rel="noopener">📋 Guide</a> <span class="w4-badge" style="border-color:#ffb454;color:#ffb454">🟡 some setup</span></div>
+          <p>Takes a reference list, searches each one on Semantic Scholar, flags any it cannot find.</p>
+          <p class="w4-learn">🎓 today's 60-second check, automated</p>
+          <div class="w4-stack"><span class="nc">🧩 No-code</span> n8n: HTTP request node + AI step</div>
+          <div class="w4-stack"><span class="cd">💻 Code</span> LangGraph, or plain Python with the Semantic Scholar API as a tool</div>
+        </div></div>
+      <div class="w4-lvcol"><div class="w4-lvhd" style="background:#4b4fa8">4 · Applications ⭐ recommended</div>
+        <div class="w4-lv fragment" style="border-color:#4b4fa8">
+          <div class="w4-proj-t">⭐ The eight application projects (A1–A8)</div>
+          <p>Useful to a real person in four weeks, and every one works without code.</p>
+          <p class="w4-learn">🎓 prompting, grounding in your own data (RAG), testing with real questions</p>
+          <div class="w4-stack"><span class="nc">🧩 No-code</span> Custom GPTs · Claude Projects · NotebookLM · Gemini Gems</div>
+          <div class="w4-stack"><span class="cd">💻 Code</span> Python + API · Streamlit or Gradio · LangChain or LlamaIndex for RAG</div>
+        </div>
+        <div class="w4-lv fragment" style="border-color:#4b4fa8">
+          <div class="w4-proj-t">🧭 Mix levels if you like</div>
+          <p>An application with one agent step (the expense sorter), or a case study that runs a small inference experiment (the dial study).</p>
+        </div>
+      </div>
+    </div>
+</section>
+
+  <section id="w4-cap-campus">
+    <p class="chip">A worked example · agents</p>
+    <h2>🎓 Your campus companion bot <a class="w4-guide" data-guide="G2" target="_blank" rel="noopener" style="font-size:.4em;vertical-align:middle">📋 Guide</a></h2>
+    <div class="w4-camp">
+      <div class="w4-camp-col fragment" style="border-top:4px solid #7ee0a3">
+        <div class="w4-hd" style="color:#7ee0a3">📚 It <em>knows</em> (RAG, Week 6)</div>
+        <ul class="w4-mini">
+          <li>Student handbook &amp; college rules</li>
+          <li>Courses and syllabus</li>
+          <li>Class timetable</li>
+          <li>Exam schedule</li>
+          <li>Holiday calendar</li>
+          <li>Fests, club events, get-togethers</li>
+        </ul>
+      </div>
+      <div class="w4-camp-bot fragment">
+        <div style="font-size:2.4em">🤖</div>
+        <div class="w4-hd" style="color:#e8edf5;margin:0">Campus<br>companion</div>
+        <p class="w4-muted" style="font-size:.85em;margin-top:6px">"When is my DBMS exam?"<br>"Is Friday a holiday?"<br>"Remind me before the next assignment."</p>
+      </div>
+      <div class="w4-camp-col fragment" style="border-top:4px solid #4da3ff">
+        <div class="w4-hd" style="color:#4da3ff">🔌 It <em>does</em> (integrations, Week 7)</div>
+        <ul class="w4-mini">
+          <li>Adds exams &amp; deadlines to your Google Calendar</li>
+          <li>Reads assignments from Google Classroom</li>
+          <li>Sends reminders on Telegram or email: "DBMS assignment due in 2 days"</li>
+          <li>A daily "what's on today" message</li>
+        </ul>
+      </div>
+    </div>
+    <div class="w4-camp-guard fragment">
+      <div class="w4-hd" style="color:#ff6b6b;margin-bottom:4px">🛡️ Guardrails: how it must behave</div>
+      <div class="w4-guards">
+        <span>✅ Answers <strong>only from official documents</strong>, and shows which one</span>
+        <span>🤷 Not in the documents? "Please check with the office" — <strong>never guesses a date</strong></span>
+        <span>✋ <strong>Asks before</strong> adding events or sending messages</span>
+        <span>🔒 Never shares <strong>other students'</strong> details</span>
+        <span>📅 Knows how old its data is: "timetable updated 1 Oct"</span>
+        <span>🙅 Politely declines anything off-topic or unsafe</span>
+      </div>
+    </div>
+    <div class="w4-row fragment" style="margin-top:8px">
+      <div class="w4-stack" style="flex:1;font-size:.42em;text-align:left"><span class="nc">🧩 No-code</span> Claude Project or NotebookLM with the PDFs · Claude's Calendar connector · n8n: daily schedule → check deadlines → Telegram message</div>
+      <div class="w4-stack" style="flex:1;font-size:.42em;text-align:left"><span class="cd">💻 Code</span> LlamaIndex or LangChain RAG · Google Calendar &amp; Classroom APIs · Telegram bot API · a scheduler · a guardrail test set</div>
+    </div>
+</section>
+
+  <section id="w4-cap-inspire">
+    <p class="chip">Inspiration · a real side project</p>
+    <h2>🎉 Party Guess + Jev, a tiny AI judge</h2>
+    <div class="w4-pg3">
+      <div class="w4-pg-card fragment" data-fragment-index="1" style="border-top:4px solid #ffb454">
+        <div class="w4-hd" style="color:#ffb454">🎮 What it is</div>
+        <p>Spin the wheel → you get <strong>"Power cut"</strong> → hold the button and shout:</p>
+        <p class="w4-pg-say">"candles!" · "కొవ్వొత్తి" · "inverter!" · "mosquito coil!"</p>
+        <p>A host voice scores you out loud. 31 boards, Telugu + English, runs in a browser.</p>
+      </div>
+      <div class="w4-pg-card fragment" data-fragment-index="2" style="border-top:4px solid #ff6b6b">
+        <div class="w4-hd" style="color:#ff6b6b">😵 The hard part</div>
+        <p>People don't say the exact answer:</p>
+        <ul class="w4-mini">
+          <li>"bubbly" → is that <em>Champagne</em>?</li>
+          <li>"galipatalu" → <em>kites</em>?</li>
+          <li>"candle and torch" → <em>two</em> answers</li>
+          <li>the mic mishears half the words</li>
+        </ul>
+        <p>Plain spelling-match got only <strong>21 of 43</strong>.</p>
+      </div>
+      <div class="w4-pg-card fragment" data-fragment-index="3" style="border-top:4px solid #7ee0a3">
+        <div class="w4-hd" style="color:#7ee0a3">🤖 How Jev helps</div>
+        <p>Jev is a small <strong>decision model</strong>: it doesn't write paragraphs, it <em>picks</em>.</p>
+        <p class="w4-pg-say">"Which board answer does this guess mean… or none of these?" → answer + how sure</p>
+        <p>✅ ≥ 75% score it · 🤔 45–75% "Did you mean…?" · ❌ below: not on the board</p>
+        <p>🎯 Trained with <strong>RLCD</strong>, <em>Reinforcement Learning for Calibrated Decisions</em>: when it says 90%, it's right about 90% of the time.</p>
+        <p class="w4-muted">Asked only when the free check is unsure · under half a paisa a guess</p>
+        <p class="w4-pg-links"><a href="https://typesafe.ai" target="_blank" rel="noopener">🌐 typesafe.ai</a> · <a href="https://docs.typesafe.ai" target="_blank" rel="noopener">📖 docs</a> · <a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev" target="_blank" rel="noopener">📝 launch post</a></p>
+      </div>
+    </div>
+    <div class="w4-pg-flow fragment" data-fragment-index="4">
+      <span>🗣️ messy human input</span><b>→</b>
+      <span>🧮 cheap rule first</span><b>→</b>
+      <span>🤖 AI makes <strong>one small decision</strong></span><b>→</b>
+      <span>📊 how sure? accept · ask · reject</span><b>→</b>
+      <span>🧪 78 real tests, <strong>0 wrong accepts</strong></span>
+    </div>
+    <div class="w4-pg-you fragment" data-fragment-index="5">
+      <div class="w4-hd" style="color:#e8edf5;margin-bottom:4px">💡 Same pattern, your life: where do people say things messily, and AI must make one decision?</div>
+      <div class="w4-pg-ideas">
+        <span>🍛 <strong>Canteen voice order</strong>: "one plate idly, extra chutney" → menu items</span>
+        <span>🏠 <strong>Hostel complaint sorter</strong>: → plumbing · electrical · mess · Wi-Fi</span>
+        <span>📝 <strong>Viva practice</strong>: does my spoken answer cover each key point? yes / no</span>
+        <span>🎲 <strong>Class quiz bot</strong> for your WhatsApp group, Telugu or Tamil</span>
+      </div>
+      <div class="w4-row" style="margin-top:6px">
+        <div class="w4-stack" style="flex:1;font-size:.42em;text-align:left"><span class="nc">🧩 No-code</span> a Claude Project with the list of options and the rule "pick one, or say none of these"</div>
+        <div class="w4-stack" style="flex:1;font-size:.42em;text-align:left"><span class="cd">💻 Code</span> browser speech-to-text + any LLM API (Week 5) asked for one label and how sure it is</div>
+      </div>
+    </div>
+</section>
+
+  <section id="w4-cap-jev-api">
+    <p class="chip">Under the hood · one request to Jev</p>
+    <h2>What the game sends, what Jev sends back 📨</h2>
+    <p class="w4-muted" style="font-size:.46em;margin:0 0 6px">Topic: <em>Things you do when the power goes off</em> · a player shouts
+    <strong style="color:#ffb454">"mombatti and go up to the roof"</strong> · the free spelling check finds nothing</p>
+    <div class="w4-api">
+      <div class="w4-api-col fragment" data-fragment-index="1">
+        <div class="w4-api-hd" style="color:#4da3ff">📤 Request <span>POST …/systemone · key stays on the server</span></div>
+<pre class="w4-api-code">{
+  <span class="k">"model"</span>: <span class="s">"jev-1.13"</span>,
+  <span class="k">"state"</span>: {
+    <span class="k">"game_topic"</span>: <span class="s">"Things you do when the power goes off"</span>,
+    <span class="k">"player_guess"</span>: <span class="s">"mombatti and go up to the roof"</span>
+  },
+  <span class="k">"questions"</span>: {
+    <span class="k">"pick"</span>: {
+      <span class="k">"type"</span>: <span class="s">"choice"</span>,
+      <span class="k">"instructions"</span>: <span class="s">"Which board answer does
+        `player_guess` name or clearly describe?"</span>,
+      <span class="k">"criteria"</span>: {
+        <span class="k">"Light a candle"</span>: <span class="s">"… also said as: candle, candles"</span>,
+        <span class="k">"Sit on the terrace"</span>: <span class="s">"… also: balcony, sit outside"</span>,
+        <span class="c">… 11 more board answers …</span>
+        <span class="k">"none_of_these"</span>: <span class="s">"names nothing on the board"</span>
+      }
+    },
+    <span class="k">"mention_0"</span>: { <span class="k">"type"</span>: <span class="s">"noul"</span>,  <span class="c">// yes/no: "Light a candle"?</span>
+      <span class="k">"instructions"</span>: { <span class="k">"question"</span>: <span class="s">"Does `player_guess`
+        name `board_answer`?"</span> } },
+    <span class="c">… one yes/no question per board answer …</span>
+  }
+}</pre>
+      </div>
+      <div class="w4-api-col fragment" data-fragment-index="2">
+        <div class="w4-api-hd" style="color:#7ee0a3">📥 Response <span>~1,100 tokens in · well under a paisa</span></div>
+<pre class="w4-api-code">{
+  <span class="k">"model"</span>: <span class="s">"jev-1.13"</span>,
+  <span class="k">"answers"</span>: {
+    <span class="k">"pick"</span>: {
+      <span class="k">"choice"</span>: <span class="s">"Light a candle"</span>,
+      <span class="k">"probabilities"</span>: {
+        <span class="k">"Light a candle"</span>:     <span class="n">0.58</span>,
+        <span class="k">"Sit on the terrace"</span>: <span class="n">0.39</span>,
+        <span class="k">"none_of_these"</span>:      <span class="n">0.01</span>
+      }
+    },
+    <span class="k">"mention_0"</span>: { <span class="k">"noul"</span>: <span class="n hi">0.94</span> },  <span class="c">// candle  ✅</span>
+    <span class="k">"mention_1"</span>: { <span class="k">"noul"</span>: <span class="n">0.03</span> },  <span class="c">// torch   ❌</span>
+    <span class="k">"mention_5"</span>: { <span class="k">"noul"</span>: <span class="n hi">0.91</span> },  <span class="c">// terrace ✅</span>
+    <span class="c">…</span>
+  },
+  <span class="k">"usage"</span>: { <span class="k">"input_tokens"</span>: <span class="n">1104</span> }
+}</pre>
+        <div class="w4-api-read fragment" data-fragment-index="3">
+          <b>Reading it like the game does</b>
+          <span>🤔 <em>pick</em> had to choose ONE, so it split its vote: 0.58 alone would only earn "Did you mean…?"</span>
+          <span>✅ The yes/no questions catch <strong>both</strong>: candle 0.94, terrace 0.91, each ≥ 0.75</span>
+          <span>🎉 Two answers score from one shout. "mombatti" was never in the list.</span>
+        </div>
+      </div>
+    </div>
+    <p class="w4-muted" style="font-size:.38em;margin-top:4px">Shape from the game's real code; the numbers are illustrative.</p>
+</section>
+
+  <section id="w4-cap-toolbox">
+    <p class="chip">The toolbox</p>
+    <h2>🧰 No-code or code: the same job, two routes</h2>
+    <table class="w4-tb">
+      <tr><th></th><th style="color:#7ee0a3">🧩 No-code / low-code</th><th style="color:#4da3ff">💻 Code</th><th class="wk">Week</th></tr>
+      <tr class="fragment"><th>💬 A chat assistant with your instructions</th><td>Custom GPTs · Claude Projects · Gemini Gems</td><td>Python + Claude / OpenAI / Gemini API</td><td class="wk">W5</td></tr><tr class="fragment"><th>📄 Answers from your own documents (RAG)</th><td>NotebookLM · Claude Projects · GPTs with files</td><td>LangChain or LlamaIndex + Chroma or FAISS</td><td class="wk">W6</td></tr><tr class="fragment"><th>🔁 Workflows &amp; automation</th><td>n8n · Zapier · Make</td><td>Python scripts + a scheduler</td><td class="wk">W7</td></tr><tr class="fragment"><th>🔌 Agents, tools &amp; connectors</th><td>Claude connectors (MCP) + skills · ChatGPT connectors</td><td>Claude Agent SDK · OpenAI Agents SDK · LangGraph · your own MCP server</td><td class="wk">W7</td></tr><tr class="fragment"><th>🖥️ Something people can use</th><td>Share the GPT / Project link · Google Forms &amp; Sheets</td><td>Streamlit · Gradio</td><td class="wk">W5</td></tr><tr class="fragment"><th>💻 Open models on your machine</th><td>LM Studio · Ollama app</td><td>Ollama API · llama.cpp · vLLM</td><td class="wk">W8</td></tr><tr class="fragment"><th>🏋️ Training &amp; fine-tuning</th><td>Teachable Machine · hosted fine-tuning (OpenAI)</td><td>PyTorch · Hugging Face Transformers, PEFT (LoRA), TRL · Unsloth, on Colab</td><td class="wk">W6 · Lab</td></tr><tr class="fragment"><th>✅ Testing quality</th><td>A spreadsheet of test questions, scored by hand</td><td>promptfoo · Ragas</td><td class="wk">W6 · W8</td></tr>
+    </table>
+    <p class="small" style="margin-top:6px"><a class="w4-guide" data-guide="INDEX" target="_blank" rel="noopener">📋 All 17 project guides: step-by-step instructions for every project on these slides</a></p>
+    <p class="small fragment" style="margin-top:4px">Start no-code, prove the idea works, <strong>then</strong> decide if code is worth it.
+    Both routes can earn full marks.</p>
+</section>
+
+  <section id="w4-cap-coverage">
+    <p class="chip">Nothing you need is left out</p>
+    <h2>🗺️ Every tool in these projects is taught here</h2>
+    <div class="w4-covrow">
+      <div class="w4-cov fragment" style="border-top:4px solid #9aa4b8">
+        <div class="w4-cov-w" style="color:#9aa4b8">W3</div><div class="w4-cov-s">done</div>
+        <span class="w4-chip">temperature</span><span class="w4-chip">Google AI Studio</span>
+      </div>
+      <div class="w4-cov fragment" style="border-top:4px solid #ffb454">
+        <div class="w4-cov-w" style="color:#ffb454">W4</div><div class="w4-cov-s">today ⭐</div>
+        <span class="w4-chip">NotebookLM</span><span class="w4-chip">Deep Research</span><span class="w4-chip">Google Scholar</span><span class="w4-chip">checking sources</span>
+      </div>
+      <div class="w4-cov fragment" style="border-top:4px solid #4da3ff">
+        <div class="w4-cov-w" style="color:#4da3ff">W5</div><div class="w4-cov-s">Building I</div>
+        <span class="w4-chip">Custom GPTs</span><span class="w4-chip">Claude Projects</span><span class="w4-chip">Gemini Gems</span><span class="w4-chip">AI APIs</span><span class="w4-chip">Python in Colab</span><span class="w4-chip">JSON output</span><span class="w4-chip">pandas · CSV</span><span class="w4-chip">Streamlit · Gradio</span>
+      </div>
+      <div class="w4-cov fragment" style="border-top:4px solid #7ee0a3">
+        <div class="w4-cov-w" style="color:#7ee0a3">W6</div><div class="w4-cov-s">Building II</div>
+        <span class="w4-chip">RAG</span><span class="w4-chip">LlamaIndex · LangChain</span><span class="w4-chip">Chroma · FAISS</span><span class="w4-chip">testing with questions</span><span class="w4-chip">Teachable Machine</span><span class="w4-chip">fine-tuning (demo)</span>
+      </div>
+      <div class="w4-cov fragment" style="border-top:4px solid #2f9bb0">
+        <div class="w4-cov-w" style="color:#2f9bb0">W7</div><div class="w4-cov-s">Agents</div>
+        <span class="w4-chip">n8n · Zapier · Make</span><span class="w4-chip">schedules</span><span class="w4-chip">public data APIs</span><span class="w4-chip">Telegram</span><span class="w4-chip">connectors · MCP</span><span class="w4-chip">Claude skills</span><span class="w4-chip">Agents SDKs</span>
+      </div>
+      <div class="w4-cov fragment" style="border-top:4px solid #c792ea">
+        <div class="w4-cov-w" style="color:#c792ea">W8</div><div class="w4-cov-s">Responsible AI</div>
+        <span class="w4-chip">open models: LM Studio · Ollama</span><span class="w4-chip">RLHF / DPO idea</span><span class="w4-chip">capstone demos 🎉</span>
+      </div>
+      <div class="w4-cov fragment" style="border-top:4px solid #ff6b6b">
+        <div class="w4-cov-w" style="color:#ff6b6b">🔬 Lab</div><div class="w4-cov-s">optional</div>
+        <span class="w4-chip">PyTorch · fast.ai</span><span class="w4-chip">LoRA · Unsloth</span><span class="w4-chip">TRL · DPO</span><span class="w4-chip">vLLM</span>
+      </div>
+    </div>
+    <p class="small fragment" style="margin-top:10px">Pick any project: by Week 8 you'll have seen every tool it needs.
+    Each <strong>📋 Guide</strong> has a row: <em>"Where you will learn each tool"</em>.</p>
+</section>
+
+  <section id="w4-cap-good">
+    <p class="chip">What makes a good one</p>
+    <h2>Small and real beats big and imaginary</h2>
+    <div class="w4-shrink">
+      <div class="fragment"><span class="big">❌ "An AI doctor"</span><span class="arr">→</span><span class="ok">✅ A clinic FAQ helper built from <em>one</em> clinic's leaflet</span></div>
+      <div class="fragment"><span class="big">❌ "ChatGPT for India"</span><span class="arr">→</span><span class="ok">✅ A Telugu explainer for 50 engineering terms</span></div>
+      <div class="fragment"><span class="big">❌ "An app that helps all students"</span><span class="arr">→</span><span class="ok">✅ A revision buddy for <em>my</em> class, from <em>our</em> notes</span></div>
+    </div>
+    <div class="w4-card fragment" style="margin-top:14px;border-left:5px solid #7ee0a3">
+      <p style="font-size:.66em"><strong>The recipe:</strong> one person · one task · one source of information · one way to test it</p>
+    </div>
+</section>
+
+  <section id="w4-cap-sentence" data-poll>
+    <p class="chip">Everyone, together 🙋</p>
+    <h2>Your capstone in one sentence</h2>
+    <div class="vote-card" style="font-size:.72em;border-color:#7ee0a3;line-height:1.7">
+      "I want to help <strong style="color:#4da3ff">[who]</strong>
+      to <strong style="color:#7ee0a3">[do what]</strong>
+      using <strong style="color:#ffb454">[which information]</strong>.<br>
+      I'll know it works if <strong style="color:#c792ea">[how I'll test it]</strong>."
+    </div>
+    <div class="waterfall">
+      <span><span class="wf-step">1</span> Fill it in. <b>Rough is perfect.</b></span>
+      <span><span class="wf-step">2</span> Hold it</span>
+      <span><span class="wf-step">3</span> Send on <b>3 · 2 · 1</b></span>
+    </div>
+    <p class="small fragment">No idea yet? Type <strong>"not sure: I'm interested in ___"</strong>. That counts.
+    We'll find you one together.</p>
+</section>
+
+  <section id="w4-cap-proposal">
+    <p class="chip">Due before Week 5</p>
+    <h2>The one-page proposal 📋</h2>
+    <p class="small">Six questions, on the weekly form. Short answers are fine.</p>
+    <div class="w4-steps" style="grid-template-columns:repeat(3,1fr)">
+      <div class="w4-step"><b>1 · Who</b>is it for? A real person or group you can talk to.</div>
+      <div class="w4-step"><b>2 · Problem</b>What do they struggle with today?</div>
+      <div class="w4-step"><b>3 · Track</b>Build, no-code, or case study?</div>
+      <div class="w4-step"><b>4 · Information</b>What documents or data will it use?</div>
+      <div class="w4-step"><b>5 · Test</b>Five real questions it must answer well.</div>
+      <div class="w4-step"><b>6 · Team</b>Solo, or with a partner?</div>
+    </div>
+    <p class="small fragment" style="margin-top:12px">I'll reply to every proposal with
+    <strong style="color:#7ee0a3">🟢 go</strong> or <strong style="color:#ffb454">🟡 go, with one tweak</strong>.
+    Nobody gets a red. Changing your idea later is allowed.</p>
+</section>
+</section>
+
+<!-- ==================== CLOSE ==================== -->
+<section id="w4-due">
+  <p class="chip">Due next week</p>
+  <h2>Due next week</h2>
+  <div class="tier core">
+    <span class="tier-label">Core — everyone</span>
+    <p>Your <strong>capstone proposal</strong>: the six questions, on this week's form. Rough is fine,
+    real is required: a real person, a real problem.</p>
+  </div>
+  <div class="tier stretch">
+    <span class="tier-label">Stretch — optional</span>
+    <p><strong>Verify three.</strong> Ask Deep Research (or any AI) about your capstone problem. Pick
+    three of its sources and check each one: does it exist, and does it actually say that?</p>
+  </div>
+  <p class="small">🥚 And bring your easter egg answer. Submission link in the chat.</p>
+</section>
+
+<section id="w4-resources">
+  <p class="chip">Explore on your own</p>
+  <h2>Resources 📚</h2>
+  <ul class="res-list">
+    <li>📄 <a href="https://notebooklm.google.com" target="_blank" rel="noopener">NotebookLM</a>: upload your own readings and ask questions. Free. <strong>Try this one first.</strong></li>
+    <li>🔎 <a href="https://scholar.google.com" target="_blank" rel="noopener">Google Scholar</a> and <a href="https://www.semanticscholar.org" target="_blank" rel="noopener">Semantic Scholar</a>: search real papers</li>
+    <li>🧪 <a href="https://elicit.com" target="_blank" rel="noopener">Elicit</a>: find and summarise research papers</li>
+    <li>📜 <a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">"Attention Is All You Need" on arXiv</a>: today's demo paper, free</li>
+    <li>🧮 The Ramanujan–Hardy story: <em>The Man Who Knew Infinity</em> (book by Robert Kanigel, 1991; film, 2015)</li>
+  </ul>
+</section>
+
+
+<section id="w4-next">
+  <h2>Next week: <em>Building I · your first AI app</em> 🛠️</h2>
+  <p class="small">You stop <em>using</em> AI tools and start <strong>making one</strong>: the first working
+  version of your capstone, in code or with no code at all.</p>
+</section>
+
+<section id="w4-closing">
+  <p class="closing-quote">
+    "I have no special talents.<br>I am only passionately curious."
+    <span class="attribution">— Albert Einstein, 1952</span>
+  </p>
+  <p class="small fragment" style="margin-top:16px">When Einstein changed physics in 1905, he was a
+  <strong>patent clerk</strong>. When Ramanujan wrote to Hardy, he was a <strong>port-office clerk with no
+  degree</strong>. Hardy didn't judge the letterhead. <strong>He judged the work.</strong></p>
+  <p class="small fragment" style="margin-top:10px;color:#7ee0a3">You are not your degree, or the name of
+  the company you'll work for. You are <strong>your curiosity</strong>, how fast you
+  <strong>learn</strong>, and what you <strong>bring to the table</strong>. See you next week. 🙏</p>
+</section>
+
+
+</div>
+</div>
+
+<!-- Capstone guide links: paste the GUIDE_LINKS line from the Apps Script log here.
+     Cards stay link-free until a project has a URL. -->
+<script>
+  window.W4_GUIDE_LINKS = {};
+  (function () {
+    var L = window.W4_GUIDE_LINKS || {};
+    document.querySelectorAll('a.w4-guide').forEach(function (a) {
+      var url = L[a.getAttribute('data-guide')];
+      if (url) { a.href = url; a.style.display = 'inline-block'; }
+    });
+  })();
+</script>
+<script src="../../assets/reveal/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({ hash:true, slideNumber:'c/t', width:1200, height:760,
+    margin:0.05, minScale:0.2, maxScale:1.6,
+    // Default true steals focus back to <body> whenever the page becomes
+    // visible again, which silently breaks paste. See week1/week2.
+    focusBodyOnPageVisibilityChange:false });
+  document.addEventListener('click', e => {
+    if (e.target.classList.contains('quiz-answer')) e.target.classList.toggle('revealed');
+  });
+
+  /* ---- Overflow guard -------------------------------------------------
+     reveal.js silently clips content taller than the slide, which cuts off
+     text at the bottom on a projector. This shrinks any offending slide
+     until it fits, and reports it in the browser console so it can be
+     fixed properly later.                                               */
+  (function () {
+    const LIMIT = () => Reveal.getConfig().height;
+    function fit(slide) {
+      if (!slide) return;
+      slide.style.fontSize = '';
+      const max = LIMIT();
+      let pct = 100;
+      while (slide.scrollHeight > max && pct > 45) {
+        pct -= 4;
+        slide.style.fontSize = pct + '%';
+      }
+      if (pct < 100) {
+        console.warn('[deck] slide shrunk to ' + pct + '% to fit:',
+          (slide.querySelector('h1,h2') || {}).textContent || slide);
+      }
+    }
+    const current = () => Reveal.getCurrentSlide();
+    Reveal.on('ready', () => fit(current()));
+    Reveal.on('slidechanged', e => fit(e.currentSlide));
+    Reveal.on('fragmentshown', () => fit(current()));
+    Reveal.on('resize', () => fit(current()));
+  })();
+</script>
+</body>
+</html>

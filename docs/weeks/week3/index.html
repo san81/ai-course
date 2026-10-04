@@ -81,9 +81,10 @@
       <h2>🙏 Thank you. This was genuinely good work.</h2>
       <div class="row" style="margin:.3em 0 .6em">
         <div class="stat"><b>11</b>explanations of gradient descent</div>
-        <div class="stat"><b>9 / 9</b>easter eggs correct: <strong>learning rate → L</strong></div>
+        <div class="stat"><b>9 / 9</b>easter eggs correct: <strong>learning rate</strong> 🥚</div>
         <div class="stat"><b>11 / 11</b>told me honestly whether they used AI</div>
       </div>
+      <p class="small" style="margin:-.2em 0 .55em;padding:.35em .6em;border-radius:.5em;background:rgba(255,180,84,.12);border-left:4px solid #ffb454">🥚 The letter to save is <strong style="color:#ffb454">R</strong>, from learning <strong style="color:#ffb454">R</strong>ate. My riddle said "first letter", so if you wrote <strong>L</strong>, your answer was right and the slip was mine. Keep <strong>A · R</strong> safe.</p>
       <div class="card" style="margin-bottom:.6em">
         <div class="hd">Your analogies <small>almost every one had the same three parts: guess → measure → small step ✅</small></div>
         <span class="pill">🔊 speaker / TV volume<small>×4</small></span>
@@ -110,7 +111,8 @@
           <p class="why">⭐ Explained <em>why</em> the steps are small, not just that they are.</p>
         </div>
       </div>
-      <p class="small fragment" style="margin-top:.5em">🗣️ And on the stretch task: "Telugu needs more tokens → it <strong>costs more</strong> → that affects <strong>who benefits</strong> from AI." Exactly the point of Week 2.</p>
+      <p class="small fragment" style="margin-top:.5em">🚀 <strong style="color:#ffb454">5 of you</strong> also did the optional stretch task, and the finding was clear: "Telugu needs more tokens → it <strong>costs more</strong> → that affects <strong>who benefits</strong> from AI." Exactly the point of Week 2.</p>
+      <p class="small fragment" style="margin-top:.35em">💬 And <strong style="color:#ffb454">3 of you</strong> asked me a question privately. That takes courage, and it is exactly how this class gets better. Two of those answers are coming up in a minute.</p>
     </div>
 </section>
 
@@ -262,7 +264,7 @@
   <section>
     <p class="chip">The four</p>
     <h2>What you actually need to carry forward</h2>
-    <svg viewBox="0 0 900 300" width="900">
+    <svg viewBox="0 0 900 180" width="1120">
       <g font-size="13">
         <g>
           <rect x="18" y="14" width="200" height="86" rx="12" fill="#1a2233" stroke="#4da3ff" stroke-width="2"/>
@@ -291,15 +293,8 @@
 
         <g class="fragment">
           <line x1="18" y1="126" x2="882" y2="126" stroke="#2a3450"/>
-          <text x="450" y="152" fill="#e8edf5" text-anchor="middle" font-size="14">
-            And here is what you may <tspan fill="#ff6b6b" font-weight="bold">let go of</tspan> with my blessing:</text>
-          <rect x="150" y="168" width="600" height="72" rx="12" fill="#231a22" stroke="#ff6b6b" stroke-dasharray="6,4"/>
-          <text x="450" y="196" fill="#ff6b6b" text-anchor="middle" font-size="13.5">
-            the Q / K / V matrix arithmetic we did by hand</text>
-          <text x="450" y="220" fill="#9aa4b8" text-anchor="middle" font-size="11.5">
-            Nothing in Weeks 3–8 asks you to compute it. You needed to SEE it once. You saw it.</text>
-          <text x="450" y="272" fill="#7ee0a3" text-anchor="middle" font-size="13">
-            Keep the sentence, not the sum: <tspan font-weight="bold">words are rewritten by the words around them.</tspan></text>
+          <text x="450" y="158" fill="#7ee0a3" text-anchor="middle" font-size="14">
+            If you keep one sentence: <tspan font-weight="bold">words are rewritten by the words around them.</tspan></text>
         </g>
       </g>
     </svg>
@@ -381,8 +376,9 @@
         </g>
       </g>
     </svg>
-    <p class="small fragment">Three things follow: it has a <strong>knowledge cutoff</strong>, it
-    does <strong>not remember you</strong> between chats, and <strong>prompting is the entire
+    <p class="small fragment">Three things follow: the model's own knowledge <strong>stops on the day
+    training ended</strong> (chat apps patch this by searching the web and pasting the results in),
+    it does <strong>not remember you</strong> between chats, and <strong>prompting is the entire
     steering wheel.</strong> That last one is today.</p>
 </section>
 
@@ -462,7 +458,7 @@
   <p class="sub">Toy numbers so we can follow along. Real models use the same steps with much bigger tables.</p>
 
   <div class="nt-row">
-    <div class="nt-panel nt-in fragment" style="flex:0 0 12em">
+    <div class="nt-panel nt-in fragment" data-fragment-index="1" style="flex:0 0 12em">
       <span class="nt-step">1</span><b>Your text</b>
       <div style="margin-top:.2em">"I spread butter on my ___"</div>
       <div class="chips"><span>I</span><span>spread</span><span>butter</span><span>on</span><span>my</span></div>
@@ -472,12 +468,12 @@
 
     <div class="nt-model" style="flex:1">
       <span class="lbl">🧠 THE MODEL</span>
-      <div class="fragment">
+      <div class="fragment" data-fragment-index="2">
         <div><span class="nt-step">2</span><b>Look up each token's embedding</b></div>
         <table class="nt-tab"><tr><th></th><th class="nt-tk">I</th><th class="nt-tk">spread</th><th class="nt-tk">butter</th><th class="nt-tk">on</th><th class="nt-tk">my</th></tr><tr><th class="nt-dim">🍽️ food</th><td class="nt-c" style="background:rgba(201,119,42,0.06);color:inherit">0.0</td><td class="nt-c" style="background:rgba(201,119,42,0.21);color:inherit">+0.4</td><td class="nt-c" style="background:rgba(201,119,42,0.68);color:#fff">+1.6</td><td class="nt-c" style="background:rgba(201,119,42,0.06);color:inherit">0.0</td><td class="nt-c" style="background:rgba(201,119,42,0.06);color:inherit">0.0</td></tr><tr><th class="nt-dim">🧍 body</th><td class="nt-c" style="background:rgba(201,119,42,0.18);color:inherit">+0.3</td><td class="nt-c" style="background:rgba(201,119,42,0.18);color:inherit">+0.3</td><td class="nt-c" style="background:rgba(201,119,42,0.06);color:inherit">0.0</td><td class="nt-c" style="background:rgba(201,119,42,0.06);color:inherit">0.0</td><td class="nt-c" style="background:rgba(201,119,42,0.21);color:inherit">+0.4</td></tr><tr><th class="nt-dim">✋ action</th><td class="nt-c" style="background:rgba(201,119,42,0.06);color:inherit">0.0</td><td class="nt-c" style="background:rgba(201,119,42,0.60);color:#fff">+1.4</td><td class="nt-c" style="background:rgba(201,119,42,0.06);color:inherit">0.0</td><td class="nt-c" style="background:rgba(201,119,42,0.14);color:inherit">+0.2</td><td class="nt-c" style="background:rgba(201,119,42,0.06);color:inherit">0.0</td></tr><tr><th class="nt-dim">🔗 link-word</th><td class="nt-c" style="background:rgba(201,119,42,0.41);color:inherit">+0.9</td><td class="nt-c" style="background:rgba(201,119,42,0.06);color:inherit">0.0</td><td class="nt-c" style="background:rgba(201,119,42,0.06);color:inherit">0.0</td><td class="nt-c" style="background:rgba(201,119,42,0.48);color:inherit">+1.1</td><td class="nt-c" style="background:rgba(201,119,42,0.45);color:inherit">+1.0</td></tr></table>
         <div class="nt-cap">Each token = a column of <b>d</b> numbers (here d = 4; real models: thousands). Like a word's <b>profile scores</b>. Real dimensions have no names; we labelled ours to make it readable.</div>
       </div>
-      <div class="fragment" style="display:flex;flex-direction:column">
+      <div class="fragment" data-fragment-index="3" style="display:flex;flex-direction:column">
         <div><span class="nt-step">3</span><b>Attention: tokens look at each other</b></div>
         <div class="nt-att3">
           <div class="nt-w"><b>W<sub>q</sub></b>Query<small>"What am I looking for?"</small></div>
@@ -1102,7 +1098,7 @@
         <li class="wf">"idli" sits near "dosa" because… <span class="quiz-answer">meaning is a position, and it was learned — nobody placed them</span></li>
         <li>Does the model learn from our chat? <span class="quiz-answer">No. Frozen weights. It re-reads the chat every time — that is context, not learning</span></li>
         <li>It optimises for… <span class="quiz-answer">plausible, not true</span></li>
-        <li>The attention matrix arithmetic is… <span class="quiz-answer">yours to forget 🎉 — keep only "words are rewritten by the words around them"</span></li>
+        <li>Attention, in one sentence, is… <span class="quiz-answer">words are rewritten by the words around them ("butter" turned "my" into something food-ish)</span></li>
       </ul>
     </div>
     <p class="small fragment">That is the foundation. Everything else today is <em>skill</em>,
@@ -1372,6 +1368,91 @@
 <!-- ==================== ACT 4: DIALS AND FAILURE MODES ==================== -->
 
 <section data-act="limits">
+  <section id="w3-act4-experiments">
+    <p class="act">Act 4 · the dials, and the edges</p>
+    <div class="w3t">
+      <h2>🧪 Two quick experiments first. Explanations after.</h2>
+      <p class="sub">Watch, guess what's going on, type your theory in chat. No wrong answers yet.</p>
+      <div class="row">
+        <div class="card" style="flex:1;border-top:4px solid #ffb454">
+          <div class="hd" style="color:#ffb454">Experiment 1 · Same prompt, one hidden dial</div>
+          <p class="muted" style="margin-bottom:.35em">"Write a one-line tagline for a filter-coffee café in Chennai."</p>
+          <div style="display:flex;gap:.4em;margin-bottom:.4em">
+            <button class="primary" data-x="d0">▶ Dial at 0 · run 3×</button>
+            <button class="primary" data-x="d1">▶ Dial at 1 · run 3×</button>
+          </div>
+          <div class="ax-dial" style="display:flex;flex-direction:column;gap:.35em"></div>
+        </div>
+        <div class="card" style="flex:1;border-top:4px solid #ff6b6b">
+          <div class="hd" style="color:#ff6b6b">Experiment 2 · Ask about something that doesn't exist</div>
+          <div style="display:flex;flex-direction:column;gap:.3em;margin-bottom:.4em">
+            <button data-x="h0" style="text-align:left">📚 "List 3 research papers (authors, year, journal) on using AI to predict paddy yield in Andhra Pradesh."</button>
+            <button data-x="h1" style="text-align:left">🧑‍🔬 "What did Dr. K. Aravind's 2019 paper on monsoon prediction find, and which journal published it?"</button>
+          </div>
+          <div class="out ax-hal" style="min-height:4.5em;max-height:12em;font-size:.92em;white-space:pre-wrap">&nbsp;</div>
+          <div class="ax-verify muted" style="font-size:.85em;margin-top:.3em"></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.5em;margin-top:.55em">
+        <span class="ax-mode badge rec">📼 recorded examples</span>
+        <button class="ax-gear" title="Set up live mode">⚙️ live mode</button>
+        <input class="ax-key" type="password" placeholder="Anthropic API key (stays in this browser)" style="display:none;flex:1">
+        <button class="ax-save primary" style="display:none">Save</button>
+      </div>
+    </div>
+<script>
+    (function(){
+      var sec = document.currentScript.closest('section');
+      var P1 = 'Write a one-line tagline for a filter-coffee café in Chennai. Reply with the tagline only.';
+      var H = [
+        { p:'List 3 research papers (authors, year, journal) on using AI to predict paddy yield in Andhra Pradesh.',
+          rec:'1. Reddy, S. & Kumar, P. (2019). "Machine learning models for paddy yield forecasting in Andhra Pradesh." Computers and Electronics in Agriculture, 162, 45–58.\n2. Rao, V., Naidu, K. & Prasad, R. (2020). "Satellite-based deep learning for rice yield prediction in coastal Andhra Pradesh." Remote Sensing, 12(8), 1291.\n3. Lakshmi, D. & Varma, A. (2021). "Random forest approaches to kharif paddy yield estimation in the Godavari delta." Journal of Agrometeorology, 23(2), 201–210.',
+          ver:'🔍 Now search Google Scholar for any of these titles.' },
+        { p:"What did Dr. K. Aravind's 2019 paper on monsoon prediction find, and which journal published it?",
+          rec:"Dr. K. Aravind's 2019 paper, published in Nature Climate Change, used a deep-learning model trained on 40 years of India Meteorological Department rainfall data. It found that the model predicted the onset of the southwest monsoon over Kerala up to three weeks earlier than traditional statistical methods, with around 85% accuracy.",
+          ver:'🔍 Now search for "Dr. K. Aravind". He doesn’t exist. I made him up for this slide.' }
+      ];
+      var REC1 = { d0:['Kaapi Kadai: where every cup tastes like a Chennai morning.','Kaapi Kadai: where every cup tastes like a Chennai morning.','Kaapi Kadai: where every cup tastes like a Chennai morning.'],
+                   d1:['Strong filter, stronger friendships.','Degree coffee with a Madras soul.','Your daily tumbler of happiness, poured from a height.'] };
+      var dial = sec.querySelector('.ax-dial'), hal = sec.querySelector('.ax-hal'), ver = sec.querySelector('.ax-verify'),
+          mode = sec.querySelector('.ax-mode'), keyIn = sec.querySelector('.ax-key'), saveBtn = sec.querySelector('.ax-save');
+      function L(){ return window.W3LLM; }
+      function live(){ return !!(L() && L().live()); }
+      function showMode(){ var on = live(); mode.className = 'ax-mode badge ' + (on ? 'live' : 'rec'); mode.textContent = on ? '🟢 live' : '📼 recorded examples'; }
+      function row(label){
+        var r = document.createElement('div');
+        r.innerHTML = '<div class="muted" style="font-size:.8em">'+label+'</div><div class="row" style="gap:.35em">'+[0,1,2].map(function(){return '<div class="out wait" style="flex:1;min-height:2.4em;font-size:.9em">…</div>';}).join('')+'</div>';
+        dial.insertBefore(r, dial.firstChild);
+        while (dial.children.length > 2) dial.removeChild(dial.lastChild);
+        return r.querySelectorAll('.out');
+      }
+      function runDial(k){
+        var t = k === 'd0' ? 0 : 1, outs = row('Dial at ' + t + (live() ? '' : ' · 📼 recorded'));
+        if (!live()) { outs.forEach(function(o,i){ setTimeout(function(){ o.className='out'; o.style.fontSize='.9em'; o.textContent = REC1[k][i]; }, 250+i*250); }); return; }
+        [0,1,2].forEach(function(i){ L().run(P1, t).then(function(x){ outs[i].className='out'; outs[i].style.fontSize='.9em'; outs[i].textContent=x; })
+          .catch(function(e){ outs[i].className='out err'; outs[i].textContent=e.message; }); });
+      }
+      function runHal(i){
+        var h = H[i]; hal.className = 'out ax-hal wait'; hal.textContent = '…'; ver.textContent = '';
+        var done = function(txt, rec){ hal.className='out ax-hal'; hal.textContent = txt; ver.innerHTML = (rec ? '📼 recorded example (the papers and findings are invented). ' : '') + h.ver; };
+        if (!live()) { setTimeout(function(){ done(h.rec, true); }, 400); return; }
+        L().run(h.p, 1).then(function(x){ done(x, false); }).catch(function(e){ hal.className='out ax-hal err'; hal.textContent=e.message; });
+      }
+      sec.querySelector('.w3t').addEventListener('click', function(e){
+        var b = e.target.closest('button'); if (!b) return;
+        var x = b.getAttribute('data-x');
+        if (x === 'd0' || x === 'd1') runDial(x);
+        if (x === 'h0') runHal(0); if (x === 'h1') runHal(1);
+        if (b.classList.contains('ax-gear')) { var s = keyIn.style.display === 'none'; keyIn.style.display = s ? 'block' : 'none'; saveBtn.style.display = s ? 'inline-block' : 'none'; }
+        if (b.classList.contains('ax-save') && keyIn.value.trim() && L()) { L().save(keyIn.value.trim(), L().model()); keyIn.value=''; keyIn.style.display='none'; saveBtn.style.display='none'; L().changed(); }
+        b.blur();
+      });
+      window.addEventListener('load', function(){ if (L()) L().listeners.push(showMode); showMode(); });
+      showMode();
+    })();
+    </script>
+  </section>
+
   <section>
     <p class="act">Act 4 · the dials, and the edges</p>
     <h2>Two consequences you will feel every day</h2>
@@ -1953,8 +2034,9 @@
   <section>
     <h2>Where these tools genuinely fail ⚠️</h2>
     <ul class="small">
-      <li class="fragment"><strong>Anything after its cutoff.</strong> It does not know this month.
-      It will not say so.</li>
+      <li class="fragment"><strong>Recent news, when it isn't searching.</strong> The model's own
+      knowledge stops at its training date. Apps fill the gap with web search, but only when they
+      <em>decide</em> to search. No sources shown? It may be out of date, and it won't say so.</li>
       <li class="fragment"><strong>Exact recall.</strong> Citations, page numbers, quotes, links —
       plausible shapes, invented contents.</li>
       <li class="fragment"><strong>Counting and careful arithmetic.</strong> It is predicting digits,
@@ -2058,13 +2140,14 @@
   <div class="tier core">
     <span class="tier-label">Core — everyone</span>
     <p>Take a task you <strong>actually need done this week</strong> — an assignment, an email, a
-    concept you are stuck on. Write a bad prompt, then a good one using WHO · WHY · WHAT · HOW.
+    concept you are stuck on. Write a bad prompt, then a good one using WHO · WHY · WHAT · HOW · SHOW.
     Submit <strong>both prompts and both answers</strong>, plus two lines on what changed.</p>
   </div>
   <div class="tier stretch">
     <span class="tier-label">Stretch — optional</span>
     <p>Find a question where the model is <strong>confidently wrong</strong>, and prove it is
-    wrong with a source. Screenshot it. The best one gets shown in Week 4.</p>
+    wrong with a source. Paste the question, its answer and your source link. The best one gets
+    shown in Week 4.</p>
   </div>
   <p class="small">🥚 And bring your easter egg answer. Submission link in the chat.</p>
 </section>
