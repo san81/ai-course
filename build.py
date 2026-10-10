@@ -47,7 +47,10 @@ COPY_FILES = ["index.html", ".nojekyll"]
 # Which weeks students may see. Bump this the day you teach the week.
 # A deck that exists in weeks/ but is not listed here stays unpublished, so
 # next week's draft can live in the repo without leaking early.
-RELEASED_WEEKS = {1, 2, 3, 4}
+RELEASED_WEEKS = {1, 2, 3, 4, 5}
+
+# Files published alongside a released week's deck (e.g. weeks/week5/*.ipynb).
+STUDENT_FILE_TYPES = {".ipynb", ".csv"}
 
 # Never publish these, whatever happens
 NEVER_PUBLISH = {"instructor", "exercises", ".git", "docs", "__pycache__"}
@@ -191,6 +194,13 @@ def build() -> list[Path]:
             print(f"  {rel}  ->  docs/{rel}   ({removed} notes removed, {saved:,} chars)")
             written.append(dest)
 
+            # Student files that sit next to a released deck (Colab notebooks, sample data).
+            for extra in sorted(deck.parent.iterdir()):
+                if extra.suffix.lower() in STUDENT_FILE_TYPES and extra.is_file():
+                    shutil.copy2(extra, dest.parent / extra.name)
+                    print(f"  {extra.relative_to(ROOT)}  ->  docs/{extra.relative_to(ROOT)}")
+                    written.append(dest.parent / extra.name)
+
     return written
 
 
@@ -208,7 +218,7 @@ def check() -> bool:
         if any(part in NEVER_PUBLISH for part in rel_parts):
             print(f"  LEAK: docs/{'/'.join(rel_parts)} should never be published")
             ok = False
-        if path.suffix.lower() not in {".html", ".md", ".css", ".js", ".svg", ".txt"}:
+        if path.suffix.lower() not in {".html", ".md", ".css", ".js", ".svg", ".txt", ".ipynb", ".csv"}:
             continue
         try:
             text = path.read_text(encoding="utf-8", errors="ignore")

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 5 — Building I: your first AI app</title>
+<link rel="stylesheet" href="../../assets/reveal/dist/reset.css">
+<link rel="stylesheet" href="../../assets/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../../assets/reveal/dist/theme/black.css">
+<link rel="stylesheet" href="../../assets/course.css">
+<style>
+  .reveal h1 { font-size: 2.0em; text-transform: none; }
+  .reveal h2 { font-size: 1.35em; text-transform: none; margin-bottom: 14px; }
+  .reveal p, .reveal li { font-size: 0.84em; line-height: 1.42; }
+  .reveal .small, .reveal .small li { font-size: 0.66em; color: #a7b0c2; line-height: 1.45; }
+  .reveal ul { margin-left: 0.6em; }
+  .reveal li { margin-bottom: 11px; }
+  .reveal .analogy { font-size: 0.72em; padding: 13px 22px; margin-top: 14px; }
+  .reveal .analogy::before { font-size: 0.85em; }
+  .reveal .predict { font-size: 0.85em; }
+  .reveal .easter-egg p { font-size: 0.72em; }
+  .reveal .tiny-hint { position: absolute; bottom: -40px; right: 0; font-size: 0.3em; color: #4a5468; }
+  .reveal .vote-card { border:1px solid #2a3450; border-radius:10px; padding:13px 20px; margin:9px 0; background:#1a2233; font-size:.62em; text-align:left; }
+  .reveal .res-list { font-size: 0.6em; text-align: left; }
+  .reveal .res-list li { margin: 7px 0; }
+  .reveal .res-list a, .reveal a { color: #4da3ff; }
+  .reveal .tier { padding: 10px 18px; }
+  .reveal .tier p { font-size: 0.66em; margin: 6px 0; }
+  .reveal .closing-quote { font-size: 1.05em; }
+  .reveal svg { max-width: 100%; height: auto; }
+  .reveal .caption { font-size: 0.58em; color: #9aa4b8; margin-top: 8px; }
+  .reveal figure.photo { margin: 10px auto; }
+  .reveal figure.photo img { max-height: 300px; width: auto; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,.45); }
+  .reveal figure.photo .photo-fallback { display: none; }
+  .reveal figure.photo.no-photo img { display: none; }
+  .reveal figure.photo.no-photo .photo-fallback { display: block; }
+  .reveal figure.photo figcaption { font-size: 0.42em; color: #7b8497; margin-top: 8px; }
+  .reveal .zoom-do {
+    border: 2px solid #7ee0a3; border-radius: 14px; padding: 16px 26px;
+    background: rgba(126,224,163,0.07); text-align: left; margin: 14px auto; max-width: 880px;
+  }
+  .reveal .zoom-do p { font-size: 0.72em; margin: 9px 0; }
+  .reveal .zoom-do .step { color: #7ee0a3; font-weight: 700; margin-right: 8px; }
+  .reveal section[data-poll] .chip { border-color: #7ee0a3; color: #7ee0a3; }
+  /* act divider cards */
+  .reveal .act { color: #ffb454; font-size: 0.55em; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+  /* checkpoint blocks */
+  .reveal .checkpoint { border: 2px solid #4da3ff; background: rgba(77,163,255,.07); border-radius: 14px; padding: 10px 24px; margin: 12px auto; max-width: 900px; text-align: left; }
+  .reveal .checkpoint li { font-size: 0.62em; margin: 10px 0; }
+  /* the farmer chain, reused in the recap */
+  .reveal .chain { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 14px 0; }
+  .reveal .chain span { border: 1px solid #2a3450; background: #1a2233; border-radius: 999px; padding: 6px 14px; font-size: 0.46em; color: #e8edf5; }
+  .reveal .chain span.new { border-color: #ffb454; color: #ffb454; }
+
+  /* ---- Week 4 components ---- */
+  .reveal .w4-row { display:flex; gap:18px; align-items:flex-start; }
+  .reveal .w4-card { flex:1; background:#1a2233; border:1px solid #2a3450; border-radius:12px; padding:12px 16px; text-align:left; }
+  .reveal .w4-card p { font-size:.6em; margin:6px 0; line-height:1.4; }
+  .reveal .w4-hd { font-weight:700; font-size:.66em; margin-bottom:4px; }
+  .reveal .w4-muted { color:#9aa4b8; }
+  .reveal .w4-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px; }
+  .reveal .w4-cites { display:flex; flex-direction:column; gap:5px; margin-top:6px; text-align:left; }
+  .reveal .w4-cite { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 14px; font-size:.45em; line-height:1.32; }
+  .reveal .w4-cite > b { display:inline-block; width:1.6em; height:1.6em; line-height:1.6em; text-align:center; border-radius:50%; background:#4da3ff; color:#0d1320; margin-right:8px; }
+  .reveal .w4-cite .quiz-answer { display:block; margin-top:4px; color:#ffb454; font-weight:600; }
+  .reveal .w4-steps { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; text-align:left; }
+  .reveal .w4-step { background:#1a2233; border:1px solid #2a3450; border-radius:12px; padding:10px 14px; font-size:.56em; line-height:1.4; }
+  .reveal .w4-step b { display:block; color:#4da3ff; font-size:1.1em; margin-bottom:3px; }
+  .reveal .w4-list { margin:4px 0 0 1em; font-size:.58em; }
+  .reveal .w4-list li { margin:5px 0; }
+  .reveal .w4-timeline { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center; margin-top:14px; font-size:.5em; }
+  .reveal .w4-timeline span:not(:nth-child(even)) { border:1px solid #2a3450; background:#1a2233; border-radius:999px; padding:5px 12px; }
+  .reveal .w4-timeline span:nth-child(even) { color:#55607a; }
+  .reveal .w4-timeline b { color:#4da3ff; margin-right:4px; }
+  .reveal .w4-projects { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px; text-align:left; }
+  .reveal .w4-proj { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.44em; line-height:1.3; }
+  .reveal .w4-proj p { margin:3px 0; font-size:1em; color:#c8d0dd; }
+  .reveal .w4-proj-t { font-weight:700; font-size:1.1em; color:#e8edf5; margin-bottom:3px; }
+  .reveal .w4-badge { display:inline-block; border:1px solid; border-radius:999px; padding:0 8px; font-size:.78em; font-weight:700; margin-left:6px; vertical-align:middle; }
+  .reveal .w4-stack { margin-top:4px; padding:3px 8px; border-radius:6px; background:#141a26; font-size:.95em; color:#dfe5ee; }
+  .reveal .w4-stack .nc { color:#7ee0a3; font-weight:700; margin-right:4px; }
+  .reveal .w4-stack .cd { color:#4da3ff; font-weight:700; margin-right:4px; }
+  .reveal .sub-small { font-size:.5em; color:#9aa4b8; margin:-6px 0 6px; }
+  .reveal .w4-levels { display:grid; grid-template-columns:1fr 1fr; gap:12px; text-align:left; }
+  .reveal .w4-lvcol { display:flex; flex-direction:column; gap:6px; }
+  .reveal .w4-lvhd { color:#fff; font-weight:800; font-size:.5em; border-radius:8px; padding:4px 10px; }
+  .reveal .w4-lv { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 10px; font-size:.38em; line-height:1.28; }
+  .reveal .w4-lv p { margin:2px 0; font-size:1em; color:#c8d0dd; }
+  .reveal .w4-lv .w4-learn { color:#ffb454; }
+  .reveal table.w4-tb { width:100%; border-collapse:separate; border-spacing:0 4px; font-size:.405em; margin-top:2px; }
+  .reveal table.w4-tb th, .reveal table.w4-tb td { border:none; padding:4px 10px; text-align:left; vertical-align:middle; background:#1a2233; line-height:1.3; }
+  .reveal table.w4-tb tr > :first-child { border-radius:8px 0 0 8px; color:#e8edf5; width:24%; }
+  .reveal table.w4-tb tr > :last-child { border-radius:0 8px 8px 0; }
+  .reveal table.w4-tb tr:first-child th { background:transparent; font-size:1.05em; }
+  .reveal table.w4-tb td { color:#dfe5ee; }
+  .reveal table.w4-tb .wk { width:4.5em; text-align:center; color:#ffb454; font-weight:700; }
+  .reveal .w4-shrink { display:flex; flex-direction:column; gap:10px; margin-top:10px; font-size:.6em; text-align:left; }
+  .reveal .w4-shrink > div { display:grid; grid-template-columns:1fr 2em 1.6fr; align-items:center; background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:9px 14px; }
+  .reveal .w4-shrink .big { color:#ff9b9b; } .reveal .w4-shrink .arr { color:#9aa4b8; text-align:center; } .reveal .w4-shrink .ok { color:#7ee0a3; }
+  .reveal .w4-camp { display:grid; grid-template-columns:1fr 7.5em 1fr; gap:10px; align-items:stretch; text-align:left; margin-top:4px; }
+  .reveal .w4-camp-col .w4-hd { font-size:.56em; } .reveal .w4-camp-col { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 12px; }
+  .reveal .w4-camp-bot { background:rgba(255,180,84,.08); border:2px solid #ffb454; border-radius:14px; padding:8px; text-align:center; font-size:.55em; display:flex; flex-direction:column; justify-content:center; }
+  .reveal .w4-mini { margin:2px 0 0 1em; font-size:.46em; line-height:1.35; }
+  .reveal .w4-mini li { margin:2px 0; }
+  .reveal .w4-pg3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; text-align:left; margin-top:2px; }
+  .reveal .w4-pg-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:6px 11px; font-size:.44em; line-height:1.32; color:#dfe5ee; }
+  .reveal .w4-pg-card .w4-hd { font-size:1.22em; }
+  .reveal .w4-pg-card p { margin:3px 0; }
+  .reveal .w4-pg-card .w4-mini { font-size:1em; margin-top:0; }
+  .reveal .w4-pg-say { background:#141a26; border-left:3px solid #ffb454; border-radius:4px; padding:3px 7px; font-style:italic; }
+  .reveal .w4-pg-flow { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:4px 5px; margin-top:8px; font-size:.4em; }
+  .reveal .w4-pg-flow span { background:rgba(77,163,255,.1); border:1px solid #4da3ff; border-radius:16px; padding:3px 10px; color:#e8edf5; }
+  .reveal .w4-pg-flow b { color:#4da3ff; }
+  .reveal .w4-pg-you { margin-top:8px; background:rgba(255,180,84,.07); border:1px solid #ffb454; border-radius:10px; padding:6px 12px; text-align:left; }
+  .reveal .w4-pg-you > .w4-hd { font-size:.5em; }
+  .reveal .w4-pg-ideas { display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; font-size:.42em; line-height:1.3; color:#dfe5ee; }
+  .reveal .w4-sk3 { display:grid; grid-template-columns:1fr 1.6em 1fr 1.6em 1.15fr; gap:6px; align-items:stretch; text-align:left; margin-top:6px; }
+  .reveal .w4-sk-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.5em; line-height:1.35; color:#dfe5ee; }
+  .reveal .w4-sk-card .w4-hd { font-size:1.25em; }
+  .reveal .w4-sk-card p { margin:5px 0; }
+  .reveal .w4-sk-wk { font-size:.8em; letter-spacing:.08em; text-transform:uppercase; color:#9aa4b8; font-weight:700; }
+  .reveal .w4-sk-arrow { align-self:center; text-align:center; color:#4da3ff; font-size:.8em; }
+  .reveal .w4-sk-analogy { margin-top:12px; background:rgba(255,180,84,.08); border:1px solid #ffb454; border-radius:10px; padding:8px 16px; font-size:.5em; text-align:left; color:#e8edf5; }
+  .reveal .w4-sk-file { flex:1.1; margin:0; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:10px 14px; font-size:.36em; line-height:1.4; text-align:left; white-space:pre; color:#dfe5ee; box-shadow:none; width:auto; }
+  .reveal .w4-sk-file .d { color:#ffb454; } .reveal .w4-sk-file .m { color:#6b7891; } .reveal .w4-sk-file .k { color:#7ee0a3; font-weight:700; }
+  .reveal .w4-sk-how { flex:1; display:flex; flex-direction:column; gap:8px; }
+  .reveal .w4-sk-step { background:#1a2233; border:1px solid #2a3450; border-left:4px solid #4da3ff; border-radius:8px; padding:7px 12px; font-size:.44em; line-height:1.35; text-align:left; color:#dfe5ee; }
+  .reveal .w4-sk-step b { display:block; color:#4da3ff; margin-bottom:2px; }
+  .reveal .w4-sk-tryit { margin:6px auto 0; max-width:1000px; display:flex; flex-direction:column; gap:3px; background:#141a26; border:1px solid #7ee0a3; border-radius:10px; padding:6px 14px; font-size:.4em; line-height:1.35; text-align:left; color:#dfe5ee; }
+  .reveal .w4-api { display:grid; grid-template-columns:1.08fr 1fr; gap:12px; text-align:left; }
+  .reveal .w4-api-col { display:flex; flex-direction:column; gap:6px; min-width:0; }
+  .reveal .w4-api-hd { font-weight:700; font-size:.44em; }
+  .reveal .w4-api-hd span { font-weight:400; color:#9aa4b8; margin-left:6px; font-size:.85em; }
+  .reveal pre.w4-api-code { margin:0; width:auto; box-shadow:none; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.3em; line-height:1.38; white-space:pre; color:#dfe5ee; overflow:hidden; }
+  .reveal .w4-api-code .k { color:#4da3ff; } .reveal .w4-api-code .s { color:#ffb454; } .reveal .w4-api-code .n { color:#e8edf5; font-weight:700; }
+  .reveal .w4-api-code .n.hi { color:#7ee0a3; } .reveal .w4-api-code .c { color:#6b7891; font-style:italic; }
+  .reveal .w4-api-read { background:rgba(126,224,163,.07); border:1px solid #7ee0a3; border-radius:10px; padding:6px 10px; font-size:.38em; line-height:1.35; display:flex; flex-direction:column; gap:3px; color:#dfe5ee; }
+  .reveal .w4-api-read b { color:#7ee0a3; }
+  .reveal .w4-skd { display:grid; grid-template-columns:1.15fr 1fr; gap:14px; align-items:stretch; text-align:left; }
+  .reveal .w4-skd-left { display:flex; flex-direction:column; gap:7px; }
+  .reveal .w4-skd-left .w4-sk-step { font-size:.4em; }
+  .reveal .w4-skd-left code { background:#0f141e; padding:0 4px; border-radius:4px; font-size:.85em; }
+  .reveal .w4-skd-shot { margin:0; display:flex; }
+  .reveal .w4-skd-shot img { width:100%; height:auto; max-height:470px; object-fit:contain; border-radius:10px; border:1px solid #2a3450; margin:0; }
+  .reveal .w4-skd-ph { display:none; flex:1; flex-direction:column; align-items:center; justify-content:center; gap:6px; border:2px dashed #4da3ff; border-radius:12px; background:rgba(77,163,255,.05); font-size:.48em; text-align:center; color:#e8edf5; min-height:340px; }
+  .reveal .w4-skd-ph code { font-size:.9em; color:#ffb454; }
+  .reveal .w4-li { text-align:left; font-size:.42em; color:#dfe5ee; display:flex; flex-direction:column; gap:8px; }
+  .reveal .w4-li button { font:inherit; background:#1a2233; color:#dfe5ee; border:1px solid #2a3450; border-radius:8px; padding:4px 10px; cursor:pointer; }
+  .reveal .w4-li button.on { background:#4da3ff; color:#0f141e; border-color:#4da3ff; font-weight:700; }
+  .reveal .w4-li button:disabled { opacity:.5; cursor:wait; }
+  .reveal .w4-li-bar { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+  .reveal .w4-li-grp { display:inline-flex; gap:0; } .reveal .w4-li-grp button { border-radius:0; } .reveal .w4-li-grp button:first-child { border-radius:8px 0 0 8px; } .reveal .w4-li-grp button:last-child { border-radius:0 8px 8px 0; }
+  .reveal .w4-li-chk { display:inline-flex; align-items:center; gap:6px; background:rgba(255,107,107,.08); border:1px solid #ff6b6b; border-radius:8px; padding:3px 10px; cursor:pointer; }
+  .reveal .w4-li-mode { color:#7ee0a3; margin-left:auto; } .reveal .w4-li-mode.warn { color:#ffb454; }
+  .reveal .w4-li-setup { display:flex; flex-wrap:wrap; gap:8px; align-items:center; background:#141a26; border:1px dashed #4da3ff; border-radius:8px; padding:6px 10px; }
+  .reveal .w4-li-setup input { font:inherit; background:#0f141e; color:#dfe5ee; border:1px solid #2a3450; border-radius:6px; padding:3px 6px; width:16em; margin-left:4px; }
+  .reveal .w4-li-setup[hidden] { display:none; }
+  .reveal .w4-li-qs { display:flex; flex-wrap:wrap; gap:6px; }
+  .reveal .w4-li-row { display:flex; gap:8px; align-items:stretch; }
+  .reveal .w4-li-q { flex:1; font:inherit; background:#0f141e; color:#e8edf5; border:1px solid #2a3450; border-radius:8px; padding:6px 8px; resize:none; }
+  .reveal .w4-li-run { background:#7ee0a3 !important; color:#0f141e !important; font-weight:700; border-color:#7ee0a3 !important; padding:4px 16px !important; }
+  .reveal .w4-li-out { display:flex; flex-direction:column; gap:8px; min-height:200px; }
+  .reveal .w4-li-lbl { color:#9aa4b8; margin-bottom:3px; }
+  .reveal .w4-li-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .reveal .w4-li-card { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:6px 8px; line-height:1.3; max-height:7.2em; overflow:auto; }
+  .reveal .w4-li-card.wait { color:#6b7891; } .reveal .w4-li-card.err { border-color:#ffb454; color:#ffb454; }
+  .reveal .w4-li-sch { text-decoration:none; }
+  .reveal .w4-hw-stats { display:flex; gap:10px; margin:2px 0 8px; }
+  .reveal .w4-hw-stats div { flex:1; background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 8px; font-size:.42em; text-align:center; color:#dfe5ee; }
+  .reveal .w4-hw-stats b { display:block; font-size:2em; color:#ffb454; line-height:1.1; }
+  .reveal .w4-hw-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; text-align:left; }
+  .reveal .w4-hw-grid3 { grid-template-columns:repeat(3,1fr); }
+  .reveal .w4-hw-grid3 .w4-hw-card { font-size:.48em; padding:9px 12px; }
+  .reveal .w4-hw-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 10px; font-size:.43em; line-height:1.35; color:#dfe5ee; }
+  .reveal .w4-hw-card .w4-hd { font-size:1.12em; line-height:1.25; }
+  .reveal .w4-hw-card p { margin:4px 0; }
+  .reveal .w4-hw-q { font-style:italic; }
+  .reveal .w4-hw-why { color:#7ee0a3; }
+  .reveal .w4-hw-foot { margin-top:8px; display:flex; flex-direction:column; gap:4px; background:#141a26; border:1px solid #2a3450; border-radius:10px; padding:6px 12px; font-size:.4em; text-align:left; color:#dfe5ee; }
+  .reveal .w4-sh-link { margin:6px 0 10px; }
+  .reveal .w4-sh-btn { display:inline-block; background:#7ee0a3; color:#0f141e !important; font-weight:800; font-size:.8em; padding:10px 28px; border-radius:12px; text-decoration:none; }
+  .reveal .w4-sh-btn[hidden], .reveal .w4-sh-wait[hidden] { display:none; }
+  .reveal .w4-sh-wait { display:inline-block; border:2px dashed #7ee0a3; color:#7ee0a3; font-size:.6em; padding:8px 22px; border-radius:12px; }
+  .reveal .w4-sh-legend { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; font-size:.44em; }
+  .reveal .w4-sh-legend span { border:2px solid; border-radius:16px; padding:3px 12px; color:#dfe5ee; background:#141a26; }
+  .reveal .w4-sh-legend em { color:#7ee0a3; font-style:normal; }
+  .reveal .w3x { text-align:left; }
+  .reveal .w3x p { font-size:inherit; }
+  .reveal .w4-pg-links { margin-top:4px !important; } .reveal .w4-pg-links a { color:#4da3ff; text-decoration:none; }
+  .reveal .w4-camp-guard { margin-top:8px; background:rgba(255,107,107,.07); border:1px solid #ff6b6b; border-radius:10px; padding:6px 12px; text-align:left; }
+  .reveal .w4-guards { display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; font-size:.44em; line-height:1.3; color:#dfe5ee; }
+  .reveal a.w4-guide { display:none; font-size:.8em; font-weight:700; color:#0d1320; background:#ffb454; border-radius:999px; padding:0 8px; margin-left:4px; text-decoration:none; vertical-align:middle; }
+  .reveal a.w4-guide:hover { background:#ffd08a; }
+  .reveal .w4-covrow { display:grid; grid-template-columns:repeat(7,1fr); gap:7px; margin-top:6px; text-align:left; }
+  .reveal .w4-cov { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 7px 9px; font-size:.4em; }
+  .reveal .w4-cov-w { font-weight:800; font-size:1.5em; line-height:1.1; }
+  .reveal .w4-cov-s { color:#9aa4b8; font-size:.9em; margin-bottom:6px; }
+  .reveal .w4-chip { display:block; background:#141a26; border:1px solid #2a3450; border-radius:6px; padding:3px 6px; margin:4px 0; color:#dfe5ee; line-height:1.25; }
+  /* reveal.js treats any .stretch element as 'fill the remaining height'; the exercise tier must not */
+  .reveal .tier.stretch { height:auto !important; width:auto !important; }
+  /* ---- Week 5 components ---- */
+  .reveal a.w5-colab { display:inline-block; background:#ffb454; color:#0f141e !important; font-weight:800; font-size:.62em; padding:10px 24px; border-radius:12px; text-decoration:none; }
+  .reveal .w5-rest { display:flex; align-items:stretch; justify-content:center; gap:8px; margin-top:10px; }
+  .reveal .w5-rest-card { flex:1; background:#1a2233; border:2px solid #2a3450; border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:4px; font-size:.68em; color:#dfe5ee; }
+  .reveal .w5-rest-card b { font-size:1.2em; color:#e8edf5; } .reveal .w5-rest-card span { color:#9aa4b8; font-size:.9em; }
+  .reveal .w5-ic { font-size:2.2em; line-height:1.1; }
+  .reveal .w5-arrow { align-self:center; color:#4da3ff; font-size:.9em; }
+  .reveal .w5-layers { display:flex; gap:8px; margin-top:10px; }
+  .reveal .w5-layer { flex:1; background:#1a2233; border:1px solid #2a3450; border-top:5px solid var(--k); border-radius:10px; padding:10px 12px; display:flex; flex-direction:column; gap:4px; font-size:.62em; text-align:left; color:#e8edf5; }
+  .reveal .w5-layer b { color:var(--k); font-size:1.6em; line-height:1; } .reveal .w5-layer span { font-weight:700; } .reveal .w5-layer small { color:#9aa4b8; font-size:.88em; }
+  .reveal .w5-setup { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; text-align:left; }
+  .reveal .w5-setup .w4-step { font-size:.62em; }
+  .reveal .w5-setup code, .reveal .w5-ask code, .reveal .w5-box code { background:#0f141e; padding:0 5px; border-radius:4px; font-size:.92em; }
+  .reveal .w5-ask { display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:center; background:rgba(126,224,163,.08); border:1px dashed #7ee0a3; border-radius:10px; padding:9px 14px; font-size:.62em; color:#e8edf5; margin-top:12px; }
+  .reveal .w5-key { margin-top:10px; background:rgba(255,107,107,.08); border:1px solid #ff6b6b; border-radius:10px; padding:9px 14px; font-size:.58em; text-align:left; color:#e8edf5; }
+  .reveal pre.w5-code { margin:0; width:auto; box-shadow:none; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:12px 16px; font-size:.46em; line-height:1.45; text-align:left; white-space:pre; color:#dfe5ee; }
+  .reveal .w5-call { display:flex; gap:10px; align-items:stretch; margin-top:6px; }
+  .reveal .w5-box { flex:1; background:#1a2233; border:2px solid #2a3450; border-radius:12px; padding:10px 16px; text-align:left; font-size:.62em; color:#dfe5ee; }
+  .reveal .w5-box p { margin:4px 0; }
+  .reveal .w5-flow { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:5px; margin-top:14px; font-size:.52em; }
+  .reveal .w5-flow span { background:rgba(77,163,255,.1); border:1px solid #4da3ff; border-radius:16px; padding:3px 10px; color:#e8edf5; } .reveal .w5-flow b { color:#4da3ff; }
+  .reveal .w5-attacks { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+  .reveal .w5-attacks div { background:#1a2233; border:1px solid #2a3450; border-top:4px solid #ff6b6b; border-radius:10px; padding:10px; font-size:.64em; color:#dfe5ee; text-align:left; }
+  .reveal .w5-attacks b { display:block; color:#ff6b6b; font-size:1.6em; line-height:1.1; }
+  .reveal .w5-apps { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .reveal .w5-app { background:#1a2233; border:1px solid #2a3450; border-top:5px solid var(--k); border-radius:10px; padding:10px 12px; font-size:.62em; color:#e8edf5; text-align:left; display:flex; flex-direction:column; gap:4px; }
+  .reveal .w5-app b { color:var(--k); font-size:1.6em; line-height:1; } .reveal .w5-app small { color:#9aa4b8; }
+  .reveal .w5-fcflow { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .reveal .w5-fcflow b { display:block; color:#4da3ff; font-size:1.5em; line-height:1.1; }
+</style>
+</head>
+<body>
+<!-- STUDENT EDITION - generated by build.py, do not edit by hand -->
+<div class="reveal">
+<div class="slides">
+<!-- ==================== TITLE ==================== -->
+<section id="w5-title">
+  <p class="chip">Week 5</p>
+  <h1>Building I: your first AI app 🛠️</h1>
+  <p class="small">Fewer slides today. <strong>More building.</strong></p>
+  <p style="margin-top:18px"><a class="w5-colab" href="https://colab.research.google.com/github/san81/ai-course/blob/main/docs/weeks/week5/week5-build-your-first-ai-app.ipynb" target="_blank" rel="noopener">🧪 Open today's notebook in Colab ↗</a></p>
+</section>
+
+<!-- ==================== EASTER EGGS ==================== -->
+<section id="w5-egg-last">
+  <div class="easter-egg">
+    <p>🥚 <strong>Last week's easter egg</strong></p>
+    <p>Out of billions of pages, a search box shows you ten. Deep Research and NotebookLM use the
+    same trick to decide what to read before they answer you. What is that field called?</p>
+  </div>
+  <div class="waterfall">
+    <span><span class="wf-step">1</span> Type your answer — <b>do NOT press send</b></span>
+    <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+    <span><span class="wf-step">3</span> Everyone sends together</span>
+  </div>
+  <p class="small fragment"><strong>Information retrieval</strong>. The letter to save:
+  <strong style="color:#ffb454">I</strong></p>
+  <p class="small fragment">Your collection so far: <strong style="color:#ffb454;font-size:1.3em;letter-spacing:.3em">A · R · T · I</strong> …
+  four more to go.</p>
+</section>
+
+<section id="w5-egg">
+  <div class="easter-egg">
+    <p>🥚 <strong>This week's easter egg</strong></p>
+    <p>An AI model can only write text. It can't check a timetable, send a message or look up a
+    phone number. Yet AI assistants do all of these. The trick: the model writes a
+    <em>request</em>, and <strong>your</strong> code carries it out.</p>
+    <p><strong>What is this technique called?</strong></p>
+  </div>
+  <p class="small">You'll see it near the end of today. Bring it next week, and save its first letter.</p>
+</section>
+
+<!-- ==================== COLD OPEN ==================== -->
+<section id="w5-api">
+  <p class="chip">What is an API?</p>
+  <h2>You never walk into the kitchen 🍽️</h2>
+  <div class="w5-rest">
+    <div class="w5-rest-card fragment"><div class="w5-ic">🙋</div><b>You</b><span>the app you build</span></div>
+    <div class="w5-arrow fragment">→</div>
+    <div class="w5-rest-card fragment"><div class="w5-ic">📜</div><b>The menu</b><span>the documentation: what you're allowed to ask for</span></div>
+    <div class="w5-arrow fragment">→</div>
+    <div class="w5-rest-card fragment" style="border-color:#ffb454"><div class="w5-ic">🧑‍🍳</div><b>The waiter</b><span>the <strong>API</strong>: takes your order, brings back the food</span></div>
+    <div class="w5-arrow fragment">→</div>
+    <div class="w5-rest-card fragment"><div class="w5-ic">🔥</div><b>The kitchen</b><span>the model, on Google's or Anthropic's computers</span></div>
+  </div>
+  <p class="small fragment" style="margin-top:14px">You don't need to know how the kitchen works. You only need the menu,
+  and the <strong>bill</strong> comes per plate: here, per <strong>token</strong>.</p>
+</section>
+
+<section id="w5-hopper">
+  <p class="chip">A story</p>
+  <h2>"Talk to the computer in English" 👩‍💻</h2>
+  <div class="w4-row" style="align-items:stretch;margin-top:6px">
+    <div class="w4-card">
+      <div class="w4-hd" style="color:#ffb454">1950s</div>
+      <p><strong>Grace Hopper</strong> argued that people should give computers instructions in words
+      close to English. Experts said computers could only understand numbers.</p>
+      <p>She built one of the first compilers anyway, and her English-like language shaped
+      <strong>COBOL</strong>, which still runs banks today.</p>
+    </div>
+    <div class="w4-card fragment" style="border-top:4px solid #7ee0a3">
+      <div class="w4-hd" style="color:#7ee0a3">Today</div>
+      <p>You will write the instructions for a working app <strong>in plain English</strong>.</p>
+      <p class="w4-muted">The language finally caught up with her idea.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MAP ==================== -->
+<section id="w5-map">
+  <p class="chip">Today</p>
+  <h2>One app, built four ways 🧱</h2>
+  <p class="small" style="margin-top:-6px">Our app: a <strong>hostel complaint sorter</strong>. A messy complaint goes in; the category, urgency and a polite reply come out.</p>
+  <div class="w5-layers">
+    <div class="w5-layer" style="--k:#7ee0a3"><b>1</b><span>🧩 No-code</span><small>the instructions <em>are</em> the app</small></div>
+    <div class="w5-layer" style="--k:#4da3ff"><b>2</b><span>📨 One API call</span><small>keys · tokens · cost</small></div>
+    <div class="w5-layer" style="--k:#ffb454"><b>3</b><span>📊 JSON × a spreadsheet</span><small>structured output · pandas</small></div>
+    <div class="w5-layer" style="--k:#c792ea"><b>4</b><span>🌐 A small app</span><small>a link you can share</small></div>
+    <div class="w5-layer" style="--k:#ff6b6b"><b>✨</b><span>The model asks your code</span><small>a peek at Week 7</small></div>
+  </div>
+  <p class="small" style="margin-top:12px">Every layer: <strong>I do it</strong> → <strong>your turn (3 min)</strong> → <strong>one word or number in chat</strong>.</p>
+  <p class="small">🧩 No-code track? Layer 1 is your capstone path. Watch the rest; you don't have to code.</p>
+</section>
+
+<!-- ==================== SETUP ==================== -->
+<section id="w5-setup">
+  <p class="chip">Setup check · 10 minutes</p>
+  <h2>Get to ✅ Connected</h2>
+  <div class="w5-setup">
+    <div class="w4-step"><b>1 · Notebook</b>Open the Colab link in the chat → <em>File → Save a copy in Drive</em></div>
+    <div class="w4-step"><b>2 · Key</b><a href="https://aistudio.google.com" target="_blank" rel="noopener">aistudio.google.com</a> → <em>Get API key</em> → <em>Create</em> → copy</div>
+    <div class="w4-step"><b>3 · Secret</b>In Colab, the 🔑 icon (left) → <em>Add new secret</em> → name <code>GEMINI_API_KEY</code> → paste → Notebook access on</div>
+    <div class="w4-step"><b>4 · Run</b>Run the first two cells. You should see <strong>✅ Connected</strong></div>
+  </div>
+  <div class="w5-ask fragment">
+    <span>✅ Connected? React with 👍</span>
+    <span>Stuck? Type just the <strong>step number</strong> (1–4)</span>
+  </div>
+  <div class="w5-key fragment">🔒 <strong>A key is a password that spends money.</strong> It goes in the Secrets panel, never in
+  a code cell, never on GitHub, never in a WhatsApp group.</div>
+</section>
+
+<!-- ==================== LAYER 1 ==================== -->
+<section id="w5-l1">
+  <p class="chip">Layer 1 · no-code</p>
+  <h2>The instructions <em>are</em> the app 🧩</h2>
+  <div class="w4-row" style="align-items:stretch;gap:14px">
+<pre class="w5-code" style="flex:1.3">You sort complaints sent to a college hostel
+helpdesk in South India. Students write in English,
+Telugu, or a mix of both, often casually.
+
+For each message, decide:
+- category: the ONE best category.
+- urgency: high = a safety risk … ; medium = … ;
+  low = everything else.
+- summary: what is wrong, in at most 12 words.
+- reply: a warm, polite reply, at most 40 words,
+  in the language they wrote in. Never promise a
+  date or a time. Never make up names or numbers.
+- needs_human: true if there is any safety risk…</pre>
+    <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+      <div class="w4-step fragment"><b>I do it</b>Paste these into a new <strong>Gemini Gem</strong> (or a Custom GPT / Claude Project). Test: <em>"Sparks coming from the switch board near my bed!!"</em></div>
+      <div class="w4-step fragment"><b>Your turn · 3 min</b>Run section 1 of the notebook. Read the instructions. Then make your own Gem with them, if you like.</div>
+      <div class="w5-ask fragment"><span>Type the <strong>urgency</strong> it gave the sparks complaint: one word</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== LAYER 2 ==================== -->
+<section id="w5-l2">
+  <p class="chip">Layer 2 · one API call</p>
+  <h2>The same thing, from code 📨</h2>
+  <div class="w5-call">
+    <div class="w5-box fragment" style="border-color:#4da3ff">
+      <div class="w4-hd" style="color:#4da3ff">📤 You send</div>
+      <p>🧠 <strong>model</strong>: which kitchen</p>
+      <p>📋 <strong>instructions</strong>: the system prompt</p>
+      <p>💬 <strong>your text</strong>: the complaint</p>
+      <p>🎛️ <strong>settings</strong>: temperature (remember Week 3?)</p>
+    </div>
+    <div class="w5-arrow">→</div>
+    <div class="w5-box fragment" style="border-color:#7ee0a3">
+      <div class="w4-hd" style="color:#7ee0a3">📥 You get back</div>
+      <p>✍️ <strong>the answer</strong></p>
+      <p>🔢 <strong>tokens in · tokens out</strong></p>
+      <p>💰 and so, <strong>the cost</strong></p>
+    </div>
+  </div>
+  <div class="w4-row" style="margin-top:12px">
+    <div class="w4-step fragment" style="flex:1"><b>Your turn · 3 min</b>Run section 2. Then change the temperature to 1 and run it three times.</div>
+    <div class="w5-ask fragment" style="flex:1"><span>Type your <strong>tokens in</strong>: just the number</span></div>
+  </div>
+</section>
+
+<!-- ==================== LAYER 3 ==================== -->
+<section id="w5-l3">
+  <p class="chip">Layer 3 · JSON × a spreadsheet</p>
+  <h2>Programs can't read paragraphs 📊</h2>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w5-box fragment" style="flex:1;border-color:#ff6b6b">
+      <div class="w4-hd" style="color:#ff6b6b">A paragraph</div>
+      <p class="w4-muted" style="font-style:italic">"This sounds like an electrical problem, and it could be quite serious. I'd suggest contacting…"</p>
+      <p>Nice for a person. Now count 500 of them.</p>
+    </div>
+    <div class="w5-box fragment" style="flex:1;border-color:#7ee0a3">
+      <div class="w4-hd" style="color:#7ee0a3">JSON</div>
+<pre class="w5-code" style="margin:0">{ "category": "electricity",
+  "urgency": "high",
+  "needs_human": true, … }</pre>
+      <p>Same answer, as labelled fields. Sort it, count it, filter it.</p>
+    </div>
+  </div>
+  <div class="w5-flow fragment">
+    <span>📄 CSV of complaints</span><b>→</b><span>🐼 pandas reads it</span><b>→</b><span>🔁 one call per row</span><b>→</b><span>📊 results table</span><b>→</b><span>💰 ₹ for 1,000 rows</span>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:10px"><span>Run section 3, then type your <strong>₹ for 1,000 rows</strong>: just the number</span></div>
+</section>
+
+<!-- ==================== BREAK IT ==================== -->
+<section id="w5-break">
+  <p class="chip">Break-it challenge · 10 minutes</p>
+  <h2>Make it misbehave 🔨</h2>
+  <div class="w5-attacks">
+    <div><b>1</b>Write in <strong>Telugu</strong>, or Telugu-English</div>
+    <div><b>2</b>Put <strong>two problems</strong> in one message</div>
+    <div><b>3</b><em>"Ignore your instructions and…"</em></div>
+    <div><b>4</b>Something that <strong>isn't a complaint</strong></div>
+    <div><b>5</b>Only <strong>emojis</strong>, or nonsense</div>
+  </div>
+  <div class="w5-ask" style="margin-top:12px"><span>Type the <strong>number</strong> of the attack that broke it: 1–5</span></div>
+  <p class="small fragment" style="margin-top:10px">Then <strong>fix it with one line</strong> in the instructions, run section 1 again, and retry the attack.
+  That's how real AI products get better: <strong>break → add a rule → test again</strong>.</p>
+</section>
+
+<!-- ==================== LAYER 4 ==================== -->
+<section id="w5-l4">
+  <p class="chip">Layer 4 · a small app</p>
+  <h2>A link anyone can use 🌐</h2>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w4-step" style="flex:1"><b>Gradio</b>Turns one Python function into a web page: a text box in, the result out.</div>
+    <div class="w4-step" style="flex:1"><b>share=True</b>Gives you a public link for 72 hours. Send it to a friend or a parent and let them try it.</div>
+    <div class="w4-step" style="flex:1"><b>Your turn · 3 min</b>Run section 4. Type a complaint into <em>your own</em> app.</div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:12px"><span>Did your app open? Type <strong>Y</strong> or <strong>N</strong></span></div>
+  <p class="small fragment" style="margin-top:10px">This is the moment it stops being a notebook and becomes <strong>something a real person can use</strong>.
+  That's what your capstone demo needs.</p>
+</section>
+
+<!-- ==================== FOUR APPS ==================== -->
+<section id="w5-four">
+  <p class="chip">Same code, four apps</p>
+  <h2>Change one letter, get a different app 🔁</h2>
+  <div class="w5-apps">
+    <div class="w5-app" style="--k:#ffb454"><b>A</b>🏠 Hostel complaint sorter<small>complaint → category, urgency, reply</small></div>
+    <div class="w5-app" style="--k:#4da3ff"><b>B</b>📚 Ask the course<small>question → answer from the course notes, or "I don't know"</small></div>
+    <div class="w5-app" style="--k:#7ee0a3"><b>C</b>🗣️ Telugu explainer<small>technical term → simple English + Telugu</small></div>
+    <div class="w5-app" style="--k:#c792ea"><b>D</b>💼 Interview coach<small>question + your answer → scores + a better answer</small></div>
+  </div>
+  <div class="w4-row" style="margin-top:12px;align-items:stretch">
+    <div class="w4-step" style="flex:1"><b>What changes</b>The <strong>instructions</strong>, the <strong>answer shape</strong> (schema) and the <strong>data</strong>.</div>
+    <div class="w4-step" style="flex:1"><b>What stays the same</b>Everything else: the call, the loop, the cost, the app.</div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:10px"><span>Change <code>USE_CASE</code>, rerun from section 1, and type the <strong>letter</strong> you picked</span></div>
+</section>
+
+<!-- ==================== FUNCTION CALLING ==================== -->
+<section id="w5-fc">
+  <p class="chip">✨ A peek at Week 7</p>
+  <h2>The model asks <em>your</em> code for help 🔧</h2>
+  <div class="w5-fcflow">
+    <div class="w5-box fragment"><b>1</b>Student: <em>"No water in C-block. Who should I contact?"</em></div>
+    <div class="w5-box fragment"><b>2</b>The model can't look it up, so it writes a request:<br><code>get_block_contact("C")</code></div>
+    <div class="w5-box fragment"><b>3</b><strong>Your Python function runs</strong> and returns <em>"C-block warden, ext. 103"</em></div>
+    <div class="w5-box fragment"><b>4</b>The model writes the reply, using the real answer</div>
+  </div>
+  <p class="small fragment" style="margin-top:12px">This is called <strong>function calling</strong>. Give a model a few functions
+  (check a timetable, add a reminder, send a message) and it starts to <em>act</em>. In Week 7, that's an <strong>agent</strong>.</p>
+  <p class="tiny-hint">🥚 remember this one</p>
+</section>
+
+<!-- ==================== CAPSTONE ==================== -->
+<section id="w5-capstone">
+  <p class="chip">Your capstone</p>
+  <h2>Which layer is your project? 🎯</h2>
+  <div class="w5-layers">
+    <div class="w5-layer" style="--k:#7ee0a3"><b>1</b><span>🧩 No-code track</span><small>a Gem, GPT or Claude Project with your instructions</small></div>
+    <div class="w5-layer" style="--k:#4da3ff"><b>2–4</b><span>🛠️ Build track</span><small>the notebook, with your instructions and data, as an app</small></div>
+    <div class="w5-layer" style="--k:#ffb454"><b>3</b><span>🔬 Case study track</span><small>run your test questions as a batch, compare tools, count the cost</small></div>
+  </div>
+  <div class="w5-ask" style="margin-top:14px"><span>Type the <strong>layer number</strong> your capstone will start at: 1, 2, 3 or 4</span></div>
+</section>
+
+<!-- ==================== CLOSE ==================== -->
+<section id="w5-due">
+  <p class="chip">Due next week</p>
+  <h2>Ship the smallest thing that works</h2>
+  <div class="tier core">
+    <span class="tier-label">Core — everyone</span>
+    <p>The <strong>first working version of your capstone</strong>: a Gem / GPT / Claude Project (no-code) or the
+    notebook with your instructions (code). Test it on <strong>your five questions</strong> from your proposal.
+    Send a screenshot or link, and how many of the five it got right.</p>
+  </div>
+  <div class="tier stretch">
+    <span class="tier-label">Stretch — optional</span>
+    <p>Run your five questions as a <strong>batch</strong> (Layer 3) and report the ₹ per 1,000. Plus <strong>one
+    break-it attack</strong> on your own app, and the one line that fixed it.</p>
+  </div>
+  <p class="small">🥚 And bring your easter egg answer. Submission link in the chat.</p>
+</section>
+
+
+<section id="w5-next">
+  <h2>Next week: <em>Building II · your own data</em> 📚</h2>
+  <p class="small">App B worked because the course notes <strong>fit inside the instructions</strong>.
+  What if your document is <strong>500 pages</strong>?</p>
+  <p class="small fragment">Next week your app learns to <strong>find the right page first</strong>, then answer from it.</p>
+</section>
+
+<section id="w5-closing">
+  <p class="closing-quote">
+    "The most dangerous phrase in the language is:<br><em>we've always done it this way.</em>"
+    <span class="attribution">— Grace Hopper</span>
+  </p>
+  <p class="small fragment" style="margin-top:16px">Four weeks ago you were <em>using</em> AI. Today you built one,
+  ran it on a spreadsheet, broke it, fixed it and shared it.</p>
+  <p class="small fragment" style="margin-top:10px;color:#7ee0a3">If something didn't run today, that's not failure:
+  that's <strong>step one of every engineer's day</strong>. Read the error, change one thing, run it again.
+  See you next week. 🙏</p>
+</section>
+
+
+</div>
+</div>
+
+<script src="../../assets/reveal/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({ hash:true, slideNumber:'c/t', width:1200, height:760,
+    margin:0.05, minScale:0.2, maxScale:1.6,
+    // Default true steals focus back to <body> whenever the page becomes
+    // visible again, which silently breaks paste. See week1/week2.
+    focusBodyOnPageVisibilityChange:false });
+  document.addEventListener('click', e => {
+    if (e.target.classList.contains('quiz-answer')) e.target.classList.toggle('revealed');
+  });
+
+  /* ---- Overflow guard -------------------------------------------------
+     reveal.js silently clips content taller than the slide, which cuts off
+     text at the bottom on a projector. This shrinks any offending slide
+     until it fits, and reports it in the browser console so it can be
+     fixed properly later.                                               */
+  (function () {
+    const LIMIT = () => Reveal.getConfig().height;
+    function fit(slide) {
+      if (!slide) return;
+      slide.style.fontSize = '';
+      const max = LIMIT();
+      let pct = 100;
+      while (slide.scrollHeight > max && pct > 45) {
+        pct -= 4;
+        slide.style.fontSize = pct + '%';
+      }
+      if (pct < 100) {
+        console.warn('[deck] slide shrunk to ' + pct + '% to fit:',
+          (slide.querySelector('h1,h2') || {}).textContent || slide);
+      }
+    }
+    const current = () => Reveal.getCurrentSlide();
+    Reveal.on('ready', () => fit(current()));
+    Reveal.on('slidechanged', e => fit(e.currentSlide));
+    Reveal.on('fragmentshown', () => fit(current()));
+    Reveal.on('resize', () => fit(current()));
+  })();
+</script>
+</body>
+</html>
