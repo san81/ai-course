@@ -227,6 +227,14 @@
   .reveal .w5-app b { color:var(--k); font-size:1.6em; line-height:1; } .reveal .w5-app small { color:#9aa4b8; }
   .reveal .w5-fcflow { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
   .reveal .w5-fcflow b { display:block; color:#4da3ff; font-size:1.5em; line-height:1.1; }
+  .reveal .w5-idea { background:rgba(255,180,84,.08); border:1px solid #ffb454; border-radius:10px; padding:8px 16px; font-size:.62em; color:#e8edf5; text-align:left; }
+  .reveal .w5-rule { margin-top:12px; background:#141a26; border:1px solid #2a3450; border-radius:10px; padding:8px 14px; font-size:.6em; color:#e8edf5; }
+  .reveal .w5-inbox { display:flex; flex-direction:column; gap:3px; text-align:left; font-size:.47em; }
+  .reveal .w5-inbox div { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:4px 12px; color:#e8edf5; display:flex; gap:10px; align-items:baseline; }
+  .reveal .w5-inbox b { color:#9aa4b8; min-width:1.8em; text-align:right; font-weight:700; }
+  .reveal .w5-inbox span { color:#ffb454; font-weight:700; font-size:.85em; min-width:1.2em; }
+  .reveal .w5-probs { display:flex; gap:8px; margin-top:10px; font-size:.48em; }
+  .reveal .w5-probs span { flex:1; background:#141a26; border:1px solid #2a3450; border-radius:8px; padding:6px 10px; color:#dfe5ee; text-align:left; }
 </style>
 </head>
 <body>
@@ -238,7 +246,8 @@
   <p class="chip">Week 5</p>
   <h1>Building I: your first AI app 🛠️</h1>
   <p class="small">Fewer slides today. <strong>More building.</strong></p>
-  <p style="margin-top:18px"><a class="w5-colab" href="https://colab.research.google.com/github/san81/ai-course/blob/main/docs/weeks/week5/week5-build-your-first-ai-app.ipynb" target="_blank" rel="noopener">🧪 Open today's notebook in Colab ↗</a></p>
+  <p style="margin-top:18px"><a class="w5-colab" href="https://colab.research.google.com/github/san81/ai-course/blob/main/docs/weeks/week5/week5-hostel-complaint-sorter.ipynb" target="_blank" rel="noopener">🧪 Today's notebook: hostel complaint sorter ↗</a></p>
+  <p class="small" style="margin-top:6px">After class: <a href="https://colab.research.google.com/github/san81/ai-course/blob/main/docs/weeks/week5/week5-build-your-first-ai-app.ipynb" target="_blank" rel="noopener">🔁 the same code as four apps (A–D) ↗</a></p>
 </section>
 
 <!-- ==================== EASTER EGGS ==================== -->
@@ -257,6 +266,50 @@
   <strong style="color:#ffb454">I</strong></p>
   <p class="small fragment">Your collection so far: <strong style="color:#ffb454;font-size:1.3em;letter-spacing:.3em">A · R · T · I</strong> …
   four more to go.</p>
+</section>
+
+<!-- ==================== WEEK 4 HOMEWORK (added 2026-10-10) ==================== -->
+<!-- No student names on slides; the student edition is public. -->
+<section>
+  <section id="w5-hw-proposal">
+    <p class="chip">From your Week 4 proposals</p>
+    <h2>A capstone idea, sharpened together ✏️</h2>
+    <div class="w5-idea">🎓 <strong>An AI study planner</strong> for classmates preparing for exams: subjects, exam dates and free hours in → a day-by-day plan out.</div>
+    <div class="w4-row" style="align-items:stretch;gap:12px;margin-top:10px">
+      <div class="w5-box fragment" style="flex:1;border-color:#7ee0a3">
+        <div class="w4-hd" style="color:#7ee0a3">⭐ Already strong</div>
+        <p>👥 <strong>Real users</strong> you can test with: your own classmates</p>
+        <p>😩 <strong>A problem they live</strong>: last-minute study, no plan</p>
+        <p>📝 <strong>Five realistic test questions</strong>, written the way students actually ask</p>
+      </div>
+      <div class="w5-box fragment" style="flex:1.25;border-color:#ffb454">
+        <div class="w4-hd" style="color:#ffb454">🔧 Three sharpening moves</div>
+        <p><strong>1 · One idea, not two.</strong> A study-material helper <em>and</em> a planner is two projects. Pick the planner; park the other.</p>
+        <p><strong>2 · Make "good" checkable.</strong> Every subject covered · fits the hours given · hard topics earlier · a revision day before each exam · nothing after the exam.</p>
+        <p><strong>3 · Give the answer a shape.</strong> A plan is a table: <code>day · subject · topic · hours</code>. That's <strong>today's Layer 3</strong>.</p>
+      </div>
+    </div>
+    <div class="w5-ask fragment"><span>Which of the 5 checks in move 2 will the AI fail most often? Type <strong>1–5</strong></span></div>
+    <p class="small fragment" style="margin-top:8px">📝 Haven't sent your proposal yet? The Week 4 form is still open. I reply to every one.</p>
+</section>
+
+  <section id="w5-hw-asked">
+    <p class="chip">You asked me privately</p>
+    <h2>"What went into Jev, and could I use it?" 🤖</h2>
+    <div class="w4-row" style="align-items:stretch;gap:12px">
+      <div class="w5-box fragment" style="flex:1;border-color:#4da3ff">
+        <div class="w4-hd" style="color:#4da3ff">🧪 The work behind it</div>
+        <p><strong>Jev itself</strong> was built by a company, TypeSafe, and trained with <strong>RLCD</strong> so its "how sure" numbers are honest.</p>
+        <p><strong>The game around it</strong> was the real work: writing the boards, a free spelling check first, <strong>78 test guesses</strong>, and tuning the 75% / 45% thresholds until it felt fair.</p>
+      </div>
+      <div class="w5-box fragment" style="flex:1;border-color:#7ee0a3">
+        <div class="w4-hd" style="color:#7ee0a3">📅 For a study planner?</div>
+        <p>Mostly <strong>no</strong>: a planner has to <em>write</em> a plan. That's a job for a model like Gemini or Claude, which you'll call today.</p>
+        <p>Jev only <em>picks</em> from options you give it. It could do one small step, like <em>"is this a revision plan, an exam plan or an assignment plan?"</em></p>
+      </div>
+    </div>
+    <div class="w5-rule fragment">✍️ Need it to <strong>write</strong>? A generative model. &nbsp;·&nbsp; ☑️ Need it to <strong>choose from a list</strong>? A decision model.</div>
+</section>
 </section>
 
 <section id="w5-egg">
@@ -306,6 +359,29 @@
   </div>
 </section>
 
+<!-- ==================== THE PROBLEM ==================== -->
+<section id="w5-problem">
+  <p class="chip">Today's problem</p>
+  <h2>The hostel office inbox 📥</h2>
+  <div class="w5-inbox">
+    <div><b>0</b><span>C</span>No water in C block since morning. Please check.</div>
+    <div><b>2</b><span>C</span>Sparks coming from the switch board near my bed when I switch on the fan!!</div>
+    <div><b>3</b><span>A</span>Mess lo curry chala uppu ga undi roju, please cook properly</div>
+    <div><b>4</b><span>C</span>నీళ్ళు రావట్లేదు, ఉదయం నుండి bathroom లో tap dry</div>
+    <div><b>7</b><span>C</span>C block taps are dry, can't even brush my teeth</div>
+    <div><b>9</b><span>A</span>Too much salt in today's dal at lunch, nobody could eat it</div>
+    <div><b>14</b><span>A</span>Smell like cooking gas near the kitchen, scared to go there</div>
+  </div>
+  <p class="small" style="margin:4px 0 0">7 of 34 · <a href="https://github.com/san81/ai-course/blob/main/docs/weeks/week5/hostel-complaints.csv" target="_blank" rel="noopener">📊 see all of them as a table ↗</a></p>
+  <div class="w5-ask" style="margin-top:8px"><span>Which would <strong>you</strong> deal with first? Type the <strong>row numbers</strong></span></div>
+  <div class="w5-probs fragment">
+    <span>🔁 <strong>Same problem, new words</strong>: 0 · 4 · 7 are one dry tap in C-block</span>
+    <span>⚠️ <strong>Danger is buried</strong>: 2 (sparks) · 14 (gas) among salty curry</span>
+    <span>🌀 <strong>Messy</strong>: English, Telugu, both. Someone reads every one, daily.</span>
+  </div>
+  <p class="small fragment" style="margin-top:6px;color:#7ee0a3">Today's app does the first pass in seconds: <strong>category · urgency · summary · reply · "a human must look"</strong>, and then we group the repeats.</p>
+</section>
+
 <!-- ==================== MAP ==================== -->
 <section id="w5-map">
   <p class="chip">Today</p>
@@ -330,7 +406,7 @@
     <div class="w4-step"><b>1 · Notebook</b>Open the Colab link in the chat → <em>File → Save a copy in Drive</em></div>
     <div class="w4-step"><b>2 · Key</b><a href="https://aistudio.google.com" target="_blank" rel="noopener">aistudio.google.com</a> → <em>Get API key</em> → <em>Create</em> → copy</div>
     <div class="w4-step"><b>3 · Secret</b>In Colab, the 🔑 icon (left) → <em>Add new secret</em> → name <code>GEMINI_API_KEY</code> → paste → Notebook access on</div>
-    <div class="w4-step"><b>4 · Run</b>Run the first two cells. You should see <strong>✅ Connected</strong></div>
+    <div class="w4-step"><b>4 · Run</b>Run the three setup cells. You should see <strong>✅ Connected</strong>, or a message saying what to fix</div>
   </div>
   <div class="w5-ask fragment">
     <span>✅ Connected? React with 👍</span>
@@ -359,8 +435,8 @@ For each message, decide:
   date or a time. Never make up names or numbers.
 - needs_human: true if there is any safety risk…</pre>
     <div style="flex:1;display:flex;flex-direction:column;gap:8px">
-      <div class="w4-step fragment"><b>I do it</b>Paste these into a new <strong>Gemini Gem</strong> (or a Custom GPT / Claude Project). Test: <em>"Sparks coming from the switch board near my bed!!"</em></div>
-      <div class="w4-step fragment"><b>Your turn · 3 min</b>Run section 1 of the notebook. Read the instructions. Then make your own Gem with them, if you like.</div>
+      <div class="w4-step fragment"><b>I do it</b>Save these as a <strong>Gemini skill</strong> (or a Custom GPT / Claude Project). Test: <em>"Sparks coming from the switch board near my bed!!"</em></div>
+      <div class="w4-step fragment"><b>Your turn · 3 min</b>Run section 1 of the notebook. Read the instructions. Then make your own skill with them, if you like.</div>
       <div class="w5-ask fragment"><span>Type the <strong>urgency</strong> it gave the sparks complaint: one word</span></div>
     </div>
   </div>
@@ -460,7 +536,7 @@ For each message, decide:
     <div class="w4-step" style="flex:1"><b>What changes</b>The <strong>instructions</strong>, the <strong>answer shape</strong> (schema) and the <strong>data</strong>.</div>
     <div class="w4-step" style="flex:1"><b>What stays the same</b>Everything else: the call, the loop, the cost, the app.</div>
   </div>
-  <div class="w5-ask fragment" style="margin-top:10px"><span>Change <code>USE_CASE</code>, rerun from section 1, and type the <strong>letter</strong> you picked</span></div>
+  <div class="w5-ask fragment" style="margin-top:10px"><span>Open the <strong>four-apps notebook</strong> (link in chat), set <code>USE_CASE</code>, run it, and type the <strong>letter</strong> you picked</span></div>
 </section>
 
 <!-- ==================== FUNCTION CALLING ==================== -->
@@ -483,7 +559,7 @@ For each message, decide:
   <p class="chip">Your capstone</p>
   <h2>Which layer is your project? 🎯</h2>
   <div class="w5-layers">
-    <div class="w5-layer" style="--k:#7ee0a3"><b>1</b><span>🧩 No-code track</span><small>a Gem, GPT or Claude Project with your instructions</small></div>
+    <div class="w5-layer" style="--k:#7ee0a3"><b>1</b><span>🧩 No-code track</span><small>a Gemini skill, GPT or Claude Project with your instructions</small></div>
     <div class="w5-layer" style="--k:#4da3ff"><b>2–4</b><span>🛠️ Build track</span><small>the notebook, with your instructions and data, as an app</small></div>
     <div class="w5-layer" style="--k:#ffb454"><b>3</b><span>🔬 Case study track</span><small>run your test questions as a batch, compare tools, count the cost</small></div>
   </div>
@@ -496,7 +572,7 @@ For each message, decide:
   <h2>Ship the smallest thing that works</h2>
   <div class="tier core">
     <span class="tier-label">Core — everyone</span>
-    <p>The <strong>first working version of your capstone</strong>: a Gem / GPT / Claude Project (no-code) or the
+    <p>The <strong>first working version of your capstone</strong>: a Gemini skill / GPT / Claude Project (no-code) or the
     notebook with your instructions (code). Test it on <strong>your five questions</strong> from your proposal.
     Send a screenshot or link, and how many of the five it got right.</p>
   </div>
