@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 6 — Building II: RAG & your own data</title>
+<link rel="stylesheet" href="../../assets/reveal/dist/reset.css">
+<link rel="stylesheet" href="../../assets/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../../assets/reveal/dist/theme/black.css">
+<link rel="stylesheet" href="../../assets/course.css">
+<style>
+  .reveal h1 { font-size: 2.0em; text-transform: none; }
+  .reveal h2 { font-size: 1.35em; text-transform: none; margin-bottom: 14px; }
+  .reveal p, .reveal li { font-size: 0.84em; line-height: 1.42; }
+  .reveal .small, .reveal .small li { font-size: 0.66em; color: #a7b0c2; line-height: 1.45; }
+  .reveal ul { margin-left: 0.6em; }
+  .reveal li { margin-bottom: 11px; }
+  .reveal .analogy { font-size: 0.72em; padding: 13px 22px; margin-top: 14px; }
+  .reveal .analogy::before { font-size: 0.85em; }
+  .reveal .predict { font-size: 0.85em; }
+  .reveal .easter-egg p { font-size: 0.72em; }
+  .reveal .tiny-hint { position: absolute; bottom: -40px; right: 0; font-size: 0.3em; color: #4a5468; }
+  .reveal .vote-card { border:1px solid #2a3450; border-radius:10px; padding:13px 20px; margin:9px 0; background:#1a2233; font-size:.62em; text-align:left; }
+  .reveal .res-list { font-size: 0.6em; text-align: left; }
+  .reveal .res-list li { margin: 7px 0; }
+  .reveal .res-list a, .reveal a { color: #4da3ff; }
+  .reveal .tier { padding: 10px 18px; }
+  .reveal .tier p { font-size: 0.66em; margin: 6px 0; }
+  .reveal .closing-quote { font-size: 1.05em; }
+  .reveal svg { max-width: 100%; height: auto; }
+  .reveal .caption { font-size: 0.58em; color: #9aa4b8; margin-top: 8px; }
+  .reveal figure.photo { margin: 10px auto; }
+  .reveal figure.photo img { max-height: 300px; width: auto; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,.45); }
+  .reveal figure.photo .photo-fallback { display: none; }
+  .reveal figure.photo.no-photo img { display: none; }
+  .reveal figure.photo.no-photo .photo-fallback { display: block; }
+  .reveal figure.photo figcaption { font-size: 0.42em; color: #7b8497; margin-top: 8px; }
+  .reveal .zoom-do {
+    border: 2px solid #7ee0a3; border-radius: 14px; padding: 16px 26px;
+    background: rgba(126,224,163,0.07); text-align: left; margin: 14px auto; max-width: 880px;
+  }
+  .reveal .zoom-do p { font-size: 0.72em; margin: 9px 0; }
+  .reveal .zoom-do .step { color: #7ee0a3; font-weight: 700; margin-right: 8px; }
+  .reveal section[data-poll] .chip { border-color: #7ee0a3; color: #7ee0a3; }
+  /* act divider cards */
+  .reveal .act { color: #ffb454; font-size: 0.55em; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+  /* checkpoint blocks */
+  .reveal .checkpoint { border: 2px solid #4da3ff; background: rgba(77,163,255,.07); border-radius: 14px; padding: 10px 24px; margin: 12px auto; max-width: 900px; text-align: left; }
+  .reveal .checkpoint li { font-size: 0.62em; margin: 10px 0; }
+  /* the farmer chain, reused in the recap */
+  .reveal .chain { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 14px 0; }
+  .reveal .chain span { border: 1px solid #2a3450; background: #1a2233; border-radius: 999px; padding: 6px 14px; font-size: 0.46em; color: #e8edf5; }
+  .reveal .chain span.new { border-color: #ffb454; color: #ffb454; }
+
+  /* ---- Week 4 components ---- */
+  .reveal .w4-row { display:flex; gap:18px; align-items:flex-start; }
+  .reveal .w4-card { flex:1; background:#1a2233; border:1px solid #2a3450; border-radius:12px; padding:12px 16px; text-align:left; }
+  .reveal .w4-card p { font-size:.6em; margin:6px 0; line-height:1.4; }
+  .reveal .w4-hd { font-weight:700; font-size:.66em; margin-bottom:4px; }
+  .reveal .w4-muted { color:#9aa4b8; }
+  .reveal .w4-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px; }
+  .reveal .w4-cites { display:flex; flex-direction:column; gap:5px; margin-top:6px; text-align:left; }
+  .reveal .w4-cite { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 14px; font-size:.45em; line-height:1.32; }
+  .reveal .w4-cite > b { display:inline-block; width:1.6em; height:1.6em; line-height:1.6em; text-align:center; border-radius:50%; background:#4da3ff; color:#0d1320; margin-right:8px; }
+  .reveal .w4-cite .quiz-answer { display:block; margin-top:4px; color:#ffb454; font-weight:600; }
+  .reveal .w4-steps { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; text-align:left; }
+  .reveal .w4-step { background:#1a2233; border:1px solid #2a3450; border-radius:12px; padding:10px 14px; font-size:.56em; line-height:1.4; }
+  .reveal .w4-step b { display:block; color:#4da3ff; font-size:1.1em; margin-bottom:3px; }
+  .reveal .w4-list { margin:4px 0 0 1em; font-size:.58em; }
+  .reveal .w4-list li { margin:5px 0; }
+  .reveal .w4-timeline { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center; margin-top:14px; font-size:.5em; }
+  .reveal .w4-timeline span:not(:nth-child(even)) { border:1px solid #2a3450; background:#1a2233; border-radius:999px; padding:5px 12px; }
+  .reveal .w4-timeline span:nth-child(even) { color:#55607a; }
+  .reveal .w4-timeline b { color:#4da3ff; margin-right:4px; }
+  .reveal .w4-projects { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px; text-align:left; }
+  .reveal .w4-proj { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.44em; line-height:1.3; }
+  .reveal .w4-proj p { margin:3px 0; font-size:1em; color:#c8d0dd; }
+  .reveal .w4-proj-t { font-weight:700; font-size:1.1em; color:#e8edf5; margin-bottom:3px; }
+  .reveal .w4-badge { display:inline-block; border:1px solid; border-radius:999px; padding:0 8px; font-size:.78em; font-weight:700; margin-left:6px; vertical-align:middle; }
+  .reveal .w4-stack { margin-top:4px; padding:3px 8px; border-radius:6px; background:#141a26; font-size:.95em; color:#dfe5ee; }
+  .reveal .w4-stack .nc { color:#7ee0a3; font-weight:700; margin-right:4px; }
+  .reveal .w4-stack .cd { color:#4da3ff; font-weight:700; margin-right:4px; }
+  .reveal .sub-small { font-size:.5em; color:#9aa4b8; margin:-6px 0 6px; }
+  .reveal .w4-levels { display:grid; grid-template-columns:1fr 1fr; gap:12px; text-align:left; }
+  .reveal .w4-lvcol { display:flex; flex-direction:column; gap:6px; }
+  .reveal .w4-lvhd { color:#fff; font-weight:800; font-size:.5em; border-radius:8px; padding:4px 10px; }
+  .reveal .w4-lv { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 10px; font-size:.38em; line-height:1.28; }
+  .reveal .w4-lv p { margin:2px 0; font-size:1em; color:#c8d0dd; }
+  .reveal .w4-lv .w4-learn { color:#ffb454; }
+  .reveal table.w4-tb { width:100%; border-collapse:separate; border-spacing:0 4px; font-size:.405em; margin-top:2px; }
+  .reveal table.w4-tb th, .reveal table.w4-tb td { border:none; padding:4px 10px; text-align:left; vertical-align:middle; background:#1a2233; line-height:1.3; }
+  .reveal table.w4-tb tr > :first-child { border-radius:8px 0 0 8px; color:#e8edf5; width:24%; }
+  .reveal table.w4-tb tr > :last-child { border-radius:0 8px 8px 0; }
+  .reveal table.w4-tb tr:first-child th { background:transparent; font-size:1.05em; }
+  .reveal table.w4-tb td { color:#dfe5ee; }
+  .reveal table.w4-tb .wk { width:4.5em; text-align:center; color:#ffb454; font-weight:700; }
+  .reveal .w4-shrink { display:flex; flex-direction:column; gap:10px; margin-top:10px; font-size:.6em; text-align:left; }
+  .reveal .w4-shrink > div { display:grid; grid-template-columns:1fr 2em 1.6fr; align-items:center; background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:9px 14px; }
+  .reveal .w4-shrink .big { color:#ff9b9b; } .reveal .w4-shrink .arr { color:#9aa4b8; text-align:center; } .reveal .w4-shrink .ok { color:#7ee0a3; }
+  .reveal .w4-camp { display:grid; grid-template-columns:1fr 7.5em 1fr; gap:10px; align-items:stretch; text-align:left; margin-top:4px; }
+  .reveal .w4-camp-col .w4-hd { font-size:.56em; } .reveal .w4-camp-col { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 12px; }
+  .reveal .w4-camp-bot { background:rgba(255,180,84,.08); border:2px solid #ffb454; border-radius:14px; padding:8px; text-align:center; font-size:.55em; display:flex; flex-direction:column; justify-content:center; }
+  .reveal .w4-mini { margin:2px 0 0 1em; font-size:.46em; line-height:1.35; }
+  .reveal .w4-mini li { margin:2px 0; }
+  .reveal .w4-pg3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; text-align:left; margin-top:2px; }
+  .reveal .w4-pg-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:6px 11px; font-size:.44em; line-height:1.32; color:#dfe5ee; }
+  .reveal .w4-pg-card .w4-hd { font-size:1.22em; }
+  .reveal .w4-pg-card p { margin:3px 0; }
+  .reveal .w4-pg-card .w4-mini { font-size:1em; margin-top:0; }
+  .reveal .w4-pg-say { background:#141a26; border-left:3px solid #ffb454; border-radius:4px; padding:3px 7px; font-style:italic; }
+  .reveal .w4-pg-flow { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:4px 5px; margin-top:8px; font-size:.4em; }
+  .reveal .w4-pg-flow span { background:rgba(77,163,255,.1); border:1px solid #4da3ff; border-radius:16px; padding:3px 10px; color:#e8edf5; }
+  .reveal .w4-pg-flow b { color:#4da3ff; }
+  .reveal .w4-pg-you { margin-top:8px; background:rgba(255,180,84,.07); border:1px solid #ffb454; border-radius:10px; padding:6px 12px; text-align:left; }
+  .reveal .w4-pg-you > .w4-hd { font-size:.5em; }
+  .reveal .w4-pg-ideas { display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; font-size:.42em; line-height:1.3; color:#dfe5ee; }
+  .reveal .w4-sk3 { display:grid; grid-template-columns:1fr 1.6em 1fr 1.6em 1.15fr; gap:6px; align-items:stretch; text-align:left; margin-top:6px; }
+  .reveal .w4-sk-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.5em; line-height:1.35; color:#dfe5ee; }
+  .reveal .w4-sk-card .w4-hd { font-size:1.25em; }
+  .reveal .w4-sk-card p { margin:5px 0; }
+  .reveal .w4-sk-wk { font-size:.8em; letter-spacing:.08em; text-transform:uppercase; color:#9aa4b8; font-weight:700; }
+  .reveal .w4-sk-arrow { align-self:center; text-align:center; color:#4da3ff; font-size:.8em; }
+  .reveal .w4-sk-analogy { margin-top:12px; background:rgba(255,180,84,.08); border:1px solid #ffb454; border-radius:10px; padding:8px 16px; font-size:.5em; text-align:left; color:#e8edf5; }
+  .reveal .w4-sk-file { flex:1.1; margin:0; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:10px 14px; font-size:.36em; line-height:1.4; text-align:left; white-space:pre; color:#dfe5ee; box-shadow:none; width:auto; }
+  .reveal .w4-sk-file .d { color:#ffb454; } .reveal .w4-sk-file .m { color:#6b7891; } .reveal .w4-sk-file .k { color:#7ee0a3; font-weight:700; }
+  .reveal .w4-sk-how { flex:1; display:flex; flex-direction:column; gap:8px; }
+  .reveal .w4-sk-step { background:#1a2233; border:1px solid #2a3450; border-left:4px solid #4da3ff; border-radius:8px; padding:7px 12px; font-size:.44em; line-height:1.35; text-align:left; color:#dfe5ee; }
+  .reveal .w4-sk-step b { display:block; color:#4da3ff; margin-bottom:2px; }
+  .reveal .w4-sk-tryit { margin:6px auto 0; max-width:1000px; display:flex; flex-direction:column; gap:3px; background:#141a26; border:1px solid #7ee0a3; border-radius:10px; padding:6px 14px; font-size:.4em; line-height:1.35; text-align:left; color:#dfe5ee; }
+  .reveal .w4-api { display:grid; grid-template-columns:1.08fr 1fr; gap:12px; text-align:left; }
+  .reveal .w4-api-col { display:flex; flex-direction:column; gap:6px; min-width:0; }
+  .reveal .w4-api-hd { font-weight:700; font-size:.44em; }
+  .reveal .w4-api-hd span { font-weight:400; color:#9aa4b8; margin-left:6px; font-size:.85em; }
+  .reveal pre.w4-api-code { margin:0; width:auto; box-shadow:none; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.3em; line-height:1.38; white-space:pre; color:#dfe5ee; overflow:hidden; }
+  .reveal .w4-api-code .k { color:#4da3ff; } .reveal .w4-api-code .s { color:#ffb454; } .reveal .w4-api-code .n { color:#e8edf5; font-weight:700; }
+  .reveal .w4-api-code .n.hi { color:#7ee0a3; } .reveal .w4-api-code .c { color:#6b7891; font-style:italic; }
+  .reveal .w4-api-read { background:rgba(126,224,163,.07); border:1px solid #7ee0a3; border-radius:10px; padding:6px 10px; font-size:.38em; line-height:1.35; display:flex; flex-direction:column; gap:3px; color:#dfe5ee; }
+  .reveal .w4-api-read b { color:#7ee0a3; }
+  .reveal .w4-skd { display:grid; grid-template-columns:1.15fr 1fr; gap:14px; align-items:stretch; text-align:left; }
+  .reveal .w4-skd-left { display:flex; flex-direction:column; gap:7px; }
+  .reveal .w4-skd-left .w4-sk-step { font-size:.4em; }
+  .reveal .w4-skd-left code { background:#0f141e; padding:0 4px; border-radius:4px; font-size:.85em; }
+  .reveal .w4-skd-shot { margin:0; display:flex; }
+  .reveal .w4-skd-shot img { width:100%; height:auto; max-height:470px; object-fit:contain; border-radius:10px; border:1px solid #2a3450; margin:0; }
+  .reveal .w4-skd-ph { display:none; flex:1; flex-direction:column; align-items:center; justify-content:center; gap:6px; border:2px dashed #4da3ff; border-radius:12px; background:rgba(77,163,255,.05); font-size:.48em; text-align:center; color:#e8edf5; min-height:340px; }
+  .reveal .w4-skd-ph code { font-size:.9em; color:#ffb454; }
+  .reveal .w4-li { text-align:left; font-size:.42em; color:#dfe5ee; display:flex; flex-direction:column; gap:8px; }
+  .reveal .w4-li button { font:inherit; background:#1a2233; color:#dfe5ee; border:1px solid #2a3450; border-radius:8px; padding:4px 10px; cursor:pointer; }
+  .reveal .w4-li button.on { background:#4da3ff; color:#0f141e; border-color:#4da3ff; font-weight:700; }
+  .reveal .w4-li button:disabled { opacity:.5; cursor:wait; }
+  .reveal .w4-li-bar { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+  .reveal .w4-li-grp { display:inline-flex; gap:0; } .reveal .w4-li-grp button { border-radius:0; } .reveal .w4-li-grp button:first-child { border-radius:8px 0 0 8px; } .reveal .w4-li-grp button:last-child { border-radius:0 8px 8px 0; }
+  .reveal .w4-li-chk { display:inline-flex; align-items:center; gap:6px; background:rgba(255,107,107,.08); border:1px solid #ff6b6b; border-radius:8px; padding:3px 10px; cursor:pointer; }
+  .reveal .w4-li-mode { color:#7ee0a3; margin-left:auto; } .reveal .w4-li-mode.warn { color:#ffb454; }
+  .reveal .w4-li-setup { display:flex; flex-wrap:wrap; gap:8px; align-items:center; background:#141a26; border:1px dashed #4da3ff; border-radius:8px; padding:6px 10px; }
+  .reveal .w4-li-setup input { font:inherit; background:#0f141e; color:#dfe5ee; border:1px solid #2a3450; border-radius:6px; padding:3px 6px; width:16em; margin-left:4px; }
+  .reveal .w4-li-setup[hidden] { display:none; }
+  .reveal .w4-li-qs { display:flex; flex-wrap:wrap; gap:6px; }
+  .reveal .w4-li-row { display:flex; gap:8px; align-items:stretch; }
+  .reveal .w4-li-q { flex:1; font:inherit; background:#0f141e; color:#e8edf5; border:1px solid #2a3450; border-radius:8px; padding:6px 8px; resize:none; }
+  .reveal .w4-li-run { background:#7ee0a3 !important; color:#0f141e !important; font-weight:700; border-color:#7ee0a3 !important; padding:4px 16px !important; }
+  .reveal .w4-li-out { display:flex; flex-direction:column; gap:8px; min-height:200px; }
+  .reveal .w4-li-lbl { color:#9aa4b8; margin-bottom:3px; }
+  .reveal .w4-li-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .reveal .w4-li-card { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:6px 8px; line-height:1.3; max-height:7.2em; overflow:auto; }
+  .reveal .w4-li-card.wait { color:#6b7891; } .reveal .w4-li-card.err { border-color:#ffb454; color:#ffb454; }
+  .reveal .w4-li-sch { text-decoration:none; }
+  .reveal .w4-hw-stats { display:flex; gap:10px; margin:2px 0 8px; }
+  .reveal .w4-hw-stats div { flex:1; background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 8px; font-size:.42em; text-align:center; color:#dfe5ee; }
+  .reveal .w4-hw-stats b { display:block; font-size:2em; color:#ffb454; line-height:1.1; }
+  .reveal .w4-hw-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; text-align:left; }
+  .reveal .w4-hw-grid3 { grid-template-columns:repeat(3,1fr); }
+  .reveal .w4-hw-grid3 .w4-hw-card { font-size:.48em; padding:9px 12px; }
+  .reveal .w4-hw-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 10px; font-size:.43em; line-height:1.35; color:#dfe5ee; }
+  .reveal .w4-hw-card .w4-hd { font-size:1.12em; line-height:1.25; }
+  .reveal .w4-hw-card p { margin:4px 0; }
+  .reveal .w4-hw-q { font-style:italic; }
+  .reveal .w4-hw-why { color:#7ee0a3; }
+  .reveal .w4-hw-foot { margin-top:8px; display:flex; flex-direction:column; gap:4px; background:#141a26; border:1px solid #2a3450; border-radius:10px; padding:6px 12px; font-size:.4em; text-align:left; color:#dfe5ee; }
+  .reveal .w4-sh-link { margin:6px 0 10px; }
+  .reveal .w4-sh-btn { display:inline-block; background:#7ee0a3; color:#0f141e !important; font-weight:800; font-size:.8em; padding:10px 28px; border-radius:12px; text-decoration:none; }
+  .reveal .w4-sh-btn[hidden], .reveal .w4-sh-wait[hidden] { display:none; }
+  .reveal .w4-sh-wait { display:inline-block; border:2px dashed #7ee0a3; color:#7ee0a3; font-size:.6em; padding:8px 22px; border-radius:12px; }
+  .reveal .w4-sh-legend { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; font-size:.44em; }
+  .reveal .w4-sh-legend span { border:2px solid; border-radius:16px; padding:3px 12px; color:#dfe5ee; background:#141a26; }
+  .reveal .w4-sh-legend em { color:#7ee0a3; font-style:normal; }
+  .reveal .w3x { text-align:left; }
+  .reveal .w3x p { font-size:inherit; }
+  .reveal .w4-pg-links { margin-top:4px !important; } .reveal .w4-pg-links a { color:#4da3ff; text-decoration:none; }
+  .reveal .w4-camp-guard { margin-top:8px; background:rgba(255,107,107,.07); border:1px solid #ff6b6b; border-radius:10px; padding:6px 12px; text-align:left; }
+  .reveal .w4-guards { display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; font-size:.44em; line-height:1.3; color:#dfe5ee; }
+  .reveal a.w4-guide { display:none; font-size:.8em; font-weight:700; color:#0d1320; background:#ffb454; border-radius:999px; padding:0 8px; margin-left:4px; text-decoration:none; vertical-align:middle; }
+  .reveal a.w4-guide:hover { background:#ffd08a; }
+  .reveal .w4-covrow { display:grid; grid-template-columns:repeat(7,1fr); gap:7px; margin-top:6px; text-align:left; }
+  .reveal .w4-cov { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 7px 9px; font-size:.4em; }
+  .reveal .w4-cov-w { font-weight:800; font-size:1.5em; line-height:1.1; }
+  .reveal .w4-cov-s { color:#9aa4b8; font-size:.9em; margin-bottom:6px; }
+  .reveal .w4-chip { display:block; background:#141a26; border:1px solid #2a3450; border-radius:6px; padding:3px 6px; margin:4px 0; color:#dfe5ee; line-height:1.25; }
+  /* reveal.js treats any .stretch element as 'fill the remaining height'; the exercise tier must not */
+  .reveal .tier.stretch { height:auto !important; width:auto !important; }
+  /* ---- Week 5 components ---- */
+  .reveal a.w5-colab { display:inline-block; background:#ffb454; color:#0f141e !important; font-weight:800; font-size:.62em; padding:10px 24px; border-radius:12px; text-decoration:none; }
+  .reveal .w5-rest { display:flex; align-items:stretch; justify-content:center; gap:8px; margin-top:10px; }
+  .reveal .w5-rest-card { flex:1; background:#1a2233; border:2px solid #2a3450; border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:4px; font-size:.68em; color:#dfe5ee; }
+  .reveal .w5-rest-card b { font-size:1.2em; color:#e8edf5; } .reveal .w5-rest-card span { color:#9aa4b8; font-size:.9em; }
+  .reveal .w5-ic { font-size:2.2em; line-height:1.1; }
+  .reveal .w5-arrow { align-self:center; color:#4da3ff; font-size:.9em; }
+  .reveal .w5-layers { display:flex; gap:8px; margin-top:10px; }
+  .reveal .w5-layer { flex:1; background:#1a2233; border:1px solid #2a3450; border-top:5px solid var(--k); border-radius:10px; padding:10px 12px; display:flex; flex-direction:column; gap:4px; font-size:.62em; text-align:left; color:#e8edf5; }
+  .reveal .w5-layer b { color:var(--k); font-size:1.6em; line-height:1; } .reveal .w5-layer span { font-weight:700; } .reveal .w5-layer small { color:#9aa4b8; font-size:.88em; }
+  .reveal .w5-setup { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; text-align:left; }
+  .reveal .w5-setup .w4-step { font-size:.62em; }
+  .reveal .w5-setup code, .reveal .w5-ask code, .reveal .w5-box code { background:#0f141e; padding:0 5px; border-radius:4px; font-size:.92em; }
+  .reveal .w5-ask { display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:center; background:rgba(126,224,163,.08); border:1px dashed #7ee0a3; border-radius:10px; padding:9px 14px; font-size:.62em; color:#e8edf5; margin-top:12px; }
+  .reveal .w5-key { margin-top:10px; background:rgba(255,107,107,.08); border:1px solid #ff6b6b; border-radius:10px; padding:9px 14px; font-size:.58em; text-align:left; color:#e8edf5; }
+  .reveal pre.w5-code { margin:0; width:auto; box-shadow:none; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:12px 16px; font-size:.46em; line-height:1.45; text-align:left; white-space:pre; color:#dfe5ee; }
+  .reveal .w5-call { display:flex; gap:10px; align-items:stretch; margin-top:6px; }
+  .reveal .w5-box { flex:1; background:#1a2233; border:2px solid #2a3450; border-radius:12px; padding:10px 16px; text-align:left; font-size:.62em; color:#dfe5ee; }
+  .reveal .w5-box p { margin:4px 0; }
+  .reveal .w5-flow { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:5px; margin-top:14px; font-size:.52em; }
+  .reveal .w5-flow span { background:rgba(77,163,255,.1); border:1px solid #4da3ff; border-radius:16px; padding:3px 10px; color:#e8edf5; } .reveal .w5-flow b { color:#4da3ff; }
+  .reveal .w5-attacks { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+  .reveal .w5-attacks div { background:#1a2233; border:1px solid #2a3450; border-top:4px solid #ff6b6b; border-radius:10px; padding:10px; font-size:.64em; color:#dfe5ee; text-align:left; }
+  .reveal .w5-attacks b { display:block; color:#ff6b6b; font-size:1.6em; line-height:1.1; }
+  .reveal .w5-apps { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .reveal .w5-app { background:#1a2233; border:1px solid #2a3450; border-top:5px solid var(--k); border-radius:10px; padding:10px 12px; font-size:.62em; color:#e8edf5; text-align:left; display:flex; flex-direction:column; gap:4px; }
+  .reveal .w5-app b { color:var(--k); font-size:1.6em; line-height:1; } .reveal .w5-app small { color:#9aa4b8; }
+  .reveal .w5-fcflow { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .reveal .w5-fcflow b { display:block; color:#4da3ff; font-size:1.5em; line-height:1.1; }
+  .reveal .w5-idea { background:rgba(255,180,84,.08); border:1px solid #ffb454; border-radius:10px; padding:8px 16px; font-size:.62em; color:#e8edf5; text-align:left; }
+  .reveal .w5-rule { margin-top:12px; background:#141a26; border:1px solid #2a3450; border-radius:10px; padding:8px 14px; font-size:.6em; color:#e8edf5; }
+  .reveal .w5-inbox { display:flex; flex-direction:column; gap:3px; text-align:left; font-size:.47em; }
+  .reveal .w5-inbox div { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:4px 12px; color:#e8edf5; display:flex; gap:10px; align-items:baseline; }
+  .reveal .w5-inbox b { color:#9aa4b8; min-width:1.8em; text-align:right; font-weight:700; }
+  .reveal .w5-inbox span { color:#ffb454; font-weight:700; font-size:.85em; min-width:1.2em; }
+  .reveal .w5-probs { display:flex; gap:8px; margin-top:10px; font-size:.48em; }
+  .reveal .w5-probs span { flex:1; background:#141a26; border:1px solid #2a3450; border-radius:8px; padding:6px 10px; color:#dfe5ee; text-align:left; }
+  /* ---- Week 6 components ---- */
+  .reveal .w6-books { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px; text-align:left; }
+  .reveal .w6-book { background:#1a2233; border:2px solid #2a3450; border-radius:14px; padding:12px 18px; font-size:.62em; color:#dfe5ee; }
+  .reveal .w6-book .w5-ic { font-size:2em; }
+  .reveal .w6-book p { margin:6px 0; }
+  .reveal .w6-tests { display:flex; flex-direction:column; gap:5px; text-align:left; font-size:.5em; }
+  .reveal .w6-tests div { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:5px 12px; color:#e8edf5; display:flex; gap:10px; align-items:baseline; }
+  .reveal .w6-tests b { color:#ffb454; min-width:1.2em; }
+  .reveal .w6-tests em { color:#9aa4b8; font-style:normal; margin-left:auto; font-size:.85em; white-space:nowrap; }
+  .reveal .w6-stats { display:flex; gap:10px; margin:8px 0; }
+  .reveal .w6-stats div { flex:1; background:#1a2233; border:1px solid #2a3450; border-radius:12px; padding:8px 10px; font-size:.5em; color:#dfe5ee; text-align:center; }
+  .reveal .w6-stats b { display:block; font-size:2em; line-height:1.1; color:#ffb454; }
+  .reveal .w6-path { display:flex; gap:6px; align-items:center; justify-content:center; flex-wrap:wrap; margin:6px 0 12px; font-size:.5em; }
+  .reveal .w6-path span { border:1px solid #2a3450; background:#1a2233; border-radius:999px; padding:5px 12px; color:#dfe5ee; }
+  .reveal .w6-path span.done { border-color:#7ee0a3; color:#7ee0a3; }
+  .reveal .w6-path span.now { border-color:#ffb454; color:#0f141e; background:#ffb454; font-weight:800; }
+  .reveal .w6-path i { color:#55607a; font-style:normal; }
+  .reveal .w6-letters { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .reveal .w6-letters div { background:#1a2233; border:1px solid #2a3450; border-top:5px solid var(--k); border-radius:10px; padding:9px 10px; font-size:.56em; text-align:left; color:#dfe5ee; }
+  .reveal .w6-letters b { display:block; color:var(--k); font-size:1.8em; line-height:1.05; }
+  .reveal .w6-quiz { display:flex; flex-direction:column; gap:6px; text-align:left; margin-top:6px; }
+  .reveal .w6-quiz div { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 14px; font-size:.54em; color:#e8edf5; display:flex; gap:12px; align-items:center; }
+  .reveal .w6-quiz div > b { color:#4da3ff; min-width:1.1em; }
+  .reveal .w6-quiz .quiz-answer { margin-left:auto; white-space:nowrap; }
+  .reveal .w6-rule { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; text-align:left; margin-top:8px; }
+  .reveal .w6-rule .w4-step { font-size:.52em; }
+  .reveal svg.w6-map text { font-family:inherit; }
+  .reveal .w6-quiz .ask { margin-left:auto; white-space:nowrap; color:#7ee0a3; }
+</style>
+</head>
+<body>
+<!-- STUDENT EDITION - generated by build.py, do not edit by hand -->
+<div class="reveal">
+<div class="slides">
+<!-- ==================== TITLE ==================== -->
+<section id="w6-title">
+  <p class="chip">Week 6</p>
+  <h1>Building II: answers from your own documents 📚</h1>
+  <p class="small">Last week it answered from memory. Today it <strong>opens the book first</strong>.</p>
+  <p style="margin-top:18px"><a class="w5-colab" href="https://colab.research.google.com/github/san81/ai-course/blob/main/docs/weeks/week6/week6-ask-the-course.ipynb" target="_blank" rel="noopener">🧪 Today's notebook: ask the course ↗</a></p>
+  <p class="small" style="margin-top:6px">Same key as Week 5. Nothing new to install.</p>
+</section>
+
+<!-- ==================== EASTER EGGS ==================== -->
+<section id="w6-egg-last">
+  <div class="easter-egg">
+    <p>🥚 <strong>Last week's easter egg</strong></p>
+    <p>An AI model can only write text. Yet AI assistants check timetables and look up phone numbers.
+    The model writes a <em>request</em>, and <strong>your</strong> code carries it out. What is this called?</p>
+  </div>
+  <div class="waterfall">
+    <span><span class="wf-step">1</span> Type your answer — <b>do NOT press send</b></span>
+    <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+    <span><span class="wf-step">3</span> Everyone sends together</span>
+  </div>
+  <p class="small fragment"><strong>Function calling</strong>. The letter to save:
+  <strong style="color:#ffb454">F</strong></p>
+  <p class="small fragment">Your collection so far: <strong style="color:#ffb454;font-size:1.3em;letter-spacing:.3em">A · R · T · I · F</strong> …
+  three more to go.</p>
+</section>
+
+<!-- ==================== WEEK 5 BUILD, IN THE CHAT ==================== -->
+<section id="w6-hw5">
+  <p class="chip">Your Week 5 build</p>
+  <h2>Three numbers, straight into the chat 💬</h2>
+  <p class="small" style="margin-top:-6px">Last week's exercise: the first working version of your capstone, tested on your five questions.</p>
+  <div class="w6-quiz">
+    <div class="fragment"><b>1</b>Did your first version <strong>run</strong>? <span class="ask">type <strong>Y</strong> or <strong>N</strong></span></div>
+    <div class="fragment"><b>2</b>How many of your <strong>five test questions</strong> did it get right? <span class="ask">type <strong>0–5</strong></span></div>
+    <div class="fragment"><b>3</b>Which <strong>layer</strong> did you build at? (1 no-code · 2 one call · 3 a spreadsheet · 4 an app) <span class="ask">type <strong>1–4</strong></span></div>
+  </div>
+  <div class="waterfall" style="margin-top:10px">
+    <span><span class="wf-step">1</span> Type — <b>do NOT press send</b></span>
+    <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+    <span><span class="wf-step">3</span> Send together</span>
+  </div>
+  <p class="small fragment" style="margin-top:8px;color:#7ee0a3"><strong>3 out of 5 is a great result.</strong> It means you tested honestly,
+  and today gives you the tools to fix the other two. 🛠️</p>
+</section>
+
+<!-- ==================== CAPSTONE FOLLOW-UP ==================== -->
+<section id="w6-project">
+  <p class="chip">Your capstone · check-in</p>
+  <h2>Where is your project today? 🧭</h2>
+  <div class="w6-path">
+    <span class="done">W4 · idea ✅</span><i>→</i><span class="done">W5 · first version</span><i>→</i><span class="now">W6 · your own data</span><i>→</i><span>W7 · it takes an action</span><i>→</i><span>W8 · demo day 🎤</span>
+  </div>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w5-box" style="flex:1.1">
+      <div class="w4-hd" style="color:#4da3ff">📋 Your tracker sheet</div>
+      <p>Each of you has your own sheet (link sent to you privately): the <strong>code path</strong>, the <strong>no-code path</strong>, ideas to <strong>extend it</strong>, and a <strong>test log</strong>.</p>
+      <p>Mark each step <strong>Done</strong>, <strong>In progress</strong> or <strong>Stuck</strong>. I read them every week.</p>
+    </div>
+    <div class="w5-box" style="flex:1;border-color:#ffb454">
+      <div class="w4-hd" style="color:#ffb454">🎯 This week's step</div>
+      <p>Give your project <strong>its own documents</strong> (today's notebook, section 7, or NotebookLM), and re-run your five test questions.</p>
+      <p class="w4-muted">No documents in your project? Your step is the test log: score it, fix one, score again.</p>
+    </div>
+  </div>
+  <div class="w5-ask" style="margin-top:12px">
+    <span>Type <strong>one letter</strong>:</span>
+    <span><strong>N</strong> not started</span><span><strong>I</strong> in progress</span><span><strong>D</strong> version 1 done</span><span><strong>S</strong> stuck</span>
+  </div>
+  <p class="small fragment" style="margin-top:8px">Typed <strong>S</strong>? That's the most useful letter on the screen. I'll message you <strong>after class</strong>, just the two of us. 🙂</p>
+</section>
+
+<section id="w6-egg">
+  <div class="easter-egg">
+    <p>🥚 <strong>This week's easter egg</strong></p>
+    <p>Today's technique has a three-letter name. You already own the first letter: Week 4's egg,
+    information <strong>R</strong>etrieval. The last letter is <strong>G</strong>eneration: the model writing.</p>
+    <p><strong>The middle letter is the clever part: what you do to the prompt before the model writes.
+    What's the word?</strong></p>
+  </div>
+  <p class="small">You'll hear it today. Bring it next week, and save its first letter.</p>
+</section>
+
+<!-- ==================== COLD OPEN ==================== -->
+<section id="w6-cold">
+  <p class="chip">A story</p>
+  <h2>Two classmates, one exam question 📝</h2>
+  <div class="w6-books">
+    <div class="w6-book fragment">
+      <div class="w5-ic">🧠</div>
+      <div class="w4-hd" style="color:#ff9b9b">Closed book</div>
+      <p>Has read everything, remembers most of it. Answers <strong>instantly, confidently</strong>.</p>
+      <p>Now and then, a detail is <strong>invented</strong>, and it sounds exactly as sure as the true parts.</p>
+    </div>
+    <div class="w6-book fragment" style="border-color:#7ee0a3">
+      <div class="w5-ic">📖</div>
+      <div class="w4-hd" style="color:#7ee0a3">Open book</div>
+      <p>Says <em>"wait."</em> Finds the right chapter, opens the page, <strong>reads the paragraph</strong>.</p>
+      <p>Answers from it, and can <strong>point at the line</strong>. If it's not in the book: <em>"it's not in here."</em></p>
+    </div>
+  </div>
+  <div class="w5-ask fragment"><span>Which one would you trust with <strong>your</strong> exam notes? Type <strong>1</strong> or <strong>2</strong></span></div>
+  <p class="small fragment" style="margin-top:8px">Every chatbot so far was classmate 1. <strong>Today you build classmate 2.</strong></p>
+</section>
+
+<!-- ==================== THE PROBLEM ==================== -->
+<section id="w6-problem">
+  <p class="chip">Today's problem</p>
+  <h2>Our course notes, as a spreadsheet 📊</h2>
+  <div class="w6-stats">
+    <div><b>247</b>slides from Weeks 1–5</div>
+    <div><b>1 row</b>per slide: week · slide · title · text</div>
+    <div><b>≈100</b>pages, if you printed it</div>
+  </div>
+  <p class="small" style="margin:2px 0 6px"><a href="https://github.com/san81/ai-course/blob/main/docs/weeks/week6/course-notes.csv" target="_blank" rel="noopener">📊 see it as a table ↗</a> · and our five test questions:</p>
+  <div class="w6-tests">
+    <div><b>1</b>Who wrote to Hardy in Cambridge in 1913?<em>easy</em></div>
+    <div><b>2</b>wat is a embeding<em>typos</em></div>
+    <div><b>3</b>What are the five parts of a good brief, and what does temperature change?<em>two in one</em></div>
+    <div><b>4</b>Should I build my no-code capstone as a Gemini Gem?<em>it changed</em></div>
+    <div><b>5</b>When is the final exam for this course?<em>not in the notes</em></div>
+  </div>
+  <div class="w5-ask" style="margin-top:10px"><span>A plain chatbot has <strong>never seen</strong> these notes. How many will it get right? Type <strong>0–5</strong></span></div>
+</section>
+
+<!-- ==================== MAP ==================== -->
+<section id="w6-map">
+  <p class="chip">Today</p>
+  <h2>Closed book → open book, in four layers 🧱</h2>
+  <div class="w5-layers">
+    <div class="w5-layer" style="--k:#7ee0a3"><b>1</b><span>🧩 No-code</span><small>hand NotebookLM the notes</small></div>
+    <div class="w5-layer" style="--k:#4da3ff"><b>2</b><span>📦 Paste everything</span><small>the whole book, every question</small></div>
+    <div class="w5-layer" style="--k:#ffb454"><b>3</b><span>🔎 Find the right slides</span><small>chunk · embed · search</small></div>
+    <div class="w5-layer" style="--k:#c792ea"><b>4</b><span>📎 Answer from them</span><small>with the slide it used · an app</small></div>
+    <div class="w5-layer" style="--k:#ff6b6b"><b>🎯</b><span>Test it</span><small>five questions, scored, fixed</small></div>
+  </div>
+  <p class="small" style="margin-top:12px">Every layer: <strong>I do it</strong> → <strong>your turn (3 min)</strong> → <strong>one word or number in chat</strong>.</p>
+  <p class="small">🧩 No-code track? Layer 1 is your capstone path. Then watch <strong>how</strong> it works underneath.</p>
+</section>
+
+<!-- ==================== SETUP ==================== -->
+<section id="w6-setup">
+  <p class="chip">Setup check · 3 minutes</p>
+  <h2>Same key, new notebook ✅</h2>
+  <div class="w5-setup">
+    <div class="w4-step"><b>1 · Notebook</b>Open the Colab link in the chat → <em>File → Save a copy in Drive</em></div>
+    <div class="w4-step"><b>2 · Start here</b>Run the first two cells: the notes table and the five tests. No key needed.</div>
+    <div class="w4-step"><b>3 · Secret</b>🔑 icon (left): <code>GEMINI_API_KEY</code> is already there. Switch <strong>Notebook access</strong> on for this notebook</div>
+    <div class="w4-step"><b>4 · Run</b>Run the three setup cells until you see <strong>✅ Connected</strong></div>
+  </div>
+  <div class="w5-ask fragment">
+    <span>✅ Connected? React with 👍</span>
+    <span>Stuck? Type just the <strong>step number</strong> (1–4)</span>
+  </div>
+</section>
+
+<!-- ==================== CLOSED BOOK ==================== -->
+<section id="w6-closed">
+  <p class="chip">Section 1 · closed book</p>
+  <h2>Five questions, no notes 🧠</h2>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w4-step" style="flex:1"><b>I do it</b>Run section 1: the five test questions, sent with <strong>no course notes</strong>. Read the answers aloud.</div>
+    <div class="w4-step" style="flex:1"><b>Your turn · 3 min</b>Run it yourself. Mark each answer against <strong>our</strong> course, not the internet.</div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:12px"><span>How many did it <strong>really</strong> get right? Type <strong>0–5</strong></span></div>
+  <div class="w5-probs fragment">
+    <span>🔄 <strong>Test 4:</strong> it happily says "make a Gem". It never saw the update.</span>
+    <span>🕳️ <strong>Test 5:</strong> does it invent a date, or admit it doesn't know?</span>
+    <span>🎲 <strong>Test 3:</strong> five parts of <em>a</em> brief, but are they <em>ours</em>?</span>
+  </div>
+</section>
+
+<!-- ==================== LAYER 1 ==================== -->
+<section id="w6-l1">
+  <p class="chip">Layer 1 · no-code</p>
+  <h2>Hand it the book 🧩</h2>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w4-step" style="flex:1"><b>1 · Download</b>Open the notes table → <em>⬇ Download raw file</em> (top right)</div>
+    <div class="w4-step" style="flex:1"><b>2 · Upload</b><a href="https://notebooklm.google.com" target="_blank" rel="noopener">notebooklm.google.com</a> → <em>New notebook</em> → add the file as a source</div>
+    <div class="w4-step" style="flex:1"><b>3 · Ask test 4</b><em>"Should I build my no-code capstone as a Gemini Gem?"</em></div>
+    <div class="w4-step" style="flex:1"><b>4 · Click the number</b>After the answer: it shows <strong>the exact slide</strong> it read</div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:12px"><span>Gem or skill? Type <strong>the one word</strong> it told you to build</span></div>
+  <p class="small fragment" style="margin-top:10px">You did this in Week 4 with one paper. <strong>Same tool, your own documents</strong>: for the 🧩 no-code track, this <em>is</em> the capstone.
+  Gemini skills, Claude Projects and Custom GPTs take files too.</p>
+</section>
+
+<!-- ==================== LAYER 2 ==================== -->
+<section id="w6-l2">
+  <p class="chip">Layer 2 · paste everything</p>
+  <h2>The whole book, with every question 📦</h2>
+  <div class="w6-stats">
+    <div class="fragment"><b>≈31,000</b>tokens in, per question</div>
+    <div class="fragment"><b>≈₹0.8</b>per question (paid price)</div>
+    <div class="fragment"><b>≈₹800</b>per 1,000 questions</div>
+  </div>
+  <p class="small fragment" style="color:#7ee0a3"><strong>And it works.</strong> For a small set of notes, this is honestly the right answer.</p>
+  <div class="w4-row fragment" style="gap:10px;align-items:stretch">
+    <div class="w4-step" style="flex:1"><b>💰 Costly</b>Every question re-sends the whole book.</div>
+    <div class="w4-step" style="flex:1"><b>📚 Too big</b>A 500-page textbook won't fit, and free limits cap tokens per minute.</div>
+    <div class="w4-step" style="flex:1"><b>🌫️ Blurry</b>A detail in the middle of a huge prompt is easy to miss.</div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:10px"><span>Run Layer 2 and type your <strong>tokens in</strong>: just the number</span></div>
+</section>
+
+<!-- ==================== NEAREST-NEIGHBOUR SEARCH ==================== -->
+<section id="w6-knn">
+  <p class="chip">You do this every day</p>
+  <h2>"ATM near me": nearest-neighbour search 📍</h2>
+  <div class="w4-row" style="align-items:center;gap:16px">
+    <svg viewBox="0 0 420 300" width="380" style="flex:1" role="img" aria-label="A map: you in the middle, the three nearest ATMs circled">
+      <rect x="1" y="1" width="418" height="298" rx="14" fill="#141a26" stroke="#2a3450"/>
+      <g stroke="#222b3d" stroke-width="10" stroke-linecap="round">
+        <line x1="20" y1="110" x2="400" y2="110"/><line x1="20" y1="215" x2="400" y2="215"/>
+        <line x1="135" y1="20" x2="135" y2="280"/><line x1="290" y1="20" x2="290" y2="280"/>
+      </g>
+      <circle cx="210" cy="160" r="88" fill="rgba(126,224,163,.06)" stroke="#7ee0a3" stroke-dasharray="6 5"/>
+      <g font-size="22" text-anchor="middle">
+        <text x="160" y="118">🏧</text><text x="265" y="210">🏧</text><text x="250" y="102">🏧</text>
+        <text x="50" y="60">🏧</text><text x="370" y="270">🏧</text><text x="380" y="50">🏧</text><text x="60" y="262">🏧</text>
+      </g>
+      <g stroke="#ffb454" stroke-width="2" stroke-dasharray="4 4">
+        <line x1="210" y1="160" x2="162" y2="112"/><line x1="210" y1="160" x2="262" y2="202"/><line x1="210" y1="160" x2="248" y2="96"/>
+      </g>
+      <circle cx="210" cy="160" r="9" fill="#ffb454"/>
+      <text x="210" y="190" font-size="14" text-anchor="middle" fill="#ffb454" font-weight="700">you</text>
+      <text x="210" y="288" font-size="12.5" text-anchor="middle" fill="#9aa4b8">each place = 2 numbers (latitude, longitude) · keep the 3 nearest</text>
+    </svg>
+    <div style="flex:1.05;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="w4-step"><b>📍 Maps</b>Every ATM = 2 numbers. Show the closest few.</div>
+      <div class="w4-step"><b>🎵 YouTube · Spotify</b>"More like this": a video's nearest neighbours.</div>
+      <div class="w4-step"><b>🛍️ Flipkart · Amazon</b>"Similar products": neighbours of what you're viewing.</div>
+      <div class="w4-step"><b>📸 Google Photos</b>Search "birthday cake": photos are numbers too.</div>
+    </div>
+  </div>
+  <div class="w5-ask" style="margin-top:10px"><span>In "ATM near me", how many numbers describe each ATM? Type <strong>one number</strong></span></div>
+  <p class="small fragment" style="margin-top:8px">Answer: <strong>2</strong>. Each slide in our notes: <strong>768</strong>. Same question, <em>"what's nearest?"</em>
+  Keeping the <strong>k</strong> nearest is called <strong>k-nearest neighbours (KNN)</strong>. Today, k = 4.</p>
+</section>
+
+<!-- ==================== EMBEDDINGS RETURN ==================== -->
+<section id="w6-embed">
+  <p class="chip">Week 2 comes back</p>
+  <h2>Meaning is a place, so search by <em>place</em> 🗺️</h2>
+  <div class="w4-row" style="align-items:center;gap:16px">
+    <svg class="w6-map" viewBox="0 0 560 330" width="560" style="flex:1.3" role="img" aria-label="Slides as dots on a map; the question lands next to the embedding slides">
+      <rect x="1" y="1" width="558" height="328" rx="14" fill="#141a26" stroke="#2a3450"/>
+      <g font-size="13" fill="#9aa4b8">
+        <circle cx="90" cy="70" r="7" fill="#4da3ff"/><text x="104" y="74">W1 · checkers</text>
+        <circle cx="120" cy="250" r="7" fill="#4da3ff"/><text x="134" y="254">W4 · Ramanujan</text>
+        <circle cx="300" cy="60" r="7" fill="#4da3ff"/><text x="314" y="64">W3 · the brief</text>
+        <circle cx="440" cy="110" r="7" fill="#4da3ff"/><text x="380" y="140">W3 · temperature</text>
+        <circle cx="70" cy="160" r="7" fill="#4da3ff"/><text x="84" y="164">W5 · Gradio</text>
+      </g>
+      <g font-size="13" fill="#e8edf5">
+        <circle cx="360" cy="230" r="8" fill="#7ee0a3"/><text x="374" y="234">W2 · embeddings</text>
+        <circle cx="330" cy="285" r="8" fill="#7ee0a3"/><text x="344" y="289">W3 · meaning is a place</text>
+      </g>
+      <line x1="270" y1="235" x2="352" y2="230" stroke="#ffb454" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="270" y1="235" x2="324" y2="280" stroke="#ffb454" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="262" y="241" font-size="26" text-anchor="middle" fill="#ffb454">★</text>
+      <text x="262" y="210" font-size="14" text-anchor="middle" fill="#ffb454" font-weight="700">"wat is a embeding"</text>
+    </svg>
+    <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+      <div class="w4-step fragment"><b>Every slide → a point</b>A list of 768 numbers. Similar meanings land close together.</div>
+      <div class="w4-step fragment"><b>The question → a point too</b>Turned into numbers the same way.</div>
+      <div class="w4-step fragment"><b>Search = "what's nearest?"</b>No model needed. Typos don't matter: it matches <strong>meaning</strong>, not spelling.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== LAYER 3 ==================== -->
+<section id="w6-l3">
+  <p class="chip">Layer 3 · find the right slides first</p>
+  <h2>Chunk → embed → search 🔎</h2>
+  <div class="w5-fcflow">
+    <div class="w5-box fragment"><b>✂️</b><strong>Chunk</strong><br>Cut the notes into pieces of ~600 characters. Our 247 slides → about 300 pieces.</div>
+    <div class="w5-box fragment"><b>🗺️</b><strong>Embed</strong><br>Every piece → 768 numbers, once. Store them.</div>
+    <div class="w5-box fragment"><b>🔎</b><strong>Search</strong><br>The question → numbers. Keep the 4 nearest pieces.</div>
+    <div class="w5-box fragment" style="border-color:#ffb454"><b>📋</b><strong>Look</strong><br>A table of the 4 pieces it found, with a closeness score.</div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:12px"><span>Search <em>"wat is a embeding"</em> (typos on purpose). The <strong>top row</strong> says e.g. <em>W2 · slide 19</em>: type just its <strong>week number</strong> (1–5)</span></div>
+  <div class="w5-key fragment" style="border-color:#ffb454;background:rgba(255,180,84,.08)">🪤 Now search <em>"When is the final exam for this course?"</em>. It's <strong>in none of our notes</strong>, yet search still returns 4 slides,
+  ones that just say "exam" in passing. <strong>Search always returns something.</strong> The next layer must say "not in the notes".</div>
+</section>
+
+<!-- ==================== LAYER 4 ==================== -->
+<section id="w6-l4">
+  <p class="chip">Layer 4 · a grounded answer</p>
+  <h2>Find it, add it to the prompt, then write 📎</h2>
+  <div class="w4-row" style="align-items:stretch;gap:14px">
+<pre class="w5-code" style="flex:1.35">Use ONLY the notes below the question.
+Each note starts with a label like [W3 · slide 24].
+- Answer in at most 80 words.
+- After each fact, cite its label.
+- If two notes disagree, prefer the later
+  week and say that it changed.
+- If the notes don't contain the answer, reply:
+  "That's not in the course notes."
+  Never guess.</pre>
+    <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+      <div class="w4-step fragment"><b>I do it</b>Ask <em>"Should I build my no-code capstone as a Gemini Gem?"</em> Read the answer, then the 📎 slides it was given.</div>
+      <div class="w4-step fragment"><b>Your turn · 3 min</b>Run Layer 4, then open <strong>your own app</strong> (the Gradio cell) and ask it anything.</div>
+      <div class="w5-ask fragment"><span>Tokens in: Layer 2 ÷ Layer 4 ≈ ? Type <strong>one number</strong></span></div>
+    </div>
+  </div>
+  <p class="small fragment" style="margin-top:10px">That's the whole technique: <strong>R</strong>etrieval-<strong>A</strong>ugmented <strong>G</strong>eneration.
+  <strong>Retrieve</strong> the right pieces, <strong>augment</strong> the prompt with them, then <strong>generate</strong> the answer.</p>
+  <p class="tiny-hint">🥚 remember this one</p>
+</section>
+
+<!-- ==================== TEST IT ==================== -->
+<section id="w6-test">
+  <p class="chip">🎯 Test it · section 5</p>
+  <h2>One good answer proves nothing. Five, scored 🎯</h2>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w4-step" style="flex:1"><b>1 · Run</b>The test cell runs all five questions and prints each answer, its 📎 slides, and the good answer.</div>
+    <div class="w4-step" style="flex:1"><b>2 · Mark</b>Type one letter per test in <code>MY_MARKS</code>: <strong>Y</strong> right, <strong>N</strong> wrong. Like <code>"YYNYY"</code>.</div>
+    <div class="w4-step" style="flex:1"><b>3 · Score</b>The cell counts it. That's your number.</div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:12px"><span>Type your <strong>score out of 5</strong>. Then compare: closed book got ?</span></div>
+  <p class="small fragment" style="margin-top:10px">This is exactly your capstone's <strong>test log</strong> (the last tab of your tracker sheet).
+  Grown-up tools like <strong>promptfoo</strong> and <strong>Ragas</strong> do the same thing automatically, after every change.</p>
+</section>
+
+<section id="w6-diagnose">
+  <p class="chip">Checkpoint</p>
+  <h2>It got one wrong. <em>Where</em> did it break? 🔧</h2>
+  <div class="w6-letters" style="grid-template-columns:repeat(3,1fr)">
+    <div style="--k:#4da3ff"><b>A</b>🔎 <strong>Search</strong> found the wrong slides<br><span class="w4-muted">fix: chunk size · more pieces (TOP_K) · reword</span></div>
+    <div style="--k:#ffb454"><b>B</b>✍️ <strong>The answer</strong> ignored the right slide<br><span class="w4-muted">fix: a clearer line in the instructions</span></div>
+    <div style="--k:#ff6b6b"><b>C</b>🕳️ <strong>It guessed</strong>: the notes don't have it<br><span class="w4-muted">fix: a stronger "not in the notes" rule</span></div>
+  </div>
+  <div class="w6-quiz" style="margin-top:10px">
+    <div><b>1</b>Asked about temperature. The 📎 list has only Week 1 slides. <span class="quiz-answer">A · search</span></div>
+    <div><b>2</b>The 📎 list includes the brief slide, but the answer names only three of the five parts. <span class="quiz-answer">B · the answer</span></div>
+    <div><b>3</b>"Who teaches on Fridays?" It replied with a name. No slide mentions one. <span class="quiz-answer">C · it guessed</span></div>
+  </div>
+  <div class="waterfall" style="margin-top:8px">
+    <span><span class="wf-step">1</span> Type <b>A, B or C</b> for each, like <b>ABC</b></span>
+    <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+    <span><span class="wf-step">3</span> Send, then tap to reveal</span>
+  </div>
+</section>
+
+<!-- ==================== VECTOR DB ==================== -->
+<section id="w6-chroma">
+  <p class="chip">Making it real · section 6</p>
+  <h2>Chroma: a database for meaning 🗄️</h2>
+  <div class="w5-fcflow" style="grid-template-columns:repeat(3,1fr)">
+    <div class="w5-box"><b>📦</b><strong>It stores</strong> every piece: its <strong>text</strong>, its <strong>768 numbers</strong>, and its <strong>labels</strong> (week, slide).</div>
+    <div class="w5-box"><b>🔎</b><strong>It finds</strong> the nearest pieces <strong>without checking every one</strong>, using an index. Like Maps not measuring every ATM in India.</div>
+    <div class="w5-box"><b>💾</b><strong>It keeps</strong> them on disk, so you embed <strong>once</strong>, not every time Colab restarts. Free, open-source, runs inside Colab.</div>
+  </div>
+  <div class="w4-row" style="align-items:stretch;gap:12px;margin-top:10px">
+<pre class="w5-code" style="flex:1.4">collection = chromadb.Client().create_collection("course_notes")
+collection.add(ids=..., embeddings=VECTORS, documents=texts,
+               metadatas=[{"source": "W3 · slide 24"}, …])
+collection.query(query_embeddings=question_numbers, n_results=4)</pre>
+    <div class="w4-step" style="flex:1"><b>Same as Layer 3</b>Same pieces, same numbers, same "4 nearest". Only <strong>where they live</strong> changes: a database instead of a table in memory.</div>
+  </div>
+  <div class="w5-ask" style="margin-top:10px"><span>Run section 6. How many pieces did Chroma store? Type <strong>one number</strong></span></div>
+</section>
+
+<!-- ==================== WHEN IT GETS HUGE ==================== -->
+<section id="w6-scale">
+  <p class="chip">When your data gets huge</p>
+  <h2>300 pieces today. What about 300 million? 📈</h2>
+  <table class="w4-tb" style="font-size:.46em">
+    <tr><th>How much</th><th>Where the numbers live</th><th>Example</th></tr>
+    <tr><td><b style="color:#7ee0a3">1</b> · hundreds to thousands of pieces</td><td>a table in memory (numpy): today's Layer 3</td><td>our course notes</td></tr>
+    <tr><td><b style="color:#4da3ff">2</b> · up to a few million, one machine</td><td><strong>Chroma</strong> · <strong>FAISS</strong> (a library from Meta)</td><td>every textbook in a department</td></tr>
+    <tr><td><b style="color:#ffb454">3</b> · millions to billions, many users at once</td><td><strong>Qdrant</strong> · <strong>OpenSearch</strong> · <strong>pgvector</strong> (inside PostgreSQL) · managed services like Pinecone</td><td>a university portal · shopping search</td></tr>
+  </table>
+  <div class="w6-letters" style="grid-template-columns:repeat(5,1fr);margin-top:10px">
+    <div style="--k:#7ee0a3"><b>⚡</b><strong>Shortlist, don't scan</strong><br><span class="w4-muted">approximate search (HNSW) checks a few neighbours, not every piece</span></div>
+    <div style="--k:#4da3ff"><b>🏷️</b><strong>Filter first</strong><br><span class="w4-muted">"only Week 3", "only this college", then search by meaning</span></div>
+    <div style="--k:#ffb454"><b>🗜️</b><strong>Smaller numbers</strong><br><span class="w4-muted">768 → 256 per piece, or compressed: less memory, a little less exact</span></div>
+    <div style="--k:#c792ea"><b>🔁</b><strong>Embed once</strong><br><span class="w4-muted">store the numbers; re-embed only documents that changed</span></div>
+    <div style="--k:#ff6b6b"><b>🔀</b><strong>Hybrid built in</strong><br><span class="w4-muted">OpenSearch and Qdrant do keywords + meaning in one query</span></div>
+  </div>
+  <div class="w5-ask" style="margin-top:10px"><span>A college portal: 2 million pages, 5,000 students searching at once. Which row? Type <strong>1, 2 or 3</strong></span></div>
+</section>
+
+<!-- ==================== IS RAG DEAD? ==================== -->
+<section id="w6-ragdead">
+  <p class="chip">You'll read this online</p>
+  <h2>"RAG is dead." Is it? 🪦</h2>
+  <div class="w6-books">
+    <div class="w6-book" style="border-color:#ff9b9b">
+      <div class="w4-hd" style="color:#ff9b9b">📦 "Just paste everything"</div>
+      <p>Models now read <strong>a million tokens or more</strong> at once. Why search at all?</p>
+      <p class="w4-muted">That's our Layer 2. It works, for small notes.</p>
+    </div>
+    <div class="w6-book" style="border-color:#7ee0a3">
+      <div class="w4-hd" style="color:#7ee0a3">🔎 "Find the right pages first"</div>
+      <p>You measured why: <strong>30× the tokens</strong>, 30× the cost, and details blur in a huge prompt.</p>
+      <p class="w4-muted">Real libraries have millions of pages, and they change every day.</p>
+    </div>
+  </div>
+  <p class="small fragment" style="margin-top:10px">The verdict: what died is <strong>basic RAG</strong>, the version we built today. RAG became <strong>plumbing</strong>, inside almost every AI product, and grew upgrades:</p>
+  <div class="w6-path fragment" style="margin-top:4px">
+    <span class="now">🔤 hybrid search</span><span>🏅 re-ranking</span><span>🤖 agentic retrieval</span><span>🌳 hierarchical parsing</span><span>🎒 context engineering</span>
+  </div>
+  <div class="w5-ask fragment"><span>Paste (<strong>P</strong>) or RAG (<strong>R</strong>)? ① your 20 pages of notes ② a college's 3,000 web pages, updated weekly. Type <strong>two letters</strong></span></div>
+</section>
+
+<!-- ==================== BM25 ==================== -->
+<section id="w6-bm25">
+  <p class="chip">Upgrade 1 · hybrid search</p>
+  <h2>The other search: matching <em>words</em> (BM25) 🔤</h2>
+  <div class="w4-row" style="align-items:stretch;gap:14px">
+    <div style="flex:1.05;display:flex;flex-direction:column;gap:7px;text-align:left">
+      <div class="w4-step"><b>① Rare words count more</b>
+        <table class="w4-tb" style="font-size:.86em;margin-top:2px">
+          <tr><th>word</th><th>in how many of our 247 slides</th><th class="wk">points</th></tr>
+          <tr><td>"the"</td><td>234</td><td class="wk">0.06</td></tr>
+          <tr><td>"model"</td><td>62</td><td class="wk">1.4</td></tr>
+          <tr><td>"temperature"</td><td>16</td><td class="wk">2.7</td></tr>
+          <tr><td>"MYCIN"</td><td>2</td><td class="wk">4.6</td></tr>
+        </table>
+      </div>
+      <div class="w4-step"><b>② Repeats help, less each time</b>Saying "MYCIN" five times isn't five times better.</div>
+      <div class="w4-step"><b>③ Long slides don't win for being long</b>Scores are adjusted for length.</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+      <div class="w4-hd" style="text-align:left;font-size:.56em">Which search finds it? <span style="color:#ffb454">K</span> = keyword · <span style="color:#7ee0a3">M</span> = meaning</div>
+      <div class="w6-quiz" style="margin-top:0">
+        <div><b>1</b>"MYCIN" <span class="quiz-answer">K · a rare exact name</span></div>
+        <div><b>2</b>"wat is a embeding" <span class="quiz-answer">M · "embeding" is in 0 slides</span></div>
+        <div><b>3</b>"gemini-3.5-flash-lite" <span class="quiz-answer">K · an exact code</span></div>
+        <div><b>4</b>"why does it answer differently every time?" <span class="quiz-answer">M · no slide uses those words</span></div>
+      </div>
+      <div class="w5-ask" style="margin-top:4px"><span>Type <strong>four letters</strong>, like <strong>KMKM</strong></span></div>
+    </div>
+  </div>
+  <p class="small fragment" style="margin-top:10px"><strong>Hybrid search</strong> runs both and merges the two lists: exact names <em>and</em> meaning. Most real systems do this.
+  <span class="w4-muted">Neither fixes the "final exam" trap: only the instructions can.</span></p>
+</section>
+
+<!-- ==================== AGENTIC / HIERARCHICAL / CONTEXT ==================== -->
+<section id="w6-modern">
+  <p class="chip">Where RAG is going</p>
+  <h2>Three more upgrades, three words to know 🧭</h2>
+  <div class="w6-letters" style="grid-template-columns:repeat(3,1fr)">
+    <div style="--k:#4da3ff"><b>🤖</b><strong>Agentic retrieval</strong>
+      <p class="w4-muted" style="margin:6px 0 4px">Search is a <em>tool</em> the model decides to use: search, read, "not enough", search again with better words.</p>
+      <p style="margin:0">📝 <em>"Five parts of a brief, and what does temperature change?"</em> It searches <strong>twice</strong>: once for each.</p></div>
+    <div style="--k:#7ee0a3"><b>🌳</b><strong>Hierarchical parsing</strong>
+      <p class="w4-muted" style="margin:6px 0 4px">Keep the document's shape: book → chapter → section → page, like a table of contents. Not random 600-character cuts.</p>
+      <p style="margin:0">📝 Ours already has a tiny one: <strong>week → slide → title</strong>. That's why every answer can say [W3 · slide 24].</p></div>
+    <div style="--k:#ffb454"><b>🎒</b><strong>Context engineering</strong>
+      <p class="w4-muted" style="margin:6px 0 4px">Deciding <em>everything</em> that goes into the prompt, and what stays out: instructions, the right pieces, the date, earlier messages, tool results.</p>
+      <p style="margin:0">📝 Like packing for an exam: everything you need, nothing that weighs you down.</p></div>
+  </div>
+  <div class="w6-quiz fragment" style="margin-top:10px">
+    <div><b>?</b>A 400-page lab manual. Answers keep mixing up Experiment 3 and Experiment 7. Which upgrade? <span class="quiz-answer">🌳 hierarchical: keep each experiment's section together</span></div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:6px"><span>Type the emoji or the first word: <strong>agentic</strong>, <strong>hierarchical</strong> or <strong>context</strong></span></div>
+</section>
+
+<!-- ==================== FINE-TUNING ==================== -->
+<section id="w6-ft">
+  <p class="chip">RAG or fine-tuning?</p>
+  <h2>Two ways to "teach" a model ⚖️</h2>
+  <div class="w6-books">
+    <div class="w6-book" style="border-color:#7ee0a3">
+      <div class="w4-hd" style="color:#7ee0a3">📖 RAG adds <em>facts</em></div>
+      <p>The model reads your documents <strong>at the moment you ask</strong>.</p>
+      <p>Update the documents → the answers update. No training.</p>
+    </div>
+    <div class="w6-book" style="border-color:#c792ea">
+      <div class="w4-hd" style="color:#c792ea">🎓 Fine-tuning changes <em>behaviour</em></div>
+      <p>More training, on your examples: a style, a format, a narrow skill.</p>
+      <p>Costs time and data. A poor way to teach facts that change.</p>
+    </div>
+  </div>
+  <div class="w4-row fragment" style="margin-top:12px;gap:12px;align-items:stretch">
+    <div class="w4-step" style="flex:1"><b>🖥️ Live · 2 minutes</b><a href="https://teachablemachine.withgoogle.com" target="_blank" rel="noopener">Teachable Machine</a>: train a model on ✋ vs ✌️ from my webcam. That's training, in your browser.</div>
+    <div class="w4-step" style="flex:1"><b>🏭 For language models</b>Hosted fine-tuning exists (upload examples, pay for training). Most capstones won't need it.</div>
+  </div>
+</section>
+
+<section id="w6-ftquiz">
+  <p class="chip">Checkpoint</p>
+  <h2>RAG or fine-tune? 🤔</h2>
+  <div class="w6-quiz">
+    <div><b>1</b>A bot that answers from this semester's hostel rules, which change every semester <span class="quiz-answer">R · facts that change</span></div>
+    <div><b>2</b>Answer questions from a 300-page lab manual, with the page number <span class="quiz-answer">R · and it cites the page</span></div>
+    <div><b>3</b>Sort photos of leaf disease into five types <span class="quiz-answer">F · train a classifier</span></div>
+    <div><b>4</b>The latest admission deadlines from college websites <span class="quiz-answer">R · and check the dates</span></div>
+    <div><b>5</b>Every reply in exactly your department's formal letter style <span class="quiz-answer">F · or try a good prompt first</span></div>
+  </div>
+  <div class="waterfall" style="margin-top:10px">
+    <span><span class="wf-step">1</span> Type <b>five letters</b>, R or F, like <b>RRFRF</b></span>
+    <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+    <span><span class="wf-step">3</span> Send, then tap to reveal</span>
+  </div>
+</section>
+
+<!-- ==================== CAPSTONE ==================== -->
+<section id="w6-capstone">
+  <p class="chip">Your capstone</p>
+  <h2>What will <em>your</em> app read? 📂</h2>
+  <div class="w6-letters">
+    <div style="--k:#7ee0a3"><b>A</b>📒 Notes, a syllabus, a textbook chapter</div>
+    <div style="--k:#4da3ff"><b>B</b>🌐 Web pages or brochures (colleges, rules, schemes)</div>
+    <div style="--k:#ffb454"><b>C</b>🎙️ Your own recordings or answers, as text</div>
+    <div style="--k:#c792ea"><b>D</b>🚫 Nothing: my project doesn't need documents</div>
+  </div>
+  <div class="w5-ask" style="margin-top:12px"><span>Type <strong>one letter</strong>: A, B, C or D</span></div>
+  <p class="small fragment" style="margin-top:10px"><strong>D is a fine answer.</strong> Not every app needs RAG: your Week 6 step is the test log.
+  Picked a training project? The optional <strong>deep-dive lab</strong> (recorded) covers fine-tuning on a free GPU.</p>
+</section>
+
+<!-- ==================== CLOSE ==================== -->
+<section id="w6-due">
+  <p class="chip">Due next week</p>
+  <h2>Give your project its own documents</h2>
+  <div class="tier core">
+    <span class="tier-label">Core — everyone</span>
+    <p>Point your capstone at <strong>documents you own</strong>: NotebookLM or a Gemini skill with files (no-code), or
+    section 7 of today's notebook (code). Run <strong>your five test questions</strong> and score them out of 5.
+    No documents in your project? Score your test log instead.</p>
+  </div>
+  <div class="tier stretch">
+    <span class="tier-label">Stretch — optional</span>
+    <p>Take one wrong answer and say <strong>where it broke</strong> (A search · B the answer · C it guessed).
+    Change <strong>one thing</strong>, and score again.</p>
+  </div>
+  <p class="small">📋 Update your <strong>tracker sheet</strong>. Next week you'll type <strong>two numbers</strong> in the chat:
+  your score, and your score after the fix. 🥚 And bring the easter egg answer.</p>
+</section>
+
+
+<section id="w6-next">
+  <h2>Next week: <em>Agents & integrations</em> 🤖</h2>
+  <p class="small">Today it <strong>answered</strong> from your documents. Last week, it <strong>asked your code</strong> for one thing.</p>
+  <p class="small fragment">Next week: give it a goal and a few tools, and it <strong>plans, acts, checks and tries again</strong>:
+  reminders, messages, workflows that run on their own.</p>
+</section>
+
+<section id="w6-closing">
+  <p class="closing-quote">
+    "What I cannot create, I do not understand."
+    <span class="attribution">— Richard Feynman</span>
+  </p>
+  <p class="small fragment" style="margin-top:16px">Today you didn't just <em>use</em> a tool that reads documents.
+  You built one, looked inside it, scored it and fixed it.</p>
+  <p class="small fragment" style="margin-top:10px;color:#7ee0a3">If your score went down after a change, that's not failure:
+  you just learned which dial matters. <strong>Change one thing, test again.</strong> See you next week. 🙏</p>
+</section>
+
+
+</div>
+</div>
+
+<script src="../../assets/reveal/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({ hash:true, slideNumber:'c/t', width:1200, height:760,
+    margin:0.05, minScale:0.2, maxScale:1.6,
+    // Default true steals focus back to <body> whenever the page becomes
+    // visible again, which silently breaks paste. See week1/week2.
+    focusBodyOnPageVisibilityChange:false });
+  document.addEventListener('click', e => {
+    if (e.target.classList.contains('quiz-answer')) e.target.classList.toggle('revealed');
+  });
+
+  /* ---- Overflow guard -------------------------------------------------
+     reveal.js silently clips content taller than the slide, which cuts off
+     text at the bottom on a projector. This shrinks any offending slide
+     until it fits, and reports it in the browser console so it can be
+     fixed properly later.                                               */
+  (function () {
+    const LIMIT = () => Reveal.getConfig().height;
+    function fit(slide) {
+      if (!slide) return;
+      slide.style.fontSize = '';
+      const max = LIMIT();
+      let pct = 100;
+      while (slide.scrollHeight > max && pct > 45) {
+        pct -= 4;
+        slide.style.fontSize = pct + '%';
+      }
+      if (pct < 100) {
+        console.warn('[deck] slide shrunk to ' + pct + '% to fit:',
+          (slide.querySelector('h1,h2') || {}).textContent || slide);
+      }
+    }
+    const current = () => Reveal.getCurrentSlide();
+    Reveal.on('ready', () => fit(current()));
+    Reveal.on('slidechanged', e => fit(e.currentSlide));
+    Reveal.on('fragmentshown', () => fit(current()));
+    Reveal.on('resize', () => fit(current()));
+  })();
+</script>
+</body>
+</html>

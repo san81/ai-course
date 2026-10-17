@@ -47,7 +47,7 @@ COPY_FILES = ["index.html", ".nojekyll"]
 # Which weeks students may see. Bump this the day you teach the week.
 # A deck that exists in weeks/ but is not listed here stays unpublished, so
 # next week's draft can live in the repo without leaking early.
-RELEASED_WEEKS = {1, 2, 3, 4, 5}
+RELEASED_WEEKS = {1, 2, 3, 4, 5, 6}
 
 # Files published alongside a released week's deck (e.g. weeks/week5/*.ipynb).
 STUDENT_FILE_TYPES = {".ipynb", ".csv"}
