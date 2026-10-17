@@ -540,6 +540,37 @@
   </div>
 </section>
 
+<!-- ==================== COSINE SIMILARITY ==================== -->
+<section id="w6-cosine">
+  <p class="chip">Under the hood</p>
+  <h2>How "near" is measured: cosine similarity 📐</h2>
+  <div class="w4-row" style="align-items:center;gap:14px">
+    <svg viewBox="0 0 330 300" width="330" height="300" style="flex:0 0 330px;height:300px" role="img" aria-label="Arrows from the origin: the question and the meaning slide point the same way; the checkers slide points elsewhere">
+      <rect x="1" y="1" width="328" height="298" rx="14" fill="#141a26" stroke="#2a3450"/>
+      <line x1="40" y1="260" x2="310" y2="260" stroke="#55607a"/><line x1="40" y1="260" x2="40" y2="20" stroke="#55607a"/>
+      <text x="305" y="282" font-size="12" fill="#9aa4b8" text-anchor="end">about meaning &amp; words →</text>
+      <text x="30" y="30" font-size="12" fill="#9aa4b8" transform="rotate(-90 30 30)" text-anchor="end">about games →</text>
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+      <line x1="40" y1="260" x2="296" y2="196" stroke="#7ee0a3" stroke-width="2.5" marker-end="url(#ah)" opacity=".55"/>
+      <line x1="40" y1="260" x2="168" y2="228" stroke="#7ee0a3" stroke-width="4" marker-end="url(#ah)"/>
+      <line x1="40" y1="260" x2="184" y2="244" stroke="#ffb454" stroke-width="3" marker-end="url(#ah)"/>
+      <line x1="40" y1="260" x2="56" y2="116" stroke="#4da3ff" stroke-width="3" marker-end="url(#ah)"/>
+      <text x="190" y="252" font-size="13" fill="#ffb454" font-weight="700">question</text>
+      <text x="120" y="215" font-size="12.5" fill="#7ee0a3">"meaning is a place"</text>
+      <text x="218" y="184" font-size="12" fill="#7ee0a3" opacity=".8">same slide, longer</text>
+      <text x="62" y="110" font-size="12.5" fill="#4da3ff">"checkers"</text>
+    </svg>
+    <div style="flex:1.1;display:flex;flex-direction:column;gap:7px;text-align:left">
+      <div class="w4-step"><b>① Multiply matching numbers, add</b>[0.9, 0.1] · [0.8, 0.2] → 0.9×0.8 + 0.1×0.2 = <strong>0.74</strong> <span class="w4-muted">(Week 2's attention score!)</span></div>
+      <div class="w4-step"><b>② Divide by both arrows' lengths</b>0.74 ÷ (0.91 × 0.82) = <strong>0.99</strong>. Only <em>direction</em> counts: long slides don't win for length.</div>
+      <div class="w4-step"><b>③ Read the score</b><strong>1</strong> same meaning · <strong>0</strong> unrelated (right angle) · <strong>−1</strong> opposite</div>
+    </div>
+  </div>
+  <div class="w5-ask" style="margin-top:10px"><span>The question vs "checkers" [0.1, 0.9]: is the score closer to <strong>1</strong> or <strong>0</strong>? Type <strong>one number</strong></span></div>
+  <p class="small fragment" style="margin-top:8px">It's <strong>0.22</strong>: unrelated. In the notebook every arrow is pre-shrunk to length 1, so
+  <code>VECTORS @ q</code> gives all 300 scores in <strong>one</strong> matrix multiplication (Week 1's farmer matrix).</p>
+</section>
+
 <!-- ==================== LAYER 3 ==================== -->
 <section id="w6-l3">
   <p class="chip">Layer 3 · find the right slides first</p>
@@ -669,7 +700,8 @@ collection.query(query_embeddings=question_numbers, n_results=4)</pre>
       <p class="w4-muted">Real libraries have millions of pages, and they change every day.</p>
     </div>
   </div>
-  <p class="small fragment" style="margin-top:10px">The verdict: what died is <strong>basic RAG</strong>, the version we built today. RAG became <strong>plumbing</strong>, inside almost every AI product, and grew upgrades:</p>
+  <p class="small fragment" style="margin-top:10px">The verdict: <strong>RAG didn't die, it grew up.</strong> What you built today is the <strong>foundation</strong>: chunk, embed, search, answer with sources.
+  It now runs inside almost every AI product, and builders add these upgrades <strong>on top</strong> of exactly what you built:</p>
   <div class="w6-path fragment" style="margin-top:4px">
     <span class="now">🔤 hybrid search</span><span>🏅 re-ranking</span><span>🤖 agentic retrieval</span><span>🌳 hierarchical parsing</span><span>🎒 context engineering</span>
   </div>
@@ -782,6 +814,32 @@ collection.query(query_embeddings=question_numbers, n_results=4)</pre>
   <div class="w5-ask" style="margin-top:12px"><span>Type <strong>one letter</strong>: A, B, C or D</span></div>
   <p class="small fragment" style="margin-top:10px"><strong>D is a fine answer.</strong> Not every app needs RAG: your Week 6 step is the test log.
   Picked a training project? The optional <strong>deep-dive lab</strong> (recorded) covers fine-tuning on a free GPU.</p>
+</section>
+
+<!-- ==================== RESOURCES ==================== -->
+<section id="w6-resources">
+  <p class="chip">Explore on your own</p>
+  <h2>Resources 📚</h2>
+  <div class="w4-row" style="align-items:flex-start;gap:16px">
+    <ul class="res-list" style="flex:1">
+      <li><strong>📐 Cosine & embeddings</strong></li>
+      <li>⭐ <a href="https://www.youtube.com/watch?v=LyGKycYT2v0" target="_blank" rel="noopener">3Blue1Brown · Dot products and duality</a>: the picture behind step ①</li>
+      <li>⭐ <a href="https://www.youtube.com/watch?v=wjZofJX0v4M" target="_blank" rel="noopener">3Blue1Brown · Transformers (chapter 5)</a>: embeddings as directions, with the dot product</li>
+      <li><a href="https://jalammar.github.io/illustrated-word2vec/" target="_blank" rel="noopener">The Illustrated Word2vec</a> (Jay Alammar): word meanings as lists of numbers, with cosine</li>
+      <li><a href="https://projector.tensorflow.org" target="_blank" rel="noopener">Embedding Projector</a>: the 3-D word map from Week 2, try "nearest points"</li>
+      <li><a href="https://developers.google.com/machine-learning/crash-course/embeddings" target="_blank" rel="noopener">Google ML Crash Course · Embeddings</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Cosine_similarity" target="_blank" rel="noopener">Cosine similarity</a> on Wikipedia: the formula, for the curious</li>
+    </ul>
+    <ul class="res-list" style="flex:1">
+      <li><strong>🔎 RAG & search</strong></li>
+      <li><a href="https://www.pinecone.io/learn/retrieval-augmented-generation/" target="_blank" rel="noopener">What is RAG?</a> (Pinecone, a plain-English guide)</li>
+      <li><a href="https://ai.google.dev/gemini-api/docs/embeddings" target="_blank" rel="noopener">Gemini API · Embeddings</a>: the model in today's notebook</li>
+      <li><a href="https://en.wikipedia.org/wiki/Okapi_BM25" target="_blank" rel="noopener">BM25</a>: the keyword-search formula</li>
+      <li><strong style="display:block;margin-top:8px">🗄️ Vector databases</strong></li>
+      <li><a href="https://docs.trychroma.com" target="_blank" rel="noopener">Chroma docs</a> · <a href="https://qdrant.tech/documentation/" target="_blank" rel="noopener">Qdrant docs</a> · <a href="https://docs.opensearch.org/latest/vector-search/" target="_blank" rel="noopener">OpenSearch vector search</a></li>
+      <li><a href="https://www.pinecone.io/learn/series/faiss/hnsw/" target="_blank" rel="noopener">HNSW explained</a>: how "shortlist, don't scan" works</li>
+    </ul>
+  </div>
 </section>
 
 <!-- ==================== CLOSE ==================== -->
