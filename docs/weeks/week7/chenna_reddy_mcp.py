@@ -1,5 +1,5 @@
 """
-Mr. Chenna Reddy, the hostel's MCP ("Master of Control Panels"), as a real MCP server.
+Mr. Chenna Reddy, the hostel handyman (nickname: MCP, "Master of Control Panels"), as a real MCP server.
 
 He can't fix pipes. He CAN look things up in the plumbing manual, shut or open the
 coloured levers at the valve junction, and check whether a bathroom is still leaking.
@@ -15,7 +15,10 @@ Settings (environment variables), so you can change the world and watch the agen
 """
 import csv, math, os, re, sys
 from collections import Counter
-from mcp.server.fastmcp import FastMCP
+try:
+    from mcp.server.fastmcp import FastMCP          # MCP Python SDK version 1.x
+except ImportError:
+    sys.exit("Mr. Chenna Reddy needs the MCP SDK version 1.x. Run:  pip install \"mcp>=1.25,<2\"")
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 MANUAL_CSV = os.environ.get("MANUAL_CSV", os.path.join(HERE, "valve-manual.csv"))
@@ -57,7 +60,7 @@ def _bm25(query, k1=1.5, b=0.75):
 
 mcp = FastMCP(
     "Mr. Chenna Reddy",
-    instructions=("I'm Mr. Chenna Reddy, the hostel's Master of Control Panels. I don't know how to "
+    instructions=("I'm Mr. Chenna Reddy, the hostel handyman (they call me the Master of Control Panels). I don't know how to "
                   "fix or replace pipes; call a plumber for that. I can look things up in the plumbing "
                   "manual, use a wrench to shut or open the coloured levers at the valve junction, and "
                   "check whether a bathroom is still leaking."),

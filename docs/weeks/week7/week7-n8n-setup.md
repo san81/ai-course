@@ -4,7 +4,7 @@ The Colab notebook builds the agent in Python. This guide builds the **same agen
 
 | File | What it is |
 |---|---|
-| `chenna_reddy_mcp.py` + `valve-manual.csv` | Mr. Chenna Reddy, the hostel's MCP ("Master of Control Panels"), as a real MCP server |
+| `chenna_reddy_mcp.py` + `valve-manual.csv` | Mr. Chenna Reddy, the hostel handyman (nickname: MCP, "Master of Control Panels"), as a real MCP server |
 | `week7-n8n-3-chenna-reddy-check.json` | Connection check: n8n asks Chenna Reddy one question. No AI, no key |
 | `week7-n8n-1-hostel-agent-chat.json` | The agent: type a complaint in n8n's chat → it works the problem → sends a WhatsApp update to the warden |
 | `week7-n8n-2-hostel-agent-whatsapp.json` | Fully on WhatsApp: a student messages a WhatsApp number → the agent replies on WhatsApp |
@@ -19,7 +19,7 @@ You need **Node.js** (nodejs.org, LTS version) and **Python 3**.
 
 1. **Start Mr. Chenna Reddy.** In a terminal, inside the folder with `chenna_reddy_mcp.py` and `valve-manual.csv`:
    ```
-   pip install mcp
+   pip install "mcp>=1.25,<2"
    python chenna_reddy_mcp.py --http
    ```
    Leave it running. He's now at `http://localhost:8000/mcp`.
