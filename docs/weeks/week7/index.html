@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 7 — Agents & integrations</title>
+<link rel="stylesheet" href="../../assets/reveal/dist/reset.css">
+<link rel="stylesheet" href="../../assets/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../../assets/reveal/dist/theme/black.css">
+<link rel="stylesheet" href="../../assets/course.css">
+<style>
+  .reveal h1 { font-size: 2.0em; text-transform: none; }
+  .reveal h2 { font-size: 1.35em; text-transform: none; margin-bottom: 14px; }
+  .reveal p, .reveal li { font-size: 0.84em; line-height: 1.42; }
+  .reveal .small, .reveal .small li { font-size: 0.66em; color: #a7b0c2; line-height: 1.45; }
+  .reveal ul { margin-left: 0.6em; }
+  .reveal li { margin-bottom: 11px; }
+  .reveal .analogy { font-size: 0.72em; padding: 13px 22px; margin-top: 14px; }
+  .reveal .analogy::before { font-size: 0.85em; }
+  .reveal .predict { font-size: 0.85em; }
+  .reveal .easter-egg p { font-size: 0.72em; }
+  .reveal .tiny-hint { position: absolute; bottom: -40px; right: 0; font-size: 0.3em; color: #4a5468; }
+  .reveal .vote-card { border:1px solid #2a3450; border-radius:10px; padding:13px 20px; margin:9px 0; background:#1a2233; font-size:.62em; text-align:left; }
+  .reveal .res-list { font-size: 0.6em; text-align: left; }
+  .reveal .res-list li { margin: 7px 0; }
+  .reveal .res-list a, .reveal a { color: #4da3ff; }
+  .reveal .tier { padding: 10px 18px; }
+  .reveal .tier p { font-size: 0.66em; margin: 6px 0; }
+  .reveal .closing-quote { font-size: 1.05em; }
+  .reveal svg { max-width: 100%; height: auto; }
+  .reveal .caption { font-size: 0.58em; color: #9aa4b8; margin-top: 8px; }
+  .reveal figure.photo { margin: 10px auto; }
+  .reveal figure.photo img { max-height: 300px; width: auto; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,.45); }
+  .reveal figure.photo .photo-fallback { display: none; }
+  .reveal figure.photo.no-photo img { display: none; }
+  .reveal figure.photo.no-photo .photo-fallback { display: block; }
+  .reveal figure.photo figcaption { font-size: 0.42em; color: #7b8497; margin-top: 8px; }
+  .reveal .zoom-do {
+    border: 2px solid #7ee0a3; border-radius: 14px; padding: 16px 26px;
+    background: rgba(126,224,163,0.07); text-align: left; margin: 14px auto; max-width: 880px;
+  }
+  .reveal .zoom-do p { font-size: 0.72em; margin: 9px 0; }
+  .reveal .zoom-do .step { color: #7ee0a3; font-weight: 700; margin-right: 8px; }
+  .reveal section[data-poll] .chip { border-color: #7ee0a3; color: #7ee0a3; }
+  /* act divider cards */
+  .reveal .act { color: #ffb454; font-size: 0.55em; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+  /* checkpoint blocks */
+  .reveal .checkpoint { border: 2px solid #4da3ff; background: rgba(77,163,255,.07); border-radius: 14px; padding: 10px 24px; margin: 12px auto; max-width: 900px; text-align: left; }
+  .reveal .checkpoint li { font-size: 0.62em; margin: 10px 0; }
+  /* the farmer chain, reused in the recap */
+  .reveal .chain { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 14px 0; }
+  .reveal .chain span { border: 1px solid #2a3450; background: #1a2233; border-radius: 999px; padding: 6px 14px; font-size: 0.46em; color: #e8edf5; }
+  .reveal .chain span.new { border-color: #ffb454; color: #ffb454; }
+
+  /* ---- Week 4 components ---- */
+  .reveal .w4-row { display:flex; gap:18px; align-items:flex-start; }
+  .reveal .w4-card { flex:1; background:#1a2233; border:1px solid #2a3450; border-radius:12px; padding:12px 16px; text-align:left; }
+  .reveal .w4-card p { font-size:.6em; margin:6px 0; line-height:1.4; }
+  .reveal .w4-hd { font-weight:700; font-size:.66em; margin-bottom:4px; }
+  .reveal .w4-muted { color:#9aa4b8; }
+  .reveal .w4-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px; }
+  .reveal .w4-cites { display:flex; flex-direction:column; gap:5px; margin-top:6px; text-align:left; }
+  .reveal .w4-cite { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 14px; font-size:.45em; line-height:1.32; }
+  .reveal .w4-cite > b { display:inline-block; width:1.6em; height:1.6em; line-height:1.6em; text-align:center; border-radius:50%; background:#4da3ff; color:#0d1320; margin-right:8px; }
+  .reveal .w4-cite .quiz-answer { display:block; margin-top:4px; color:#ffb454; font-weight:600; }
+  .reveal .w4-steps { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; text-align:left; }
+  .reveal .w4-step { background:#1a2233; border:1px solid #2a3450; border-radius:12px; padding:10px 14px; font-size:.56em; line-height:1.4; }
+  .reveal .w4-step b { display:block; color:#4da3ff; font-size:1.1em; margin-bottom:3px; }
+  .reveal .w4-list { margin:4px 0 0 1em; font-size:.58em; }
+  .reveal .w4-list li { margin:5px 0; }
+  .reveal .w4-timeline { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center; margin-top:14px; font-size:.5em; }
+  .reveal .w4-timeline span:not(:nth-child(even)) { border:1px solid #2a3450; background:#1a2233; border-radius:999px; padding:5px 12px; }
+  .reveal .w4-timeline span:nth-child(even) { color:#55607a; }
+  .reveal .w4-timeline b { color:#4da3ff; margin-right:4px; }
+  .reveal .w4-projects { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px; text-align:left; }
+  .reveal .w4-proj { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.44em; line-height:1.3; }
+  .reveal .w4-proj p { margin:3px 0; font-size:1em; color:#c8d0dd; }
+  .reveal .w4-proj-t { font-weight:700; font-size:1.1em; color:#e8edf5; margin-bottom:3px; }
+  .reveal .w4-badge { display:inline-block; border:1px solid; border-radius:999px; padding:0 8px; font-size:.78em; font-weight:700; margin-left:6px; vertical-align:middle; }
+  .reveal .w4-stack { margin-top:4px; padding:3px 8px; border-radius:6px; background:#141a26; font-size:.95em; color:#dfe5ee; }
+  .reveal .w4-stack .nc { color:#7ee0a3; font-weight:700; margin-right:4px; }
+  .reveal .w4-stack .cd { color:#4da3ff; font-weight:700; margin-right:4px; }
+  .reveal .sub-small { font-size:.5em; color:#9aa4b8; margin:-6px 0 6px; }
+  .reveal .w4-levels { display:grid; grid-template-columns:1fr 1fr; gap:12px; text-align:left; }
+  .reveal .w4-lvcol { display:flex; flex-direction:column; gap:6px; }
+  .reveal .w4-lvhd { color:#fff; font-weight:800; font-size:.5em; border-radius:8px; padding:4px 10px; }
+  .reveal .w4-lv { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 10px; font-size:.38em; line-height:1.28; }
+  .reveal .w4-lv p { margin:2px 0; font-size:1em; color:#c8d0dd; }
+  .reveal .w4-lv .w4-learn { color:#ffb454; }
+  .reveal table.w4-tb { width:100%; border-collapse:separate; border-spacing:0 4px; font-size:.405em; margin-top:2px; }
+  .reveal table.w4-tb th, .reveal table.w4-tb td { border:none; padding:4px 10px; text-align:left; vertical-align:middle; background:#1a2233; line-height:1.3; }
+  .reveal table.w4-tb tr > :first-child { border-radius:8px 0 0 8px; color:#e8edf5; width:24%; }
+  .reveal table.w4-tb tr > :last-child { border-radius:0 8px 8px 0; }
+  .reveal table.w4-tb tr:first-child th { background:transparent; font-size:1.05em; }
+  .reveal table.w4-tb td { color:#dfe5ee; }
+  .reveal table.w4-tb .wk { width:4.5em; text-align:center; color:#ffb454; font-weight:700; }
+  .reveal .w4-shrink { display:flex; flex-direction:column; gap:10px; margin-top:10px; font-size:.6em; text-align:left; }
+  .reveal .w4-shrink > div { display:grid; grid-template-columns:1fr 2em 1.6fr; align-items:center; background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:9px 14px; }
+  .reveal .w4-shrink .big { color:#ff9b9b; } .reveal .w4-shrink .arr { color:#9aa4b8; text-align:center; } .reveal .w4-shrink .ok { color:#7ee0a3; }
+  .reveal .w4-camp { display:grid; grid-template-columns:1fr 7.5em 1fr; gap:10px; align-items:stretch; text-align:left; margin-top:4px; }
+  .reveal .w4-camp-col .w4-hd { font-size:.56em; } .reveal .w4-camp-col { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 12px; }
+  .reveal .w4-camp-bot { background:rgba(255,180,84,.08); border:2px solid #ffb454; border-radius:14px; padding:8px; text-align:center; font-size:.55em; display:flex; flex-direction:column; justify-content:center; }
+  .reveal .w4-mini { margin:2px 0 0 1em; font-size:.46em; line-height:1.35; }
+  .reveal .w4-mini li { margin:2px 0; }
+  .reveal .w4-pg3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; text-align:left; margin-top:2px; }
+  .reveal .w4-pg-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:6px 11px; font-size:.44em; line-height:1.32; color:#dfe5ee; }
+  .reveal .w4-pg-card .w4-hd { font-size:1.22em; }
+  .reveal .w4-pg-card p { margin:3px 0; }
+  .reveal .w4-pg-card .w4-mini { font-size:1em; margin-top:0; }
+  .reveal .w4-pg-say { background:#141a26; border-left:3px solid #ffb454; border-radius:4px; padding:3px 7px; font-style:italic; }
+  .reveal .w4-pg-flow { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:4px 5px; margin-top:8px; font-size:.4em; }
+  .reveal .w4-pg-flow span { background:rgba(77,163,255,.1); border:1px solid #4da3ff; border-radius:16px; padding:3px 10px; color:#e8edf5; }
+  .reveal .w4-pg-flow b { color:#4da3ff; }
+  .reveal .w4-pg-you { margin-top:8px; background:rgba(255,180,84,.07); border:1px solid #ffb454; border-radius:10px; padding:6px 12px; text-align:left; }
+  .reveal .w4-pg-you > .w4-hd { font-size:.5em; }
+  .reveal .w4-pg-ideas { display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; font-size:.42em; line-height:1.3; color:#dfe5ee; }
+  .reveal .w4-sk3 { display:grid; grid-template-columns:1fr 1.6em 1fr 1.6em 1.15fr; gap:6px; align-items:stretch; text-align:left; margin-top:6px; }
+  .reveal .w4-sk-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.5em; line-height:1.35; color:#dfe5ee; }
+  .reveal .w4-sk-card .w4-hd { font-size:1.25em; }
+  .reveal .w4-sk-card p { margin:5px 0; }
+  .reveal .w4-sk-wk { font-size:.8em; letter-spacing:.08em; text-transform:uppercase; color:#9aa4b8; font-weight:700; }
+  .reveal .w4-sk-arrow { align-self:center; text-align:center; color:#4da3ff; font-size:.8em; }
+  .reveal .w4-sk-analogy { margin-top:12px; background:rgba(255,180,84,.08); border:1px solid #ffb454; border-radius:10px; padding:8px 16px; font-size:.5em; text-align:left; color:#e8edf5; }
+  .reveal .w4-sk-file { flex:1.1; margin:0; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:10px 14px; font-size:.36em; line-height:1.4; text-align:left; white-space:pre; color:#dfe5ee; box-shadow:none; width:auto; }
+  .reveal .w4-sk-file .d { color:#ffb454; } .reveal .w4-sk-file .m { color:#6b7891; } .reveal .w4-sk-file .k { color:#7ee0a3; font-weight:700; }
+  .reveal .w4-sk-how { flex:1; display:flex; flex-direction:column; gap:8px; }
+  .reveal .w4-sk-step { background:#1a2233; border:1px solid #2a3450; border-left:4px solid #4da3ff; border-radius:8px; padding:7px 12px; font-size:.44em; line-height:1.35; text-align:left; color:#dfe5ee; }
+  .reveal .w4-sk-step b { display:block; color:#4da3ff; margin-bottom:2px; }
+  .reveal .w4-sk-tryit { margin:6px auto 0; max-width:1000px; display:flex; flex-direction:column; gap:3px; background:#141a26; border:1px solid #7ee0a3; border-radius:10px; padding:6px 14px; font-size:.4em; line-height:1.35; text-align:left; color:#dfe5ee; }
+  .reveal .w4-api { display:grid; grid-template-columns:1.08fr 1fr; gap:12px; text-align:left; }
+  .reveal .w4-api-col { display:flex; flex-direction:column; gap:6px; min-width:0; }
+  .reveal .w4-api-hd { font-weight:700; font-size:.44em; }
+  .reveal .w4-api-hd span { font-weight:400; color:#9aa4b8; margin-left:6px; font-size:.85em; }
+  .reveal pre.w4-api-code { margin:0; width:auto; box-shadow:none; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.3em; line-height:1.38; white-space:pre; color:#dfe5ee; overflow:hidden; }
+  .reveal .w4-api-code .k { color:#4da3ff; } .reveal .w4-api-code .s { color:#ffb454; } .reveal .w4-api-code .n { color:#e8edf5; font-weight:700; }
+  .reveal .w4-api-code .n.hi { color:#7ee0a3; } .reveal .w4-api-code .c { color:#6b7891; font-style:italic; }
+  .reveal .w4-api-read { background:rgba(126,224,163,.07); border:1px solid #7ee0a3; border-radius:10px; padding:6px 10px; font-size:.38em; line-height:1.35; display:flex; flex-direction:column; gap:3px; color:#dfe5ee; }
+  .reveal .w4-api-read b { color:#7ee0a3; }
+  .reveal .w4-skd { display:grid; grid-template-columns:1.15fr 1fr; gap:14px; align-items:stretch; text-align:left; }
+  .reveal .w4-skd-left { display:flex; flex-direction:column; gap:7px; }
+  .reveal .w4-skd-left .w4-sk-step { font-size:.4em; }
+  .reveal .w4-skd-left code { background:#0f141e; padding:0 4px; border-radius:4px; font-size:.85em; }
+  .reveal .w4-skd-shot { margin:0; display:flex; }
+  .reveal .w4-skd-shot img { width:100%; height:auto; max-height:470px; object-fit:contain; border-radius:10px; border:1px solid #2a3450; margin:0; }
+  .reveal .w4-skd-ph { display:none; flex:1; flex-direction:column; align-items:center; justify-content:center; gap:6px; border:2px dashed #4da3ff; border-radius:12px; background:rgba(77,163,255,.05); font-size:.48em; text-align:center; color:#e8edf5; min-height:340px; }
+  .reveal .w4-skd-ph code { font-size:.9em; color:#ffb454; }
+  .reveal .w4-li { text-align:left; font-size:.42em; color:#dfe5ee; display:flex; flex-direction:column; gap:8px; }
+  .reveal .w4-li button { font:inherit; background:#1a2233; color:#dfe5ee; border:1px solid #2a3450; border-radius:8px; padding:4px 10px; cursor:pointer; }
+  .reveal .w4-li button.on { background:#4da3ff; color:#0f141e; border-color:#4da3ff; font-weight:700; }
+  .reveal .w4-li button:disabled { opacity:.5; cursor:wait; }
+  .reveal .w4-li-bar { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+  .reveal .w4-li-grp { display:inline-flex; gap:0; } .reveal .w4-li-grp button { border-radius:0; } .reveal .w4-li-grp button:first-child { border-radius:8px 0 0 8px; } .reveal .w4-li-grp button:last-child { border-radius:0 8px 8px 0; }
+  .reveal .w4-li-chk { display:inline-flex; align-items:center; gap:6px; background:rgba(255,107,107,.08); border:1px solid #ff6b6b; border-radius:8px; padding:3px 10px; cursor:pointer; }
+  .reveal .w4-li-mode { color:#7ee0a3; margin-left:auto; } .reveal .w4-li-mode.warn { color:#ffb454; }
+  .reveal .w4-li-setup { display:flex; flex-wrap:wrap; gap:8px; align-items:center; background:#141a26; border:1px dashed #4da3ff; border-radius:8px; padding:6px 10px; }
+  .reveal .w4-li-setup input { font:inherit; background:#0f141e; color:#dfe5ee; border:1px solid #2a3450; border-radius:6px; padding:3px 6px; width:16em; margin-left:4px; }
+  .reveal .w4-li-setup[hidden] { display:none; }
+  .reveal .w4-li-qs { display:flex; flex-wrap:wrap; gap:6px; }
+  .reveal .w4-li-row { display:flex; gap:8px; align-items:stretch; }
+  .reveal .w4-li-q { flex:1; font:inherit; background:#0f141e; color:#e8edf5; border:1px solid #2a3450; border-radius:8px; padding:6px 8px; resize:none; }
+  .reveal .w4-li-run { background:#7ee0a3 !important; color:#0f141e !important; font-weight:700; border-color:#7ee0a3 !important; padding:4px 16px !important; }
+  .reveal .w4-li-out { display:flex; flex-direction:column; gap:8px; min-height:200px; }
+  .reveal .w4-li-lbl { color:#9aa4b8; margin-bottom:3px; }
+  .reveal .w4-li-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .reveal .w4-li-card { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:6px 8px; line-height:1.3; max-height:7.2em; overflow:auto; }
+  .reveal .w4-li-card.wait { color:#6b7891; } .reveal .w4-li-card.err { border-color:#ffb454; color:#ffb454; }
+  .reveal .w4-li-sch { text-decoration:none; }
+  .reveal .w4-hw-stats { display:flex; gap:10px; margin:2px 0 8px; }
+  .reveal .w4-hw-stats div { flex:1; background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 8px; font-size:.42em; text-align:center; color:#dfe5ee; }
+  .reveal .w4-hw-stats b { display:block; font-size:2em; color:#ffb454; line-height:1.1; }
+  .reveal .w4-hw-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; text-align:left; }
+  .reveal .w4-hw-grid3 { grid-template-columns:repeat(3,1fr); }
+  .reveal .w4-hw-grid3 .w4-hw-card { font-size:.48em; padding:9px 12px; }
+  .reveal .w4-hw-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 10px; font-size:.43em; line-height:1.35; color:#dfe5ee; }
+  .reveal .w4-hw-card .w4-hd { font-size:1.12em; line-height:1.25; }
+  .reveal .w4-hw-card p { margin:4px 0; }
+  .reveal .w4-hw-q { font-style:italic; }
+  .reveal .w4-hw-why { color:#7ee0a3; }
+  .reveal .w4-hw-foot { margin-top:8px; display:flex; flex-direction:column; gap:4px; background:#141a26; border:1px solid #2a3450; border-radius:10px; padding:6px 12px; font-size:.4em; text-align:left; color:#dfe5ee; }
+  .reveal .w4-sh-link { margin:6px 0 10px; }
+  .reveal .w4-sh-btn { display:inline-block; background:#7ee0a3; color:#0f141e !important; font-weight:800; font-size:.8em; padding:10px 28px; border-radius:12px; text-decoration:none; }
+  .reveal .w4-sh-btn[hidden], .reveal .w4-sh-wait[hidden] { display:none; }
+  .reveal .w4-sh-wait { display:inline-block; border:2px dashed #7ee0a3; color:#7ee0a3; font-size:.6em; padding:8px 22px; border-radius:12px; }
+  .reveal .w4-sh-legend { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; font-size:.44em; }
+  .reveal .w4-sh-legend span { border:2px solid; border-radius:16px; padding:3px 12px; color:#dfe5ee; background:#141a26; }
+  .reveal .w4-sh-legend em { color:#7ee0a3; font-style:normal; }
+  .reveal .w3x { text-align:left; }
+  .reveal .w3x p { font-size:inherit; }
+  .reveal .w4-pg-links { margin-top:4px !important; } .reveal .w4-pg-links a { color:#4da3ff; text-decoration:none; }
+  .reveal .w4-camp-guard { margin-top:8px; background:rgba(255,107,107,.07); border:1px solid #ff6b6b; border-radius:10px; padding:6px 12px; text-align:left; }
+  .reveal .w4-guards { display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; font-size:.44em; line-height:1.3; color:#dfe5ee; }
+  .reveal a.w4-guide { display:none; font-size:.8em; font-weight:700; color:#0d1320; background:#ffb454; border-radius:999px; padding:0 8px; margin-left:4px; text-decoration:none; vertical-align:middle; }
+  .reveal a.w4-guide:hover { background:#ffd08a; }
+  .reveal .w4-covrow { display:grid; grid-template-columns:repeat(7,1fr); gap:7px; margin-top:6px; text-align:left; }
+  .reveal .w4-cov { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 7px 9px; font-size:.4em; }
+  .reveal .w4-cov-w { font-weight:800; font-size:1.5em; line-height:1.1; }
+  .reveal .w4-cov-s { color:#9aa4b8; font-size:.9em; margin-bottom:6px; }
+  .reveal .w4-chip { display:block; background:#141a26; border:1px solid #2a3450; border-radius:6px; padding:3px 6px; margin:4px 0; color:#dfe5ee; line-height:1.25; }
+  /* reveal.js treats any .stretch element as 'fill the remaining height'; the exercise tier must not */
+  .reveal .tier.stretch { height:auto !important; width:auto !important; }
+  /* ---- Week 5 components ---- */
+  .reveal a.w5-colab { display:inline-block; background:#ffb454; color:#0f141e !important; font-weight:800; font-size:.62em; padding:10px 24px; border-radius:12px; text-decoration:none; }
+  .reveal .w5-rest { display:flex; align-items:stretch; justify-content:center; gap:8px; margin-top:10px; }
+  .reveal .w5-rest-card { flex:1; background:#1a2233; border:2px solid #2a3450; border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:4px; font-size:.68em; color:#dfe5ee; }
+  .reveal .w5-rest-card b { font-size:1.2em; color:#e8edf5; } .reveal .w5-rest-card span { color:#9aa4b8; font-size:.9em; }
+  .reveal .w5-ic { font-size:2.2em; line-height:1.1; }
+  .reveal .w5-arrow { align-self:center; color:#4da3ff; font-size:.9em; }
+  .reveal .w5-layers { display:flex; gap:8px; margin-top:10px; }
+  .reveal .w5-layer { flex:1; background:#1a2233; border:1px solid #2a3450; border-top:5px solid var(--k); border-radius:10px; padding:10px 12px; display:flex; flex-direction:column; gap:4px; font-size:.62em; text-align:left; color:#e8edf5; }
+  .reveal .w5-layer b { color:var(--k); font-size:1.6em; line-height:1; } .reveal .w5-layer span { font-weight:700; } .reveal .w5-layer small { color:#9aa4b8; font-size:.88em; }
+  .reveal .w5-setup { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; text-align:left; }
+  .reveal .w5-setup .w4-step { font-size:.62em; }
+  .reveal .w5-setup code, .reveal .w5-ask code, .reveal .w5-box code { background:#0f141e; padding:0 5px; border-radius:4px; font-size:.92em; }
+  .reveal .w5-ask { display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:center; background:rgba(126,224,163,.08); border:1px dashed #7ee0a3; border-radius:10px; padding:9px 14px; font-size:.62em; color:#e8edf5; margin-top:12px; }
+  .reveal .w5-key { margin-top:10px; background:rgba(255,107,107,.08); border:1px solid #ff6b6b; border-radius:10px; padding:9px 14px; font-size:.58em; text-align:left; color:#e8edf5; }
+  .reveal pre.w5-code { margin:0; width:auto; box-shadow:none; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:12px 16px; font-size:.46em; line-height:1.45; text-align:left; white-space:pre; color:#dfe5ee; }
+  .reveal .w5-call { display:flex; gap:10px; align-items:stretch; margin-top:6px; }
+  .reveal .w5-box { flex:1; background:#1a2233; border:2px solid #2a3450; border-radius:12px; padding:10px 16px; text-align:left; font-size:.62em; color:#dfe5ee; }
+  .reveal .w5-box p { margin:4px 0; }
+  .reveal .w5-flow { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:5px; margin-top:14px; font-size:.52em; }
+  .reveal .w5-flow span { background:rgba(77,163,255,.1); border:1px solid #4da3ff; border-radius:16px; padding:3px 10px; color:#e8edf5; } .reveal .w5-flow b { color:#4da3ff; }
+  .reveal .w5-attacks { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+  .reveal .w5-attacks div { background:#1a2233; border:1px solid #2a3450; border-top:4px solid #ff6b6b; border-radius:10px; padding:10px; font-size:.64em; color:#dfe5ee; text-align:left; }
+  .reveal .w5-attacks b { display:block; color:#ff6b6b; font-size:1.6em; line-height:1.1; }
+  .reveal .w5-apps { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .reveal .w5-app { background:#1a2233; border:1px solid #2a3450; border-top:5px solid var(--k); border-radius:10px; padding:10px 12px; font-size:.62em; color:#e8edf5; text-align:left; display:flex; flex-direction:column; gap:4px; }
+  .reveal .w5-app b { color:var(--k); font-size:1.6em; line-height:1; } .reveal .w5-app small { color:#9aa4b8; }
+  .reveal .w5-fcflow { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .reveal .w5-fcflow b { display:block; color:#4da3ff; font-size:1.5em; line-height:1.1; }
+  .reveal .w5-idea { background:rgba(255,180,84,.08); border:1px solid #ffb454; border-radius:10px; padding:8px 16px; font-size:.62em; color:#e8edf5; text-align:left; }
+  .reveal .w5-rule { margin-top:12px; background:#141a26; border:1px solid #2a3450; border-radius:10px; padding:8px 14px; font-size:.6em; color:#e8edf5; }
+  .reveal .w5-inbox { display:flex; flex-direction:column; gap:3px; text-align:left; font-size:.47em; }
+  .reveal .w5-inbox div { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:4px 12px; color:#e8edf5; display:flex; gap:10px; align-items:baseline; }
+  .reveal .w5-inbox b { color:#9aa4b8; min-width:1.8em; text-align:right; font-weight:700; }
+  .reveal .w5-inbox span { color:#ffb454; font-weight:700; font-size:.85em; min-width:1.2em; }
+  .reveal .w5-probs { display:flex; gap:8px; margin-top:10px; font-size:.48em; }
+  .reveal .w5-probs span { flex:1; background:#141a26; border:1px solid #2a3450; border-radius:8px; padding:6px 10px; color:#dfe5ee; text-align:left; }
+  /* ---- Week 6 components ---- */
+  .reveal .w6-books { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px; text-align:left; }
+  .reveal .w6-book { background:#1a2233; border:2px solid #2a3450; border-radius:14px; padding:12px 18px; font-size:.62em; color:#dfe5ee; }
+  .reveal .w6-book .w5-ic { font-size:2em; }
+  .reveal .w6-book p { margin:6px 0; }
+  .reveal .w6-tests { display:flex; flex-direction:column; gap:5px; text-align:left; font-size:.5em; }
+  .reveal .w6-tests div { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:5px 12px; color:#e8edf5; display:flex; gap:10px; align-items:baseline; }
+  .reveal .w6-tests b { color:#ffb454; min-width:1.2em; }
+  .reveal .w6-tests em { color:#9aa4b8; font-style:normal; margin-left:auto; font-size:.85em; white-space:nowrap; }
+  .reveal .w6-stats { display:flex; gap:10px; margin:8px 0; }
+  .reveal .w6-stats div { flex:1; background:#1a2233; border:1px solid #2a3450; border-radius:12px; padding:8px 10px; font-size:.5em; color:#dfe5ee; text-align:center; }
+  .reveal .w6-stats b { display:block; font-size:2em; line-height:1.1; color:#ffb454; }
+  .reveal .w6-path { display:flex; gap:6px; align-items:center; justify-content:center; flex-wrap:wrap; margin:6px 0 12px; font-size:.5em; }
+  .reveal .w6-path span { border:1px solid #2a3450; background:#1a2233; border-radius:999px; padding:5px 12px; color:#dfe5ee; }
+  .reveal .w6-path span.done { border-color:#7ee0a3; color:#7ee0a3; }
+  .reveal .w6-path span.now { border-color:#ffb454; color:#0f141e; background:#ffb454; font-weight:800; }
+  .reveal .w6-path i { color:#55607a; font-style:normal; }
+  .reveal .w6-letters { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .reveal .w6-letters div { background:#1a2233; border:1px solid #2a3450; border-top:5px solid var(--k); border-radius:10px; padding:9px 10px; font-size:.56em; text-align:left; color:#dfe5ee; }
+  .reveal .w6-letters b { display:block; color:var(--k); font-size:1.8em; line-height:1.05; }
+  .reveal .w6-quiz { display:flex; flex-direction:column; gap:6px; text-align:left; margin-top:6px; }
+  .reveal .w6-quiz div { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 14px; font-size:.54em; color:#e8edf5; display:flex; gap:12px; align-items:center; }
+  .reveal .w6-quiz div > b { color:#4da3ff; min-width:1.1em; }
+  .reveal .w6-quiz .quiz-answer { margin-left:auto; white-space:nowrap; }
+  .reveal .w6-rule { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; text-align:left; margin-top:8px; }
+  .reveal .w6-rule .w4-step { font-size:.52em; }
+  .reveal svg.w6-map text { font-family:inherit; }
+  .reveal .w6-quiz .ask { margin-left:auto; white-space:nowrap; color:#7ee0a3; }
+  /* ---- Week 7 components ---- */
+  .reveal .w7-chat { max-width:760px; margin:6px auto; display:flex; flex-direction:column; gap:8px; text-align:left; }
+  .reveal .w7-msg { background:#1f2c25; border:1px solid #2f5a44; border-radius:14px 14px 14px 4px; padding:10px 16px; font-size:.6em; color:#e8edf5; max-width:85%; }
+  .reveal .w7-msg.me { align-self:flex-end; background:#1a2a3d; border-color:#2f4a6e; border-radius:14px 14px 4px 14px; }
+  .reveal .w7-msg small { display:block; color:#9aa4b8; font-size:.8em; margin-bottom:2px; }
+  .reveal .w7-goal { margin:10px auto 0; max-width:880px; background:rgba(255,180,84,.08); border:2px solid #ffb454; border-radius:12px; padding:8px 18px; font-size:.62em; color:#e8edf5; }
+  .reveal .w7-steps { display:flex; flex-direction:column; gap:7px; text-align:left; }
+  .reveal .w7-step { display:grid; grid-template-columns:2.2em 1fr 1.3fr; gap:10px; align-items:center; background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 12px; font-size:.52em; color:#dfe5ee; }
+  .reveal .w7-step b.n { display:flex; align-items:center; justify-content:center; width:1.9em; height:1.9em; border-radius:50%; background:#4da3ff; color:#0d1320; }
+  .reveal .w7-step .obs { color:#7ee0a3; font-style:italic; }
+  .reveal .w7-step.turn { border-color:#ffb454; }
+  .reveal .w7-step.turn .obs { color:#ffb454; }
+  .reveal .w7-speech { background:#1a2233; border:2px solid #c792ea; border-radius:16px; padding:10px 18px; font-size:.6em; color:#e8edf5; text-align:left; position:relative; }
+  .reveal .w7-speech p { margin:5px 0; }
+  .reveal .w7-can { display:grid; grid-template-columns:1fr 1fr; gap:6px 16px; margin-top:6px; }
+  .reveal .w7-loop { display:grid; grid-template-columns:1fr 1.1fr 1fr; gap:10px; align-items:stretch; margin-top:6px; }
+  .reveal .w7-box { background:#1a2233; border:2px solid #2a3450; border-radius:12px; padding:10px 14px; text-align:left; font-size:.56em; color:#dfe5ee; }
+  .reveal .w7-box p { margin:5px 0; }
+  .reveal .w7-trace { margin:0; width:auto; box-shadow:none; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:10px 14px; font-size:.41em; line-height:1.45; text-align:left; white-space:pre; color:#dfe5ee; overflow:hidden; }
+  .reveal .w7-trace .t { color:#c792ea; } .reveal .w7-trace .a { color:#4da3ff; } .reveal .w7-trace .o { color:#7ee0a3; } .reveal .w7-trace .w { color:#ffb454; }
+  .reveal .w7-plans { display:flex; flex-direction:column; gap:5px; text-align:left; font-size:.44em; }
+  .reveal .w7-plans div { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:5px 12px; color:#dfe5ee; display:grid; grid-template-columns:11em 1fr; gap:10px; }
+  .reveal .w7-plans b { color:#ffb454; } .reveal .w7-plans em { color:#ff9b9b; font-style:normal; font-weight:700; }
+  .reveal .w7-flow { display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:8px; font-size:.52em; }
+  .reveal .w7-flow span { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; color:#e8edf5; }
+  .reveal .w7-flow b { color:#4da3ff; }
+</style>
+</head>
+<body>
+<!-- STUDENT EDITION - generated by build.py, do not edit by hand -->
+<div class="reveal">
+<div class="slides">
+<!-- ==================== TITLE ==================== -->
+<section id="w7-title">
+  <p class="chip">Week 7</p>
+  <h1>Agents: from answering to <em>acting</em> 🤖</h1>
+  <p class="small">Last week it found the right page. Tonight it <strong>makes the calls</strong>.</p>
+  <p style="margin-top:18px"><a class="w5-colab" href="https://colab.research.google.com/github/san81/ai-course/blob/main/docs/weeks/week7/week7-hostel-agent.ipynb" target="_blank" rel="noopener">🧪 Today's notebook: the hostel agent ↗</a></p>
+  <p class="small" style="margin-top:6px">No-code track: <a href="https://github.com/san81/ai-course/blob/main/docs/weeks/week7/week7-n8n-setup.md" target="_blank" rel="noopener">🔀 the same agent in n8n, on WhatsApp ↗</a></p>
+</section>
+
+<!-- ==================== EASTER EGGS ==================== -->
+<section id="w7-egg-last">
+  <div class="easter-egg">
+    <p>🥚 <strong>Last week's easter egg</strong></p>
+    <p>Today's technique has a three-letter name. R is Retrieval, G is Generation.
+    <strong>The middle letter: what you do to the prompt before the model writes?</strong></p>
+  </div>
+  <div class="waterfall">
+    <span><span class="wf-step">1</span> Type your answer — <b>do NOT press send</b></span>
+    <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+    <span><span class="wf-step">3</span> Everyone sends together</span>
+  </div>
+  <p class="small fragment"><strong>Augmented</strong>: Retrieval-Augmented Generation. The letter to save:
+  <strong style="color:#ffb454">A</strong></p>
+  <p class="small fragment">Your collection so far: <strong style="color:#ffb454;font-size:1.3em;letter-spacing:.3em">A · R · T · I · F · A</strong> …
+  two more to go.</p>
+</section>
+
+<section id="w7-hw6">
+  <p class="chip">Your Week 6 work</p>
+  <h2>Two numbers, straight into the chat 💬</h2>
+  <p class="small" style="margin-top:-6px">Last week: give your project its own documents, score your five test questions, fix one, score again.</p>
+  <div class="w6-quiz">
+    <div class="fragment"><b>1</b>Your score <strong>before</strong> the fix <span class="ask">type <strong>0–5</strong></span></div>
+    <div class="fragment"><b>2</b>Your score <strong>after</strong> the fix <span class="ask">type <strong>0–5</strong></span></div>
+    <div class="fragment"><b>3</b>The one that was wrong broke at… <strong>A</strong> search · <strong>B</strong> the answer · <strong>C</strong> it guessed <span class="ask">type <strong>A, B or C</strong></span></div>
+  </div>
+  <div class="waterfall" style="margin-top:10px">
+    <span><span class="wf-step">1</span> Type — <b>do NOT press send</b></span>
+    <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+    <span><span class="wf-step">3</span> Send together</span>
+  </div>
+  <p class="small fragment" style="margin-top:8px;color:#7ee0a3">Same score after the fix? Still a win: you <strong>know where it breaks</strong>. That's the skill.</p>
+</section>
+
+<section id="w7-project">
+  <p class="chip">Your capstone · check-in</p>
+  <h2>Where is your project today? 🧭</h2>
+  <div class="w6-path">
+    <span class="done">W4 · idea ✅</span><i>→</i><span class="done">W5 · first version</span><i>→</i><span class="done">W6 · your own data</span><i>→</i><span class="now">W7 · it takes an action</span><i>→</i><span>W8 · demo day 🎤</span>
+  </div>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w5-box" style="flex:1">
+      <div class="w4-hd" style="color:#4da3ff">📋 Your tracker sheet</div>
+      <p>Mark this week's steps <strong>Done</strong>, <strong>In progress</strong> or <strong>Stuck</strong>, and fill in the <strong>Test log</strong> tab with last week's scores.</p>
+    </div>
+    <div class="w5-box" style="flex:1;border-color:#ffb454">
+      <div class="w4-hd" style="color:#ffb454">🎯 This week's step</div>
+      <p>Your project <strong>does one thing</strong> in the world: saves to a sheet, sends a reminder, adds a calendar entry. Or, for a pure Q&amp;A project, it passes your <strong>full test set</strong>.</p>
+    </div>
+  </div>
+  <div class="w5-ask" style="margin-top:12px">
+    <span>Type <strong>one letter</strong>:</span>
+    <span><strong>N</strong> not started</span><span><strong>I</strong> in progress</span><span><strong>D</strong> version 1 done</span><span><strong>S</strong> stuck</span>
+  </div>
+  <p class="small fragment" style="margin-top:8px">Next week is <strong>demo day</strong>. Typed <strong>S</strong>? I'll message you after class. There's still a week. 🙂</p>
+</section>
+
+<section id="w7-egg">
+  <div class="easter-egg">
+    <p>🥚 <strong>This week's easter egg</strong></p>
+    <p>Sometimes there is no tool and no API: just a website or an app on a screen. Some agents then do
+    exactly what you do. They <strong>look at the screen, move the mouse, click and type</strong>.</p>
+    <p><strong>What is that ability called?</strong></p>
+  </div>
+  <p class="small">You'll see it near the end today. Bring it next week, and save its first letter.</p>
+</section>
+
+<!-- ==================== THE STORY ==================== -->
+<section id="w7-story-0">
+  <p class="chip">11:40 pm · C-block</p>
+  <h2>Remember the hostel inbox? 💧</h2>
+  <div class="w7-chat">
+    <div class="w7-msg"><small>📱 Student, C-block · 11:40 pm</small>Anna, water is pouring from the pipe under the sink in the C-block 2nd floor bathroom!! The floor is flooding and it's going into the corridor 😰</div>
+  </div>
+  <div class="w7-goal">🎯 <strong>You're on night duty.</strong> Your goal: <strong>stop the flood, get it fixed, keep people informed.</strong>
+  Nobody gives you the steps.</div>
+  <div class="w5-ask" style="margin-top:12px"><span>Who do you contact <strong>first</strong>? <strong>A</strong> the plumber · <strong>B</strong> the warden · <strong>C</strong> the hostel WhatsApp group · <strong>D</strong> go and look yourself</span></div>
+  <p class="small fragment" style="margin-top:8px">Most of us pick <strong>B</strong>: we don't even have the plumber's number. So step one is… <strong>look up the warden's extension.</strong></p>
+</section>
+
+<section id="w7-story-1">
+  <p class="chip">The story · part 1</p>
+  <h2>Every answer changes the next step 📞</h2>
+  <div class="w7-steps">
+    <div class="w7-step fragment"><b class="n">1</b><span>Look up C-block's warden in the contact list</span><span class="obs">"Mrs. Lakshmi, +91 90000 00001"</span></div>
+    <div class="w7-step fragment"><b class="n">2</b><span>Call the warden: "C-block leak, what should I do?"</span><span class="obs">"Plumber Ravi: +91 90000 00002. And Mr. Chenna Reddy can shut the water."</span></div>
+    <div class="w7-step turn fragment"><b class="n">3</b><span>Call the plumber: "Pipe leaking, can you come?"</span><span class="obs">"I'll come at 12:45. <strong>Meanwhile, stop the water</strong>, or the corridor floods."</span></div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:12px"><span>Before step 3 you didn't plan to stop the water yourself. Who do you call <strong>now</strong>? Type <strong>one name</strong></span></div>
+  <p class="small fragment" style="margin-top:8px">The plan just <strong>changed</strong>, because of what someone said. A script can't do that. <strong>You</strong> just did.</p>
+</section>
+
+<section id="w7-story-2">
+  <p class="chip">The story · part 2</p>
+  <h2>Mr. Chenna Reddy, the hostel's MCP 🔧</h2>
+  <p class="small" style="margin-top:-6px">MCP = <strong>M</strong>aster of <strong>C</strong>ontrol <strong>P</strong>anels 😄. You call him: <em>"Sir, what can you do?"</em></p>
+  <div class="w7-speech fragment">
+    <p>🧔 <em>"I don't know how to fix a pipe. I can't change one either. But:"</em></p>
+    <div class="w7-can">
+      <p>📖 I can <strong>look things up</strong> in the plumbing manual</p>
+      <p>🔧 I can <strong>shut or open a lever</strong> with my wrench</p>
+      <p>👀 I can <strong>go and check</strong> whether it's still leaking</p>
+      <p>❌ Fixing pipes: <strong>call the plumber</strong></p>
+    </div>
+  </div>
+  <p class="small fragment" style="margin-top:12px">Notice what he did: before helping, he told you <strong>exactly what he can and can't do</strong>.
+  That one habit is the heart of a real AI standard. More in a moment.</p>
+</section>
+
+<section id="w7-story-3">
+  <p class="chip">The story · part 3</p>
+  <h2>Six coloured levers. Which one? 🎨</h2>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w5-box" style="flex:1">
+      <div class="w4-hd" style="color:#9aa4b8">📕 A 300-page manual</div>
+      <p>He doesn't read it all. He opens the <strong>index</strong> (p.2): <em>"Valve junction and lever colours: p.41–44."</em></p>
+    </div>
+    <div class="w5-box fragment" style="flex:1">
+      <div class="w4-hd" style="color:#ffb454">p.42 · 2019</div>
+      <p><strong style="color:#ffd84d">YELLOW</strong>: C-block, all bathrooms, all floors.</p>
+    </div>
+    <div class="w5-box fragment" style="flex:1;border-color:#7ee0a3">
+      <div class="w4-hd" style="color:#7ee0a3">p.44 · revision 2024</div>
+      <p>New <strong style="color:#ff9f43">ORANGE</strong> lever: C-block <strong>2nd floor only</strong>. Yellow still shuts all of C-block.</p>
+    </div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:12px"><span>Which lever should he shut? Type <strong>one colour</strong></span></div>
+  <p class="small fragment" style="margin-top:8px"><strong>Orange</strong>: it stops the leak and leaves everyone else's water on.
+  Index → right page → newest version: that's <strong>last week's RAG</strong>, done by a helper.</p>
+</section>
+
+<section id="w7-story-4">
+  <p class="chip">The story · part 4</p>
+  <h2>"Shall I?" Then check. Then report ✅</h2>
+  <div class="w7-steps">
+    <div class="w7-step turn fragment"><b class="n">⚠️</b><span>Chenna Reddy: <em>"The RED lever is the main inlet. It stops water to the whole hostel and the kitchen. Shall I?"</em></span><span class="obs">You: "No. Orange first. Red only if the warden agrees."</span></div>
+    <div class="w7-step fragment"><b class="n">4</b><span>Shut <strong style="color:#ff9f43">orange</strong></span><span class="obs">"Orange shut. Water off for the 2nd-floor bathrooms only."</span></div>
+    <div class="w7-step fragment"><b class="n">5</b><span><strong>Go and look:</strong> is it still leaking?</span><span class="obs">"Stopped. Floor wet, nothing dripping."</span></div>
+    <div class="w7-step fragment"><b class="n">6</b><span>WhatsApp the warden · reply to the student</span><span class="obs">"Water stopped at 11:52. Ravi the plumber comes at 12:45 to replace the pipe."</span></div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:10px"><span>Which step would you be most tempted to <strong>skip</strong> at midnight? Type <strong>⚠️, 5 or 6</strong></span></div>
+</section>
+
+<!-- ==================== CONCEPTS ==================== -->
+<section id="w7-map">
+  <p class="chip">What just happened</p>
+  <h2>The story is the whole of Week 7 🗺️</h2>
+  <table class="w4-tb" style="font-size:.48em">
+    <tr><th>In the story</th><th>The AI word</th></tr>
+    <tr><td>You, deciding who to call next</td><td><strong>The model</strong>: the judgement</td></tr>
+    <tr><td>Your phone, the contact list, the rules, "keep going until it's fixed"</td><td><strong>The harness</strong>: runs the loop, makes the calls, sets the limits</td></tr>
+    <tr><td>Looking up the warden's number</td><td><strong>A tool</strong> (Week 5's function calling)</td></tr>
+    <tr><td>"Meanwhile, stop the water"</td><td><strong>Observe → re-plan</strong></td></tr>
+    <tr><td>"Mr. Chenna Reddy, what can you do?"</td><td><strong>MCP</strong>: a helper lists its tools</td></tr>
+    <tr><td>Index → p.44 → orange</td><td><strong>RAG inside a tool</strong> (Week 6)</td></tr>
+    <tr><td>"Red shuts the whole hostel. Shall I?"</td><td><strong>A guardrail</strong>: confirm before big actions</td></tr>
+    <tr><td>Going to look at the floor</td><td><strong>Verify</strong> before saying "done"</td></tr>
+  </table>
+</section>
+
+<section id="w7-loop">
+  <p class="chip">The agent loop</p>
+  <h2>Think → act → observe → repeat 🔁</h2>
+  <div class="w7-loop">
+    <div class="w7-box fragment" style="border-color:#c792ea"><div class="w4-hd" style="color:#c792ea">🧠 Think</div>
+      <p>The <strong>model</strong> reads the goal and everything so far, and decides the next step.</p>
+      <p class="w4-muted">"Plan: call the plumber."</p></div>
+    <div class="w7-box fragment" style="border-color:#4da3ff"><div class="w4-hd" style="color:#4da3ff">🔧 Act</div>
+      <p>It writes a <strong>tool request</strong>: <code>call_person("+91 90000 00002", …)</code>.</p>
+      <p>The <strong>harness</strong> (our code) makes the call. The model can't. <span class="w4-muted">(Week 5's egg!)</span></p></div>
+    <div class="w7-box fragment" style="border-color:#7ee0a3"><div class="w4-hd" style="color:#7ee0a3">👀 Observe</div>
+      <p>The result goes back into the history: <em>"I'll come at 12:45. Meanwhile, stop the water."</em></p>
+      <p class="w4-muted">…and round again.</p></div>
+  </div>
+  <div class="w4-row fragment" style="margin-top:12px;gap:12px;align-items:stretch">
+    <div class="w4-step" style="flex:1"><b>🏁 It stops when…</b>the model stops asking for tools (goal met), <strong>or</strong> the harness's <strong>step limit</strong> runs out.</div>
+    <div class="w4-step" style="flex:1"><b>🧩 The harness</b>is everything around the model: tool list, running calls, memory of what happened, limits, rules. Week 3's "model vs harness", now with hands.</div>
+  </div>
+</section>
+
+<section id="w7-loopcheck">
+  <p class="chip">Checkpoint</p>
+  <h2>Model or harness? 🤔</h2>
+  <div class="w6-quiz">
+    <div><b>1</b>Decides to call the plumber next <span class="quiz-answer">M · judgement</span></div>
+    <div><b>2</b>Actually dials the number <span class="quiz-answer">H · runs the tool</span></div>
+    <div><b>3</b>Stops everything after 15 steps <span class="quiz-answer">H · the safety limit</span></div>
+    <div><b>4</b>Writes "Plan: look up the manual first" <span class="quiz-answer">M · it's text</span></div>
+    <div><b>5</b>Remembers what everyone said so far <span class="quiz-answer">H · keeps the history</span></div>
+  </div>
+  <div class="waterfall" style="margin-top:10px">
+    <span><span class="wf-step">1</span> Type <b>five letters</b>, M or H, like <b>MHHMH</b></span>
+    <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+    <span><span class="wf-step">3</span> Send, then tap to reveal</span>
+  </div>
+</section>
+
+<!-- ==================== HANDS-ON ==================== -->
+<section id="w7-setup">
+  <p class="chip">Hands-on · 2 minutes</p>
+  <h2>Same key, new notebook ✅</h2>
+  <div class="w5-setup">
+    <div class="w4-step"><b>1 · Notebook</b>Open the Colab link → <em>File → Save a copy in Drive</em></div>
+    <div class="w4-step"><b>2 · Start here</b>Run the first cell: the complaint and the plumbing manual</div>
+    <div class="w4-step"><b>3 · Secret</b>🔑 <code>GEMINI_API_KEY</code> → switch <strong>Notebook access</strong> on</div>
+    <div class="w4-step"><b>4 · Run</b>The three setup cells → <strong>✅ Connected</strong></div>
+  </div>
+  <div class="w5-layers" style="margin-top:12px">
+    <div class="w5-layer" style="--k:#7ee0a3"><b>1</b><span>🙋 You are the agent</span><small>call the tools by hand</small></div>
+    <div class="w5-layer" style="--k:#4da3ff"><b>2</b><span>🔁 The loop</span><small>Gemini drives</small></div>
+    <div class="w5-layer" style="--k:#c792ea"><b>3</b><span>🔧 Chenna Reddy (MCP)</span><small>a real MCP server</small></div>
+    <div class="w5-layer" style="--k:#ffb454"><b>4</b><span>🔄 Change the world</span><small>watch the plan change</small></div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:10px"><span>✅ Connected? React 👍 · stuck? type the <strong>step number</strong></span></div>
+</section>
+
+<section id="w7-l1">
+  <p class="chip">Section 1 · you are the agent</p>
+  <h2>Call the tools yourself first 🙋</h2>
+  <div class="w4-row" style="align-items:stretch;gap:14px">
+<pre class="w5-code" style="flex:1.3">get_block_contact("C")
+→ {'warden': {'name': 'Mrs. Lakshmi',
+              'phone': '+91 90000 00001'}, …}
+
+call_person("+91 90000 00001",
+            "Leak in C-block. What should I do?")
+→ "Mrs. Lakshmi: The plumber is Ravi,
+   +91 90000 00002. Mr. Chenna Reddy …"</pre>
+    <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+      <div class="w4-step"><b>Four tools</b><code>get_block_contact</code> · <code>call_person</code> · <code>send_whatsapp</code> · <code>reply_to_student</code>. Plain Python functions.</div>
+      <div class="w4-step fragment"><b>Your turn · 3 min</b>Run the cell. Then add one line that <strong>calls the number the warden gave you</strong>.</div>
+      <div class="w5-ask fragment"><span>What does that person tell you to do next? Type <strong>one word</strong></span></div>
+    </div>
+  </div>
+</section>
+
+<section id="w7-l2">
+  <p class="chip">Section 2 · the loop</p>
+  <h2>Gemini drives. Read its plan lines 🧠</h2>
+  <div class="w4-row" style="align-items:stretch;gap:14px">
+<pre class="w7-trace" style="flex:1.45"><span class="t">🧠 Plan: find the C-block warden's number.</span>
+<span class="a">🔧 get_block_contact(block='C')</span>
+<span class="o">👀 {'warden': {'name': 'Mrs. Lakshmi', 'phone': '+91 90000 00001'} …</span>
+<span class="t">🧠 Plan: call the warden.</span>
+<span class="a">🔧 call_person(phone='+91 90000 00001', message='Leak in C-block…')</span>
+<span class="o">👀 Mrs. Lakshmi: The plumber is Ravi, +91 90000 00002 …</span>
+<span class="t">🧠 Plan: call the plumber.</span>
+<span class="a">🔧 call_person(phone='+91 90000 00002', …)</span>
+<span class="o">👀 Ravi here. I'll come at 12:45 am. Meanwhile stop the water …</span>
+<span class="w">🧠 I have no tool to shut the water. I'll tell the warden and the student.</span>
+<span class="a">🔧 send_whatsapp(…)   🔧 reply_to_student(…)</span>
+<span class="o">🏁 Done in 6 turns.</span></pre>
+    <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+      <div class="w4-step"><b>Your turn · 3 min</b>Run section 2. Read only the 🧠 lines: they're the plan, made up as it goes.</div>
+      <div class="w5-ask fragment"><span>How many <strong>tool calls</strong> did yours make? Type <strong>one number</strong></span></div>
+      <div class="w4-step fragment" style="border-left-color:#ffb454"><b>Notice the honest bit</b>The plumber said "stop the water", but it has <strong>no tool</strong> for that. A good agent says so instead of pretending.</div>
+    </div>
+  </div>
+</section>
+
+<section id="w7-mcp">
+  <p class="chip">MCP, for real</p>
+  <h2>MCP = Model Context Protocol 🔌</h2>
+  <p class="small" style="margin-top:-6px">Mr. Chenna Reddy's habit, made into a standard: every helper can be asked <em>"what can you do?"</em> in the same way.</p>
+  <div class="w7-flow">
+    <span>🧪 Our Colab agent</span><span>🔀 n8n</span><span>✳️ Claude</span><b>⇄ MCP ⇄</b>
+    <span style="border-color:#c792ea">🔧 <strong>Mr. Chenna Reddy</strong> server<br><small style="color:#9aa4b8">look_up_manual · shut_lever · open_lever · check_leak</small></span>
+  </div>
+  <div class="w4-row" style="margin-top:12px;gap:12px;align-items:stretch">
+    <div class="w4-step fragment" style="flex:1"><b>🔌 Like USB-C</b>Build a helper <strong>once</strong>, and any AI app that "speaks MCP" can plug it in. Today: the same server works in Colab <em>and</em> n8n, unchanged.</div>
+    <div class="w4-step fragment" style="flex:1"><b>📋 What the AI sees</b>Only the <strong>list</strong>: each tool's name, what it does, what it needs. Never his code.</div>
+    <div class="w4-step fragment" style="flex:1"><b>🌍 Real ones</b>Google Drive, Calendar, GitHub, Slack… each has an MCP server. "Connectors" in Claude are MCP.</div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:10px"><span>Run section 3's "what can you do?" cell. How many tools does he offer? Type <strong>one number</strong></span></div>
+</section>
+
+<section id="w7-l3">
+  <p class="chip">Section 3 · plug him in</p>
+  <h2>Same goal, same agent, one new helper 🔧</h2>
+  <div class="w7-plans">
+    <div><b>Section 2 · no Chenna Reddy</b><span>contacts → warden → plumber → <em>"no tool to stop the water"</em> → WhatsApp → reply</span></div>
+    <div class="fragment"><b>Section 3 · with him</b><span>contacts → warden → plumber → <strong>look up manual</strong> → <strong>shut orange</strong> → <strong>check leak</strong> → WhatsApp → reply</span></div>
+  </div>
+  <div class="w4-row fragment" style="margin-top:12px;gap:12px;align-items:stretch">
+    <div class="w4-step" style="flex:1"><b>Nobody changed the plan</b>We only <strong>added tools</strong>. The agent noticed them and used them, in a sensible order.</div>
+    <div class="w4-step" style="flex:1"><b>The rules held</b>It looked up the manual <em>before</em> touching a lever, picked the <strong>smallest</strong> one, and <strong>checked</strong> before reporting.</div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:10px"><span>Which lever did <strong>your</strong> agent shut? Type <strong>one colour</strong></span></div>
+</section>
+
+<section id="w7-tweak">
+  <p class="chip">Section 4 · change the world</p>
+  <h2>A script follows steps. An agent re-plans 🔄</h2>
+  <div class="w6-letters">
+    <div style="--k:#4da3ff"><b>A</b>📵 The warden <strong>doesn't pick up</strong><br><span class="w4-muted">→ it calls the deputy warden</span></div>
+    <div style="--k:#ffb454"><b>B</b>🔧 The orange lever is <strong>jammed</strong><br><span class="w4-muted">→ it tries yellow (bigger), and says so</span></div>
+    <div style="--k:#c792ea"><b>C</b>🌙 The plumber can only come <strong>tomorrow</strong><br><span class="w4-muted">→ water off overnight; the message changes</span></div>
+    <div style="--k:#7ee0a3"><b>D</b>🏢 A leak in <strong>B-block</strong> instead<br><span class="w4-muted">→ another warden, the green lever</span></div>
+  </div>
+  <p class="small" style="margin-top:10px">One change each. <strong>Same code.</strong> The last cell prints every plan side by side.</p>
+  <div class="w5-ask" style="margin-top:6px"><span>Which experiment changed the plan the <strong>most</strong>? Type <strong>A, B, C or D</strong></span></div>
+  <p class="small fragment" style="margin-top:8px">✏️ Then invent your own: <code>STUCK_LEVERS="orange,yellow"</code> (watch the ⚠️ red-lever guardrail) or <code>MAX_STEPS = 4</code> (watch the ⛔ harness stop it).</p>
+</section>
+
+<section id="w7-whatsapp">
+  <p class="chip">Acting on WhatsApp</p>
+  <h2>Draft, or send? 📱</h2>
+  <div class="w6-books">
+    <div class="w6-book" style="border-color:#7ee0a3">
+      <div class="w4-hd" style="color:#7ee0a3">📝 In the notebook: a draft</div>
+      <p>The agent writes the WhatsApp message and makes a link. <strong>You</strong> open it and press <strong>Send</strong>.</p>
+      <p class="w4-muted">Set <code>MY_WHATSAPP</code> to your own number to try it.</p>
+    </div>
+    <div class="w6-book" style="border-color:#4da3ff">
+      <div class="w4-hd" style="color:#4da3ff">🤖 In n8n: it sends</div>
+      <p>The same agent sends the update to the warden's phone <strong>automatically</strong>, through the WhatsApp Business API.</p>
+      <p class="w4-muted">Watch my phone. 📳</p>
+    </div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:12px"><span>Messages in <strong>your</strong> name to <strong>your</strong> warden: draft or auto-send? Type <strong>D</strong> or <strong>S</strong></span></div>
+</section>
+
+<section id="w7-n8n">
+  <p class="chip">No-code track · live demo</p>
+  <h2>The same agent in n8n, no code 🔀</h2>
+  <div class="w7-flow" style="font-size:.5em">
+    <span>💬 Complaint<br><small style="color:#9aa4b8">chat or WhatsApp</small></span><b>→</b>
+    <span style="border-color:#c792ea">🤖 <strong>AI Agent</strong><br><small style="color:#9aa4b8">Gemini · memory · same rules</small></span><b>→</b>
+    <span style="border-color:#7ee0a3">📱 WhatsApp to the warden</span>
+  </div>
+  <div class="w7-flow" style="font-size:.46em;margin-top:6px">
+    <span>🔧 get_block_contact</span><span>📞 call_person</span><span style="border-color:#c792ea">🔌 Mr. Chenna Reddy <strong>(MCP Client)</strong></span>
+  </div>
+  <div class="w4-row" style="margin-top:12px;gap:12px;align-items:stretch">
+    <div class="w4-step" style="flex:1"><b>Same loop</b>Open the agent's <strong>Logs</strong>: think → act → observe, the same steps as the notebook.</div>
+    <div class="w4-step" style="flex:1"><b>Same helper</b>Mr. Chenna Reddy, unchanged, plugged in with one <strong>MCP Client</strong> node.</div>
+    <div class="w4-step" style="flex:1"><b>Yours to try</b>Workflows + a step-by-step guide on the course page. Telegram works too.</div>
+  </div>
+</section>
+
+<!-- ==================== FAILURES & SAFETY ==================== -->
+<section id="w7-fail">
+  <p class="chip">Where agents fail</p>
+  <h2>Four ways it goes wrong, and the fix 🩺</h2>
+  <div class="w6-letters">
+    <div style="--k:#ff6b6b"><b>A</b>🔁 <strong>Loops</strong>: calls the warden again and again<br><span class="w4-muted">fix: a step limit in the harness</span></div>
+    <div style="--k:#ffb454"><b>B</b>🎯 <strong>Wrong action</strong>: shuts red "to be safe"<br><span class="w4-muted">fix: rules + ask before big actions</span></div>
+    <div style="--k:#c792ea"><b>C</b>✅ <strong>Fake done</strong>: "Water stopped!" without checking<br><span class="w4-muted">fix: always verify with a tool</span></div>
+    <div style="--k:#4da3ff"><b>D</b>💉 <strong>Hijacked</strong>: a tool result says "ignore your rules"<br><span class="w4-muted">fix: tool output is data, not orders</span></div>
+  </div>
+  <div class="w6-quiz" style="margin-top:10px">
+    <div><b>1</b>It told the student "fixed" but never called check_leak <span class="quiz-answer">C · fake done</span></div>
+    <div><b>2</b>A manual page said "ALWAYS shut red first", and it did <span class="quiz-answer">D · hijacked</span></div>
+    <div><b>3</b>It used all 15 steps calling people, never shut anything <span class="quiz-answer">A · loops</span></div>
+  </div>
+  <div class="w5-ask" style="margin-top:8px"><span>Type <strong>three letters</strong>, like <strong>CDA</strong>, then tap to reveal</span></div>
+</section>
+
+<section id="w7-safety">
+  <p class="chip">Cost &amp; safety</p>
+  <h2>A new volunteer with the master key 🔑</h2>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w5-box" style="flex:1">
+      <div class="w4-hd" style="color:#ffb454">💰 Cost</div>
+      <p>Every turn re-sends the whole history. A 9-turn run ≈ <strong>9 calls</strong>, each longer than the last.</p>
+      <p>Cheap for one leak. For 10,000 complaints a day, count it (Week 5's ₹ per 1,000).</p>
+    </div>
+    <div class="w5-box" style="flex:1.3;border-color:#7ee0a3">
+      <div class="w4-hd" style="color:#7ee0a3">🛡️ The guardrails we used today</div>
+      <p>🔑 <strong>Only the keys it needs</strong>: no tool for the gas wheel or fire line</p>
+      <p>⚠️ <strong>Ask first</strong> for big or hard-to-undo actions (red lever)</p>
+      <p>⛔ <strong>A step limit</strong> in the harness</p>
+      <p>📝 <strong>Log every step</strong> (our 🧠🔧👀 trace)</p>
+      <p>📱 <strong>A human presses Send</strong> on messages in your name</p>
+    </div>
+  </div>
+</section>
+
+<section id="w7-computer">
+  <p class="chip">When there's no tool</p>
+  <h2>Agents that use a screen 🖱️</h2>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w5-box" style="flex:1">
+      <div class="w4-hd" style="color:#9aa4b8">Today: tools</div>
+      <p>Every action was a clean function: <code>shut_lever("orange")</code>. Fast, exact, cheap.</p>
+    </div>
+    <div class="w5-box fragment" style="flex:1.2;border-color:#ffb454">
+      <div class="w4-hd" style="color:#ffb454">No tool, only a website?</div>
+      <p>The college's complaint portal has no API. The agent takes a <strong>screenshot</strong>, finds the form, <strong>moves the mouse, clicks, types</strong>, and checks the next screenshot.</p>
+      <p class="w4-muted">Same loop: think → act (click) → observe (screenshot).</p>
+    </div>
+  </div>
+  <p class="small fragment" style="margin-top:12px">This is called <strong>computer use</strong>. Powerful when nothing else exists, but <strong>slow, fragile</strong> (a moved button breaks it) and riskier. Prefer a tool when there is one.</p>
+  <p class="tiny-hint">🥚 remember this one</p>
+</section>
+
+<!-- ==================== CAPSTONE & CLOSE ==================== -->
+<section id="w7-capstone">
+  <p class="chip">Your capstone</p>
+  <h2>What will <em>your</em> project do? ⚙️</h2>
+  <div class="w6-letters">
+    <div style="--k:#7ee0a3"><b>A</b>📊 Save to a Google Sheet<br><span class="w4-muted">a plan, a log, an application</span></div>
+    <div style="--k:#4da3ff"><b>B</b>📱 Send a message or reminder<br><span class="w4-muted">WhatsApp, Telegram, email</span></div>
+    <div style="--k:#ffb454"><b>C</b>📅 Add a calendar entry<br><span class="w4-muted">study sessions, deadlines</span></div>
+    <div style="--k:#c792ea"><b>D</b>🎯 No action: pass the full test set<br><span class="w4-muted">for Q&amp;A projects</span></div>
+  </div>
+  <div class="w5-ask" style="margin-top:12px"><span>Type <strong>one letter</strong>: A, B, C or D</span></div>
+  <p class="small fragment" style="margin-top:10px">The recipe from section 6 of the notebook: <strong>one tool</strong> + <strong>your goal and rules</strong> in <code>SYSTEM</code> + <strong>one guardrail</strong>.
+  No-code? The n8n workflow, with your own tool nodes.</p>
+</section>
+
+<section id="w7-due">
+  <p class="chip">Due next week: demo day</p>
+  <h2>Make it act, then show it</h2>
+  <div class="tier core">
+    <span class="tier-label">Core — everyone</span>
+    <p>Your capstone takes <strong>one action</strong> (A, B or C) or passes its <strong>full test set</strong> (D), with
+    <strong>one guardrail</strong> you can name. Then prepare a <strong>5-minute demo</strong>: the problem, a live run, your test score, one thing that failed and how you fixed it.</p>
+  </div>
+  <div class="tier stretch">
+    <span class="tier-label">Stretch — optional</span>
+    <p>Wrap one of your project's functions as an <strong>MCP server</strong> (copy Mr. Chenna Reddy's file, change the tools) and plug it into n8n or Claude.</p>
+  </div>
+  <p class="small">🥚 Bring the easter egg answer. It's the second-to-last letter.</p>
+</section>
+
+
+<section id="w7-next">
+  <h2>Next week: <em>Responsible AI &amp; demo day</em> 🎤</h2>
+  <p class="small">You can build it now: it reads, decides and acts. <strong>Should</strong> you?</p>
+  <p class="small fragment">Then the floor is yours: <strong>five minutes, your project, live.</strong></p>
+</section>
+
+<section id="w7-resources">
+  <p class="chip">Explore on your own</p>
+  <h2>Resources 📚</h2>
+  <div class="w4-row" style="align-items:flex-start;gap:16px">
+    <ul class="res-list" style="flex:1">
+      <li><strong>🤖 Agents</strong></li>
+      <li>⭐ <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">Building effective agents</a> (Anthropic): when to use an agent, and when a simple workflow is better</li>
+      <li><a href="https://huggingface.co/learn/agents-course" target="_blank" rel="noopener">Hugging Face Agents Course</a>: free, hands-on, with certificates</li>
+      <li><a href="https://ai.google.dev/gemini-api/docs/function-calling" target="_blank" rel="noopener">Gemini API · Function calling</a>: the tool requests in today's notebook</li>
+    </ul>
+    <ul class="res-list" style="flex:1">
+      <li><strong>🔌 MCP &amp; no-code</strong></li>
+      <li>⭐ <a href="https://modelcontextprotocol.io/docs/getting-started/intro" target="_blank" rel="noopener">Model Context Protocol: introduction</a></li>
+      <li><a href="https://docs.n8n.io/advanced-ai/" target="_blank" rel="noopener">n8n · Advanced AI</a>: AI Agent node, tools, MCP</li>
+      <li><a href="https://github.com/san81/ai-course/blob/main/docs/weeks/week7/week7-n8n-setup.md" target="_blank" rel="noopener">Our n8n + WhatsApp setup guide</a> and Mr. Chenna Reddy's server, on the course page</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== CLOSE (Week 7 · last slide) ==================== -->
+<section id="w7-closing">
+  <p class="closing-quote">
+    "Learning is no longer limited by how well someone can explain it.<br>
+    It is limited by <em>how much you want to know.</em>"
+  </p>
+  <div class="w6-books fragment" style="margin-top:18px">
+    <div class="w6-book">
+      <div class="w4-hd" style="color:#9aa4b8">🌙 11 pm · classmate 1</div>
+      <p>Asks the AI tutor <em>"what is an agent?"</em>, reads the answer, nods, closes the tab.</p>
+    </div>
+    <div class="w6-book" style="border-color:#7ee0a3">
+      <div class="w4-hd" style="color:#7ee0a3">🌙 11 pm · classmate 2</div>
+      <p>Asks the same question. Then <em>"why?"</em> Then <em>"show me."</em> Builds a tiny one, breaks it,
+      asks again at 1 am, and fixes it.</p>
+    </div>
+  </div>
+  <p class="small fragment" style="margin-top:14px">Same free tutor. Same night. <strong>A different engineer a month later.</strong></p>
+  <p class="small fragment" style="margin-top:8px;color:#7ee0a3">The explanations are free now, in any language, at any hour.
+  <strong>Your curiosity is the only thing nobody can give you.</strong> Next week: show us what yours built. 🙏</p>
+</section>
+
+
+</div>
+</div>
+
+<script src="../../assets/reveal/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({ hash:true, slideNumber:'c/t', width:1200, height:760,
+    margin:0.05, minScale:0.2, maxScale:1.6,
+    // Default true steals focus back to <body> whenever the page becomes
+    // visible again, which silently breaks paste. See week1/week2.
+    focusBodyOnPageVisibilityChange:false });
+  document.addEventListener('click', e => {
+    if (e.target.classList.contains('quiz-answer')) e.target.classList.toggle('revealed');
+  });
+
+  /* ---- Overflow guard -------------------------------------------------
+     reveal.js silently clips content taller than the slide, which cuts off
+     text at the bottom on a projector. This shrinks any offending slide
+     until it fits, and reports it in the browser console so it can be
+     fixed properly later.                                               */
+  (function () {
+    const LIMIT = () => Reveal.getConfig().height;
+    function fit(slide) {
+      if (!slide) return;
+      slide.style.fontSize = '';
+      const max = LIMIT();
+      let pct = 100;
+      while (slide.scrollHeight > max && pct > 45) {
+        pct -= 4;
+        slide.style.fontSize = pct + '%';
+      }
+      if (pct < 100) {
+        console.warn('[deck] slide shrunk to ' + pct + '% to fit:',
+          (slide.querySelector('h1,h2') || {}).textContent || slide);
+      }
+    }
+    const current = () => Reveal.getCurrentSlide();
+    Reveal.on('ready', () => fit(current()));
+    Reveal.on('slidechanged', e => fit(e.currentSlide));
+    Reveal.on('fragmentshown', () => fit(current()));
+    Reveal.on('resize', () => fit(current()));
+  })();
+</script>
+</body>
+</html>

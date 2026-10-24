@@ -1,0 +1,28 @@
+page,section,text
+1,Cover,"Sri Venkateswara Boys' Hostel · Plumbing & Utilities Manual · 2019 edition, with 2024 revisions at the back. Keep in the pump room. Do not take home."
+2,Index,Index. Safety rules p.3 · Pump room and motor timings p.8-12 · Overhead tanks and cleaning p.15-18 · Valve junction and lever colours p.41-44 · Revision 2024 (C-block renovation) p.44 · Electrical panel p.50-53 · Fire hydrant line p.60 · Kitchen LPG manifold p.70 · Emergency contacts p.90.
+3,Safety rules,"Never work alone at night on electrical or gas equipment. Water and electricity: switch off the panel before mopping near sockets. Report every leak to the warden, even small ones."
+4,Safety rules,Wear rubber slippers in the pump room. The floor near the motor is always wet. Keep the pump room locked; the key is with the security desk.
+8,Pump room,"The main motor fills the overhead tanks twice a day: 5:30 am and 6:00 pm, about 40 minutes each run. Do not run the motor when a main line is shut."
+9,Pump room,"If the motor makes a grinding noise, switch it off at panel P2 and inform the warden. Spare fuses are in the red box on the left wall."
+10,Pump room,"Borewell motor and municipal supply both feed the sump. Municipal water arrives on Tuesdays and Fridays, early morning."
+12,Pump room,"Monthly check: grease the motor bearings, check the foot valve, note the meter reading in the blue register."
+15,Overhead tanks,"Each block has two 5,000-litre tanks on the terrace. Tanks are cleaned every three months by an outside agency."
+16,Overhead tanks,"Before cleaning a tank, shut that block's lever at the valve junction and inform the students one day earlier."
+18,Overhead tanks,"Overflowing tank: switch off the motor first, then check the float valve on the terrace."
+41,Valve junction,"Valve junction: behind the pump room, ground floor. Levers are colour-coded. A lever lying ALONG the pipe is open; turn it a quarter turn so it lies ACROSS the pipe to shut. Use the 24 mm wrench hanging on the wall if a lever is stiff."
+41,Valve junction,"RED lever: MAIN INLET. Shuts water to EVERY block, the kitchen and the RO drinking-water plant. Never shut the red lever without the warden's approval."
+42,Valve junction,"BLUE lever: A-block, all floors. GREEN lever: B-block, all floors."
+42,Valve junction,"YELLOW lever: C-block, all bathrooms on all floors (2019 layout)."
+43,Valve junction,WHITE lever: RO drinking-water plant only. BLACK-handled wheel: fire hydrant line. NEVER shut the fire hydrant line.
+43,Valve junction,"If you cannot tell which lever is which, do not guess. Call the warden. Shutting the wrong line can stop drinking water or the fire line."
+44,Revision 2024,"Revision 2024, after the C-block renovation: the C-block 2nd-floor bathrooms now have their own ORANGE lever. Shutting ORANGE stops water to the 2nd-floor bathrooms only. YELLOW still shuts all of C-block."
+44,Revision 2024,"After a leak is repaired, open the lever slowly and check the repaired joint for drips for five minutes."
+50,Electrical panel,Panel P1: hostel lighting. Panel P2: motors. Panel P3: kitchen. Only the electrician or the warden may switch off P1 or P3.
+52,Electrical panel,"If water reaches a socket or a switch board, switch off that floor's MCB at the floor distribution board before anyone touches it."
+60,Fire hydrant line,The fire hydrant line must always stay open and pressurised. It is checked every month by the fire officer.
+70,Kitchen LPG manifold,The grey wheel in the kitchen is the LPG gas manifold. It is NOT a water valve. Only the cook or the warden may touch it.
+72,Kitchen LPG manifold,"Smell of gas: do not switch any light on or off, open windows, shut the grey wheel, call the warden."
+80,Mess,The mess needs water from 5 am. Shutting the main line before 7 am stops breakfast.
+85,Laundry,Washing machines in the C-block ground floor take water from the C-block line (yellow).
+90,Emergency contacts,"Warden, deputy warden and plumber numbers are kept at the security desk and in the hostel helpdesk system, not in this manual, because they change every year."

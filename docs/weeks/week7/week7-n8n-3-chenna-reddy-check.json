@@ -1,0 +1,73 @@
+{
+  "name": "Week 7 · Mr. Chenna Reddy connection check",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "06d4aea4-11e7-4bca-a4c6-7d693398867c",
+      "name": "Run"
+    },
+    {
+      "parameters": {
+        "serverTransport": "httpStreamable",
+        "endpointUrl": "http://localhost:8000/mcp",
+        "authentication": "none",
+        "tool": {
+          "__rl": true,
+          "mode": "list",
+          "value": "look_up_manual",
+          "cachedResultName": "look_up_manual"
+        },
+        "inputMode": "json",
+        "jsonInput": "{\n  \"question\": \"which lever for the C-block 2nd floor bathroom\"\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        0
+      ],
+      "id": "efa5f01a-1e54-4f77-a5c5-b7a08657e99e",
+      "name": "Ask Mr. Chenna Reddy"
+    },
+    {
+      "parameters": {
+        "content": "## 🔧 Connection check (no AI, no key)\nRun this first. If it returns manual page 44, n8n can reach Mr. Chenna Reddy.",
+        "height": 160,
+        "width": 360
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -200
+      ],
+      "id": "0abe0a97-f6c0-44de-9277-d1a25868a959",
+      "name": "Note 28dce8"
+    }
+  ],
+  "connections": {
+    "Run": {
+      "main": [
+        [
+          {
+            "node": "Ask Mr. Chenna Reddy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

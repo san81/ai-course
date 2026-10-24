@@ -1,0 +1,245 @@
+{
+  "name": "Week 7 · Hostel agent (fully on WhatsApp)",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3447f2e3-22ab-4e23-9c50-e966b1f877e7",
+      "name": "Complaint on WhatsApp",
+      "webhookId": "29e3305b-2bec-450e-a814-308551c4fa04"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are the night-duty helper at a college hostel. A student has reported a problem.\nGOAL: stop the damage, get it repaired, and keep people informed.\nNobody gives you steps. Decide what to do next, one step at a time, using your tools.\nRules:\n- Look up phone numbers with get_block_contact; never invent them.\n- Call people with call_person and follow their advice.\n- Mr. Chenna Reddy's tools (names ending in look_up_manual, shut_lever, check_leak) control the water: look up the manual first.\n- Shut the smallest lever that covers the leak. Only shut a bigger one if the smaller one fails, and the RED lever only with the warden's approval.\n- Before saying the water has stopped, check it with check_leak.\n- Your final answer is the reply to the student: what happened, and when the plumber comes. Keep it under 60 words.",
+          "maxIterations": 15,
+          "returnIntermediateSteps": false
+        },
+        "promptType": "define",
+        "text": "={{ $json.messages[0].text.body }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        260,
+        0
+      ],
+      "id": "0c690303-0d9c-42ea-b8cc-b835952f7eac",
+      "name": "Night-duty agent"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "phoneNumberId": "PASTE_PHONE_NUMBER_ID",
+        "recipientPhoneNumber": "={{ $('Complaint on WhatsApp').item.json.messages[0].from }}",
+        "messageType": "text",
+        "textBody": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        620,
+        0
+      ],
+      "id": "48b420f8-856b-4728-ac9c-53e9d309e618",
+      "name": "Reply to the student on WhatsApp"
+    },
+    {
+      "parameters": {
+        "content": "## 📱 Fully on WhatsApp\nA student messages the hostel's WhatsApp number → the agent works the problem → replies on WhatsApp.\nNeeds a public URL for the trigger (n8n Cloud, or a tunnel to your laptop). See the setup guide, part C.",
+        "height": 220,
+        "width": 440
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -160
+      ],
+      "id": "905aad69-f1bb-4d8f-9f96-2b06040b1bf7",
+      "name": "Note 07d6d1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        220
+      ],
+      "id": "90951d8b-a770-4aed-9a0f-b85a23f7f1c5",
+      "name": "Gemini (free tier)"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 20,
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Complaint on WhatsApp').item.json.messages[0].from }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        220
+      ],
+      "id": "2f32ea39-4512-4431-b54b-7513b69222f6",
+      "name": "Memory"
+    },
+    {
+      "parameters": {
+        "name": "get_block_contact",
+        "description": "Look up the warden and deputy warden of a hostel block (A, B or C): names and phone numbers.",
+        "language": "javaScript",
+        "jsCode": "const CONTACTS = {\n  A: { warden: { name: 'Mr. Ramesh', phone: '+91 90000 00011' }, 'deputy warden': { name: 'Mr. Kiran', phone: '+91 90000 00012' } },\n  B: { warden: { name: 'Mrs. Sujatha', phone: '+91 90000 00021' }, 'deputy warden': { name: 'Mr. Anil', phone: '+91 90000 00022' } },\n  C: { warden: { name: 'Mrs. Lakshmi', phone: '+91 90000 00001' }, 'deputy warden': { name: 'Mr. Prasad', phone: '+91 90000 00003' } },\n};\n// The hostel helpdesk's contact list (made-up names and numbers).\nconst b = String(query.block || '').trim().toUpperCase().slice(0, 1);\nreturn CONTACTS[b] ? JSON.stringify(CONTACTS[b]) : 'No such block. Blocks are A, B and C.';",
+        "specifyInputSchema": true,
+        "schemaType": "fromJson",
+        "jsonSchemaExample": "{\n  \"block\": \"C\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        320,
+        220
+      ],
+      "id": "3e53af9f-1e33-4c6a-89bb-acc6cd59b6d2",
+      "name": "get_block_contact"
+    },
+    {
+      "parameters": {
+        "name": "call_person",
+        "description": "Phone someone and tell them what's happening. Returns what they say back.",
+        "language": "javaScript",
+        "jsCode": "// 🌍 Change these to change tonight's world, then chat again and watch the plan change.\nconst WARDEN_ANSWERS = true;            // false = the C-block warden doesn't pick up\nconst PLUMBER_COMES = '12:45 am';       // e.g. 'tomorrow at 9 am'\n\nconst CONTACTS = {\n  A: { warden: { name: 'Mr. Ramesh', phone: '+91 90000 00011' }, 'deputy warden': { name: 'Mr. Kiran', phone: '+91 90000 00012' } },\n  B: { warden: { name: 'Mrs. Sujatha', phone: '+91 90000 00021' }, 'deputy warden': { name: 'Mr. Anil', phone: '+91 90000 00022' } },\n  C: { warden: { name: 'Mrs. Lakshmi', phone: '+91 90000 00001' }, 'deputy warden': { name: 'Mr. Prasad', phone: '+91 90000 00003' } },\n};\nconst PLUMBER = '+91 90000 00002';\nconst digits = (p) => String(p || '').replace(/\\D/g, '').slice(-10);\nconst msg = String(query.message || '').toLowerCase();\nif (digits(query.phone) === digits(PLUMBER)) {\n  if (PLUMBER_COMES.includes('tomorrow'))\n    return `Ravi here. Sorry, I'm out of town tonight. I can come ${PLUMBER_COMES} and replace that pipe. Tonight, stop the water so it doesn't flood. Mr. Chenna Reddy at the hostel knows the levers.`;\n  return `Ravi here. I'll come at ${PLUMBER_COMES} and replace the pipe. Meanwhile stop the water so the corridor doesn't flood. Mr. Chenna Reddy at the hostel knows the levers. Don't open the pipe yourself.`;\n}\nfor (const block of Object.values(CONTACTS)) {\n  for (const [role, person] of Object.entries(block)) {\n    if (digits(person.phone) !== digits(query.phone)) continue;\n    if (role === 'warden' && !WARDEN_ANSWERS) return `No answer from ${person.name}. (It's late; the phone rang out.)`;\n    if (msg.includes('red')) return `${person.name}: Red stops water to the WHOLE hostel and the kitchen. Only if no smaller lever works. If it really comes to that, yes, you have my approval.`;\n    return `${person.name}: Thanks for calling. The plumber is Ravi, ${PLUMBER}. Mr. Chenna Reddy, our Master of Control Panels, can shut the water at the valve junction. Send me an update when it's under control.`;\n  }\n}\nreturn 'Wrong number. Nobody by that number.';",
+        "specifyInputSchema": true,
+        "schemaType": "fromJson",
+        "jsonSchemaExample": "{\n  \"phone\": \"+91 90000 00001\",\n  \"message\": \"Water leak in C-block, what should I do?\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        480,
+        220
+      ],
+      "id": "17d468d8-637e-45b6-9575-dd0e07667ff3",
+      "name": "call_person"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://localhost:8000/mcp",
+        "serverTransport": "httpStreamable",
+        "authentication": "none",
+        "include": "all",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        640,
+        220
+      ],
+      "id": "3c8f39a3-f4b8-4a70-a7d8-a2ef08303a43",
+      "name": "Mr. Chenna Reddy (MCP)"
+    }
+  ],
+  "connections": {
+    "Complaint on WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Night-duty agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Night-duty agent": {
+      "main": [
+        [
+          {
+            "node": "Reply to the student on WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini (free tier)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Night-duty agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Night-duty agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_block_contact": {
+      "ai_tool": [
+        [
+          {
+            "node": "Night-duty agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "call_person": {
+      "ai_tool": [
+        [
+          {
+            "node": "Night-duty agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mr. Chenna Reddy (MCP)": {
+      "ai_tool": [
+        [
+          {
+            "node": "Night-duty agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

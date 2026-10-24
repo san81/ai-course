@@ -1,0 +1,277 @@
+{
+  "name": "Week 7 · Hostel agent (chat + WhatsApp update)",
+  "nodes": [
+    {
+      "parameters": {
+        "public": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "644e6555-d58a-461b-974a-0e4420a4a616",
+      "name": "Student's complaint (chat)",
+      "webhookId": "35fc42ef-7fe7-4a7b-aa9e-e2100f7a689e"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are the night-duty helper at a college hostel. A student has reported a problem.\nGOAL: stop the damage, get it repaired, and keep people informed.\nNobody gives you steps. Decide what to do next, one step at a time, using your tools.\nRules:\n- Look up phone numbers with get_block_contact; never invent them.\n- Call people with call_person and follow their advice.\n- Mr. Chenna Reddy's tools (names ending in look_up_manual, shut_lever, check_leak) control the water: look up the manual first.\n- Shut the smallest lever that covers the leak. Only shut a bigger one if the smaller one fails, and the RED lever only with the warden's approval.\n- Before saying the water has stopped, check it with check_leak.\n- Your final answer is the reply to the student: what happened, and when the plumber comes. Keep it under 60 words.",
+          "maxIterations": 15,
+          "returnIntermediateSteps": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        260,
+        0
+      ],
+      "id": "7d9c0fc2-91b5-4e46-90f7-cd0905aefd7b",
+      "name": "Night-duty agent"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "phoneNumberId": "PASTE_PHONE_NUMBER_ID",
+        "recipientPhoneNumber": "PASTE_WARDEN_NUMBER_WITH_COUNTRY_CODE",
+        "messageType": "text",
+        "textBody": "=🚰 Hostel helpdesk update\n\nComplaint: {{ $('Student\\'s complaint (chat)').item.json.chatInput }}\n\nWhat the agent did and told the student:\n{{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        620,
+        0
+      ],
+      "id": "3f213ec6-1f09-48c2-9bbd-91105c744d9e",
+      "name": "WhatsApp update to the warden"
+    },
+    {
+      "parameters": {
+        "chatId": "PASTE_YOUR_TELEGRAM_CHAT_ID",
+        "text": "=🚰 Hostel helpdesk update\n\n{{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        620,
+        180
+      ],
+      "id": "b9e89ba8-df3d-4043-b4ff-5d1e1422590b",
+      "name": "Telegram update (alternative)",
+      "disabled": true,
+      "webhookId": "d24b027c-0cf7-4a1c-b15d-be4cf7eb1884"
+    },
+    {
+      "parameters": {
+        "content": "## 🚰 Hostel agent · chat demo\n1. Start Mr. Chenna Reddy: `python chenna_reddy_mcp.py --http`\n2. Add your Gemini key to **Gemini (free tier)**\n3. Click **Open chat** and paste the student's complaint\n4. Open **Night-duty agent → Logs** to watch think → act → observe\n\n🔄 Change the world: open **call_person** and set `WARDEN_ANSWERS = false` or `PLUMBER_COMES = 'tomorrow at 9 am'`. Restart Chenna Reddy with `STUCK_LEVERS=orange`.",
+        "height": 360,
+        "width": 440
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -160
+      ],
+      "id": "252bb007-5602-4ee9-a62a-816f0b1f5915",
+      "name": "Note 36da68"
+    },
+    {
+      "parameters": {
+        "content": "## 📱 WhatsApp\nUses the WhatsApp Business Cloud API (Meta test number, free). See the setup guide. The warden must message the test number first (opens the 24-hour window). No WhatsApp? Enable the Telegram node instead.",
+        "height": 220,
+        "width": 360,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        560,
+        -260
+      ],
+      "id": "3144030e-4147-4adc-bbc1-deb5ca86f811",
+      "name": "Note 084eb0"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        220
+      ],
+      "id": "eade24d9-cc19-45b4-8eb1-82675f191740",
+      "name": "Gemini (free tier)"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        220
+      ],
+      "id": "ccceabea-0aff-4f43-a7d3-dd76eba8a236",
+      "name": "Memory"
+    },
+    {
+      "parameters": {
+        "name": "get_block_contact",
+        "description": "Look up the warden and deputy warden of a hostel block (A, B or C): names and phone numbers.",
+        "language": "javaScript",
+        "jsCode": "const CONTACTS = {\n  A: { warden: { name: 'Mr. Ramesh', phone: '+91 90000 00011' }, 'deputy warden': { name: 'Mr. Kiran', phone: '+91 90000 00012' } },\n  B: { warden: { name: 'Mrs. Sujatha', phone: '+91 90000 00021' }, 'deputy warden': { name: 'Mr. Anil', phone: '+91 90000 00022' } },\n  C: { warden: { name: 'Mrs. Lakshmi', phone: '+91 90000 00001' }, 'deputy warden': { name: 'Mr. Prasad', phone: '+91 90000 00003' } },\n};\n// The hostel helpdesk's contact list (made-up names and numbers).\nconst b = String(query.block || '').trim().toUpperCase().slice(0, 1);\nreturn CONTACTS[b] ? JSON.stringify(CONTACTS[b]) : 'No such block. Blocks are A, B and C.';",
+        "specifyInputSchema": true,
+        "schemaType": "fromJson",
+        "jsonSchemaExample": "{\n  \"block\": \"C\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        320,
+        220
+      ],
+      "id": "01b255df-4f85-499b-95f8-b63c1c0d888a",
+      "name": "get_block_contact"
+    },
+    {
+      "parameters": {
+        "name": "call_person",
+        "description": "Phone someone and tell them what's happening. Returns what they say back.",
+        "language": "javaScript",
+        "jsCode": "// 🌍 Change these to change tonight's world, then chat again and watch the plan change.\nconst WARDEN_ANSWERS = true;            // false = the C-block warden doesn't pick up\nconst PLUMBER_COMES = '12:45 am';       // e.g. 'tomorrow at 9 am'\n\nconst CONTACTS = {\n  A: { warden: { name: 'Mr. Ramesh', phone: '+91 90000 00011' }, 'deputy warden': { name: 'Mr. Kiran', phone: '+91 90000 00012' } },\n  B: { warden: { name: 'Mrs. Sujatha', phone: '+91 90000 00021' }, 'deputy warden': { name: 'Mr. Anil', phone: '+91 90000 00022' } },\n  C: { warden: { name: 'Mrs. Lakshmi', phone: '+91 90000 00001' }, 'deputy warden': { name: 'Mr. Prasad', phone: '+91 90000 00003' } },\n};\nconst PLUMBER = '+91 90000 00002';\nconst digits = (p) => String(p || '').replace(/\\D/g, '').slice(-10);\nconst msg = String(query.message || '').toLowerCase();\nif (digits(query.phone) === digits(PLUMBER)) {\n  if (PLUMBER_COMES.includes('tomorrow'))\n    return `Ravi here. Sorry, I'm out of town tonight. I can come ${PLUMBER_COMES} and replace that pipe. Tonight, stop the water so it doesn't flood. Mr. Chenna Reddy at the hostel knows the levers.`;\n  return `Ravi here. I'll come at ${PLUMBER_COMES} and replace the pipe. Meanwhile stop the water so the corridor doesn't flood. Mr. Chenna Reddy at the hostel knows the levers. Don't open the pipe yourself.`;\n}\nfor (const block of Object.values(CONTACTS)) {\n  for (const [role, person] of Object.entries(block)) {\n    if (digits(person.phone) !== digits(query.phone)) continue;\n    if (role === 'warden' && !WARDEN_ANSWERS) return `No answer from ${person.name}. (It's late; the phone rang out.)`;\n    if (msg.includes('red')) return `${person.name}: Red stops water to the WHOLE hostel and the kitchen. Only if no smaller lever works. If it really comes to that, yes, you have my approval.`;\n    return `${person.name}: Thanks for calling. The plumber is Ravi, ${PLUMBER}. Mr. Chenna Reddy, our Master of Control Panels, can shut the water at the valve junction. Send me an update when it's under control.`;\n  }\n}\nreturn 'Wrong number. Nobody by that number.';",
+        "specifyInputSchema": true,
+        "schemaType": "fromJson",
+        "jsonSchemaExample": "{\n  \"phone\": \"+91 90000 00001\",\n  \"message\": \"Water leak in C-block, what should I do?\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        480,
+        220
+      ],
+      "id": "ef05564a-f285-4d10-8fcb-77b91a69dc16",
+      "name": "call_person"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://localhost:8000/mcp",
+        "serverTransport": "httpStreamable",
+        "authentication": "none",
+        "include": "all",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        640,
+        220
+      ],
+      "id": "a9e080a8-fd76-456f-8cbf-6f131bbffb2b",
+      "name": "Mr. Chenna Reddy (MCP)"
+    }
+  ],
+  "connections": {
+    "Student's complaint (chat)": {
+      "main": [
+        [
+          {
+            "node": "Night-duty agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Night-duty agent": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp update to the warden",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Telegram update (alternative)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini (free tier)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Night-duty agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Night-duty agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_block_contact": {
+      "ai_tool": [
+        [
+          {
+            "node": "Night-duty agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "call_person": {
+      "ai_tool": [
+        [
+          {
+            "node": "Night-duty agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mr. Chenna Reddy (MCP)": {
+      "ai_tool": [
+        [
+          {
+            "node": "Night-duty agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
