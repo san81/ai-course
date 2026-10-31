@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 8 — Responsible AI & demo day</title>
+<link rel="stylesheet" href="../../assets/reveal/dist/reset.css">
+<link rel="stylesheet" href="../../assets/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../../assets/reveal/dist/theme/black.css">
+<link rel="stylesheet" href="../../assets/course.css">
+<style>
+  .reveal h1 { font-size: 2.0em; text-transform: none; }
+  .reveal h2 { font-size: 1.35em; text-transform: none; margin-bottom: 14px; }
+  .reveal p, .reveal li { font-size: 0.84em; line-height: 1.42; }
+  .reveal .small, .reveal .small li { font-size: 0.66em; color: #a7b0c2; line-height: 1.45; }
+  .reveal ul { margin-left: 0.6em; }
+  .reveal li { margin-bottom: 11px; }
+  .reveal .analogy { font-size: 0.72em; padding: 13px 22px; margin-top: 14px; }
+  .reveal .analogy::before { font-size: 0.85em; }
+  .reveal .predict { font-size: 0.85em; }
+  .reveal .easter-egg p { font-size: 0.72em; }
+  .reveal .tiny-hint { position: absolute; bottom: -40px; right: 0; font-size: 0.3em; color: #4a5468; }
+  .reveal .vote-card { border:1px solid #2a3450; border-radius:10px; padding:13px 20px; margin:9px 0; background:#1a2233; font-size:.62em; text-align:left; }
+  .reveal .res-list { font-size: 0.6em; text-align: left; }
+  .reveal .res-list li { margin: 7px 0; }
+  .reveal .res-list a, .reveal a { color: #4da3ff; }
+  .reveal .tier { padding: 10px 18px; }
+  .reveal .tier p { font-size: 0.66em; margin: 6px 0; }
+  .reveal .closing-quote { font-size: 1.05em; }
+  .reveal svg { max-width: 100%; height: auto; }
+  .reveal .caption { font-size: 0.58em; color: #9aa4b8; margin-top: 8px; }
+  .reveal figure.photo { margin: 10px auto; }
+  .reveal figure.photo img { max-height: 300px; width: auto; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,.45); }
+  .reveal figure.photo .photo-fallback { display: none; }
+  .reveal figure.photo.no-photo img { display: none; }
+  .reveal figure.photo.no-photo .photo-fallback { display: block; }
+  .reveal figure.photo figcaption { font-size: 0.42em; color: #7b8497; margin-top: 8px; }
+  .reveal .zoom-do {
+    border: 2px solid #7ee0a3; border-radius: 14px; padding: 16px 26px;
+    background: rgba(126,224,163,0.07); text-align: left; margin: 14px auto; max-width: 880px;
+  }
+  .reveal .zoom-do p { font-size: 0.72em; margin: 9px 0; }
+  .reveal .zoom-do .step { color: #7ee0a3; font-weight: 700; margin-right: 8px; }
+  .reveal section[data-poll] .chip { border-color: #7ee0a3; color: #7ee0a3; }
+  /* act divider cards */
+  .reveal .act { color: #ffb454; font-size: 0.55em; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+  /* checkpoint blocks */
+  .reveal .checkpoint { border: 2px solid #4da3ff; background: rgba(77,163,255,.07); border-radius: 14px; padding: 10px 24px; margin: 12px auto; max-width: 900px; text-align: left; }
+  .reveal .checkpoint li { font-size: 0.62em; margin: 10px 0; }
+  /* the farmer chain, reused in the recap */
+  .reveal .chain { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 14px 0; }
+  .reveal .chain span { border: 1px solid #2a3450; background: #1a2233; border-radius: 999px; padding: 6px 14px; font-size: 0.46em; color: #e8edf5; }
+  .reveal .chain span.new { border-color: #ffb454; color: #ffb454; }
+
+  /* ---- Week 4 components ---- */
+  .reveal .w4-row { display:flex; gap:18px; align-items:flex-start; }
+  .reveal .w4-card { flex:1; background:#1a2233; border:1px solid #2a3450; border-radius:12px; padding:12px 16px; text-align:left; }
+  .reveal .w4-card p { font-size:.6em; margin:6px 0; line-height:1.4; }
+  .reveal .w4-hd { font-weight:700; font-size:.66em; margin-bottom:4px; }
+  .reveal .w4-muted { color:#9aa4b8; }
+  .reveal .w4-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px; }
+  .reveal .w4-cites { display:flex; flex-direction:column; gap:5px; margin-top:6px; text-align:left; }
+  .reveal .w4-cite { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 14px; font-size:.45em; line-height:1.32; }
+  .reveal .w4-cite > b { display:inline-block; width:1.6em; height:1.6em; line-height:1.6em; text-align:center; border-radius:50%; background:#4da3ff; color:#0d1320; margin-right:8px; }
+  .reveal .w4-cite .quiz-answer { display:block; margin-top:4px; color:#ffb454; font-weight:600; }
+  .reveal .w4-steps { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; text-align:left; }
+  .reveal .w4-step { background:#1a2233; border:1px solid #2a3450; border-radius:12px; padding:10px 14px; font-size:.56em; line-height:1.4; }
+  .reveal .w4-step b { display:block; color:#4da3ff; font-size:1.1em; margin-bottom:3px; }
+  .reveal .w4-list { margin:4px 0 0 1em; font-size:.58em; }
+  .reveal .w4-list li { margin:5px 0; }
+  .reveal .w4-timeline { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center; margin-top:14px; font-size:.5em; }
+  .reveal .w4-timeline span:not(:nth-child(even)) { border:1px solid #2a3450; background:#1a2233; border-radius:999px; padding:5px 12px; }
+  .reveal .w4-timeline span:nth-child(even) { color:#55607a; }
+  .reveal .w4-timeline b { color:#4da3ff; margin-right:4px; }
+  .reveal .w4-projects { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px; text-align:left; }
+  .reveal .w4-proj { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.44em; line-height:1.3; }
+  .reveal .w4-proj p { margin:3px 0; font-size:1em; color:#c8d0dd; }
+  .reveal .w4-proj-t { font-weight:700; font-size:1.1em; color:#e8edf5; margin-bottom:3px; }
+  .reveal .w4-badge { display:inline-block; border:1px solid; border-radius:999px; padding:0 8px; font-size:.78em; font-weight:700; margin-left:6px; vertical-align:middle; }
+  .reveal .w4-stack { margin-top:4px; padding:3px 8px; border-radius:6px; background:#141a26; font-size:.95em; color:#dfe5ee; }
+  .reveal .w4-stack .nc { color:#7ee0a3; font-weight:700; margin-right:4px; }
+  .reveal .w4-stack .cd { color:#4da3ff; font-weight:700; margin-right:4px; }
+  .reveal .sub-small { font-size:.5em; color:#9aa4b8; margin:-6px 0 6px; }
+  .reveal .w4-levels { display:grid; grid-template-columns:1fr 1fr; gap:12px; text-align:left; }
+  .reveal .w4-lvcol { display:flex; flex-direction:column; gap:6px; }
+  .reveal .w4-lvhd { color:#fff; font-weight:800; font-size:.5em; border-radius:8px; padding:4px 10px; }
+  .reveal .w4-lv { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 10px; font-size:.38em; line-height:1.28; }
+  .reveal .w4-lv p { margin:2px 0; font-size:1em; color:#c8d0dd; }
+  .reveal .w4-lv .w4-learn { color:#ffb454; }
+  .reveal table.w4-tb { width:100%; border-collapse:separate; border-spacing:0 4px; font-size:.405em; margin-top:2px; }
+  .reveal table.w4-tb th, .reveal table.w4-tb td { border:none; padding:4px 10px; text-align:left; vertical-align:middle; background:#1a2233; line-height:1.3; }
+  .reveal table.w4-tb tr > :first-child { border-radius:8px 0 0 8px; color:#e8edf5; width:24%; }
+  .reveal table.w4-tb tr > :last-child { border-radius:0 8px 8px 0; }
+  .reveal table.w4-tb tr:first-child th { background:transparent; font-size:1.05em; }
+  .reveal table.w4-tb td { color:#dfe5ee; }
+  .reveal table.w4-tb .wk { width:4.5em; text-align:center; color:#ffb454; font-weight:700; }
+  .reveal .w4-shrink { display:flex; flex-direction:column; gap:10px; margin-top:10px; font-size:.6em; text-align:left; }
+  .reveal .w4-shrink > div { display:grid; grid-template-columns:1fr 2em 1.6fr; align-items:center; background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:9px 14px; }
+  .reveal .w4-shrink .big { color:#ff9b9b; } .reveal .w4-shrink .arr { color:#9aa4b8; text-align:center; } .reveal .w4-shrink .ok { color:#7ee0a3; }
+  .reveal .w4-camp { display:grid; grid-template-columns:1fr 7.5em 1fr; gap:10px; align-items:stretch; text-align:left; margin-top:4px; }
+  .reveal .w4-camp-col .w4-hd { font-size:.56em; } .reveal .w4-camp-col { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 12px; }
+  .reveal .w4-camp-bot { background:rgba(255,180,84,.08); border:2px solid #ffb454; border-radius:14px; padding:8px; text-align:center; font-size:.55em; display:flex; flex-direction:column; justify-content:center; }
+  .reveal .w4-mini { margin:2px 0 0 1em; font-size:.46em; line-height:1.35; }
+  .reveal .w4-mini li { margin:2px 0; }
+  .reveal .w4-pg3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; text-align:left; margin-top:2px; }
+  .reveal .w4-pg-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:6px 11px; font-size:.44em; line-height:1.32; color:#dfe5ee; }
+  .reveal .w4-pg-card .w4-hd { font-size:1.22em; }
+  .reveal .w4-pg-card p { margin:3px 0; }
+  .reveal .w4-pg-card .w4-mini { font-size:1em; margin-top:0; }
+  .reveal .w4-pg-say { background:#141a26; border-left:3px solid #ffb454; border-radius:4px; padding:3px 7px; font-style:italic; }
+  .reveal .w4-pg-flow { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:4px 5px; margin-top:8px; font-size:.4em; }
+  .reveal .w4-pg-flow span { background:rgba(77,163,255,.1); border:1px solid #4da3ff; border-radius:16px; padding:3px 10px; color:#e8edf5; }
+  .reveal .w4-pg-flow b { color:#4da3ff; }
+  .reveal .w4-pg-you { margin-top:8px; background:rgba(255,180,84,.07); border:1px solid #ffb454; border-radius:10px; padding:6px 12px; text-align:left; }
+  .reveal .w4-pg-you > .w4-hd { font-size:.5em; }
+  .reveal .w4-pg-ideas { display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; font-size:.42em; line-height:1.3; color:#dfe5ee; }
+  .reveal .w4-sk3 { display:grid; grid-template-columns:1fr 1.6em 1fr 1.6em 1.15fr; gap:6px; align-items:stretch; text-align:left; margin-top:6px; }
+  .reveal .w4-sk-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.5em; line-height:1.35; color:#dfe5ee; }
+  .reveal .w4-sk-card .w4-hd { font-size:1.25em; }
+  .reveal .w4-sk-card p { margin:5px 0; }
+  .reveal .w4-sk-wk { font-size:.8em; letter-spacing:.08em; text-transform:uppercase; color:#9aa4b8; font-weight:700; }
+  .reveal .w4-sk-arrow { align-self:center; text-align:center; color:#4da3ff; font-size:.8em; }
+  .reveal .w4-sk-analogy { margin-top:12px; background:rgba(255,180,84,.08); border:1px solid #ffb454; border-radius:10px; padding:8px 16px; font-size:.5em; text-align:left; color:#e8edf5; }
+  .reveal .w4-sk-file { flex:1.1; margin:0; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:10px 14px; font-size:.36em; line-height:1.4; text-align:left; white-space:pre; color:#dfe5ee; box-shadow:none; width:auto; }
+  .reveal .w4-sk-file .d { color:#ffb454; } .reveal .w4-sk-file .m { color:#6b7891; } .reveal .w4-sk-file .k { color:#7ee0a3; font-weight:700; }
+  .reveal .w4-sk-how { flex:1; display:flex; flex-direction:column; gap:8px; }
+  .reveal .w4-sk-step { background:#1a2233; border:1px solid #2a3450; border-left:4px solid #4da3ff; border-radius:8px; padding:7px 12px; font-size:.44em; line-height:1.35; text-align:left; color:#dfe5ee; }
+  .reveal .w4-sk-step b { display:block; color:#4da3ff; margin-bottom:2px; }
+  .reveal .w4-sk-tryit { margin:6px auto 0; max-width:1000px; display:flex; flex-direction:column; gap:3px; background:#141a26; border:1px solid #7ee0a3; border-radius:10px; padding:6px 14px; font-size:.4em; line-height:1.35; text-align:left; color:#dfe5ee; }
+  .reveal .w4-api { display:grid; grid-template-columns:1.08fr 1fr; gap:12px; text-align:left; }
+  .reveal .w4-api-col { display:flex; flex-direction:column; gap:6px; min-width:0; }
+  .reveal .w4-api-hd { font-weight:700; font-size:.44em; }
+  .reveal .w4-api-hd span { font-weight:400; color:#9aa4b8; margin-left:6px; font-size:.85em; }
+  .reveal pre.w4-api-code { margin:0; width:auto; box-shadow:none; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; font-size:.3em; line-height:1.38; white-space:pre; color:#dfe5ee; overflow:hidden; }
+  .reveal .w4-api-code .k { color:#4da3ff; } .reveal .w4-api-code .s { color:#ffb454; } .reveal .w4-api-code .n { color:#e8edf5; font-weight:700; }
+  .reveal .w4-api-code .n.hi { color:#7ee0a3; } .reveal .w4-api-code .c { color:#6b7891; font-style:italic; }
+  .reveal .w4-api-read { background:rgba(126,224,163,.07); border:1px solid #7ee0a3; border-radius:10px; padding:6px 10px; font-size:.38em; line-height:1.35; display:flex; flex-direction:column; gap:3px; color:#dfe5ee; }
+  .reveal .w4-api-read b { color:#7ee0a3; }
+  .reveal .w4-skd { display:grid; grid-template-columns:1.15fr 1fr; gap:14px; align-items:stretch; text-align:left; }
+  .reveal .w4-skd-left { display:flex; flex-direction:column; gap:7px; }
+  .reveal .w4-skd-left .w4-sk-step { font-size:.4em; }
+  .reveal .w4-skd-left code { background:#0f141e; padding:0 4px; border-radius:4px; font-size:.85em; }
+  .reveal .w4-skd-shot { margin:0; display:flex; }
+  .reveal .w4-skd-shot img { width:100%; height:auto; max-height:470px; object-fit:contain; border-radius:10px; border:1px solid #2a3450; margin:0; }
+  .reveal .w4-skd-ph { display:none; flex:1; flex-direction:column; align-items:center; justify-content:center; gap:6px; border:2px dashed #4da3ff; border-radius:12px; background:rgba(77,163,255,.05); font-size:.48em; text-align:center; color:#e8edf5; min-height:340px; }
+  .reveal .w4-skd-ph code { font-size:.9em; color:#ffb454; }
+  .reveal .w4-li { text-align:left; font-size:.42em; color:#dfe5ee; display:flex; flex-direction:column; gap:8px; }
+  .reveal .w4-li button { font:inherit; background:#1a2233; color:#dfe5ee; border:1px solid #2a3450; border-radius:8px; padding:4px 10px; cursor:pointer; }
+  .reveal .w4-li button.on { background:#4da3ff; color:#0f141e; border-color:#4da3ff; font-weight:700; }
+  .reveal .w4-li button:disabled { opacity:.5; cursor:wait; }
+  .reveal .w4-li-bar { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+  .reveal .w4-li-grp { display:inline-flex; gap:0; } .reveal .w4-li-grp button { border-radius:0; } .reveal .w4-li-grp button:first-child { border-radius:8px 0 0 8px; } .reveal .w4-li-grp button:last-child { border-radius:0 8px 8px 0; }
+  .reveal .w4-li-chk { display:inline-flex; align-items:center; gap:6px; background:rgba(255,107,107,.08); border:1px solid #ff6b6b; border-radius:8px; padding:3px 10px; cursor:pointer; }
+  .reveal .w4-li-mode { color:#7ee0a3; margin-left:auto; } .reveal .w4-li-mode.warn { color:#ffb454; }
+  .reveal .w4-li-setup { display:flex; flex-wrap:wrap; gap:8px; align-items:center; background:#141a26; border:1px dashed #4da3ff; border-radius:8px; padding:6px 10px; }
+  .reveal .w4-li-setup input { font:inherit; background:#0f141e; color:#dfe5ee; border:1px solid #2a3450; border-radius:6px; padding:3px 6px; width:16em; margin-left:4px; }
+  .reveal .w4-li-setup[hidden] { display:none; }
+  .reveal .w4-li-qs { display:flex; flex-wrap:wrap; gap:6px; }
+  .reveal .w4-li-row { display:flex; gap:8px; align-items:stretch; }
+  .reveal .w4-li-q { flex:1; font:inherit; background:#0f141e; color:#e8edf5; border:1px solid #2a3450; border-radius:8px; padding:6px 8px; resize:none; }
+  .reveal .w4-li-run { background:#7ee0a3 !important; color:#0f141e !important; font-weight:700; border-color:#7ee0a3 !important; padding:4px 16px !important; }
+  .reveal .w4-li-out { display:flex; flex-direction:column; gap:8px; min-height:200px; }
+  .reveal .w4-li-lbl { color:#9aa4b8; margin-bottom:3px; }
+  .reveal .w4-li-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .reveal .w4-li-card { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:6px 8px; line-height:1.3; max-height:7.2em; overflow:auto; }
+  .reveal .w4-li-card.wait { color:#6b7891; } .reveal .w4-li-card.err { border-color:#ffb454; color:#ffb454; }
+  .reveal .w4-li-sch { text-decoration:none; }
+  .reveal .w4-hw-stats { display:flex; gap:10px; margin:2px 0 8px; }
+  .reveal .w4-hw-stats div { flex:1; background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:5px 8px; font-size:.42em; text-align:center; color:#dfe5ee; }
+  .reveal .w4-hw-stats b { display:block; font-size:2em; color:#ffb454; line-height:1.1; }
+  .reveal .w4-hw-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; text-align:left; }
+  .reveal .w4-hw-grid3 { grid-template-columns:repeat(3,1fr); }
+  .reveal .w4-hw-grid3 .w4-hw-card { font-size:.48em; padding:9px 12px; }
+  .reveal .w4-hw-card { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 10px; font-size:.43em; line-height:1.35; color:#dfe5ee; }
+  .reveal .w4-hw-card .w4-hd { font-size:1.12em; line-height:1.25; }
+  .reveal .w4-hw-card p { margin:4px 0; }
+  .reveal .w4-hw-q { font-style:italic; }
+  .reveal .w4-hw-why { color:#7ee0a3; }
+  .reveal .w4-hw-foot { margin-top:8px; display:flex; flex-direction:column; gap:4px; background:#141a26; border:1px solid #2a3450; border-radius:10px; padding:6px 12px; font-size:.4em; text-align:left; color:#dfe5ee; }
+  .reveal .w4-sh-link { margin:6px 0 10px; }
+  .reveal .w4-sh-btn { display:inline-block; background:#7ee0a3; color:#0f141e !important; font-weight:800; font-size:.8em; padding:10px 28px; border-radius:12px; text-decoration:none; }
+  .reveal .w4-sh-btn[hidden], .reveal .w4-sh-wait[hidden] { display:none; }
+  .reveal .w4-sh-wait { display:inline-block; border:2px dashed #7ee0a3; color:#7ee0a3; font-size:.6em; padding:8px 22px; border-radius:12px; }
+  .reveal .w4-sh-legend { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; font-size:.44em; }
+  .reveal .w4-sh-legend span { border:2px solid; border-radius:16px; padding:3px 12px; color:#dfe5ee; background:#141a26; }
+  .reveal .w4-sh-legend em { color:#7ee0a3; font-style:normal; }
+  .reveal .w3x { text-align:left; }
+  .reveal .w3x p { font-size:inherit; }
+  .reveal .w4-pg-links { margin-top:4px !important; } .reveal .w4-pg-links a { color:#4da3ff; text-decoration:none; }
+  .reveal .w4-camp-guard { margin-top:8px; background:rgba(255,107,107,.07); border:1px solid #ff6b6b; border-radius:10px; padding:6px 12px; text-align:left; }
+  .reveal .w4-guards { display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; font-size:.44em; line-height:1.3; color:#dfe5ee; }
+  .reveal a.w4-guide { display:none; font-size:.8em; font-weight:700; color:#0d1320; background:#ffb454; border-radius:999px; padding:0 8px; margin-left:4px; text-decoration:none; vertical-align:middle; }
+  .reveal a.w4-guide:hover { background:#ffd08a; }
+  .reveal .w4-covrow { display:grid; grid-template-columns:repeat(7,1fr); gap:7px; margin-top:6px; text-align:left; }
+  .reveal .w4-cov { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 7px 9px; font-size:.4em; }
+  .reveal .w4-cov-w { font-weight:800; font-size:1.5em; line-height:1.1; }
+  .reveal .w4-cov-s { color:#9aa4b8; font-size:.9em; margin-bottom:6px; }
+  .reveal .w4-chip { display:block; background:#141a26; border:1px solid #2a3450; border-radius:6px; padding:3px 6px; margin:4px 0; color:#dfe5ee; line-height:1.25; }
+  /* reveal.js treats any .stretch element as 'fill the remaining height'; the exercise tier must not */
+  .reveal .tier.stretch { height:auto !important; width:auto !important; }
+  /* ---- Week 5 components ---- */
+  .reveal a.w5-colab { display:inline-block; background:#ffb454; color:#0f141e !important; font-weight:800; font-size:.62em; padding:10px 24px; border-radius:12px; text-decoration:none; }
+  .reveal .w5-rest { display:flex; align-items:stretch; justify-content:center; gap:8px; margin-top:10px; }
+  .reveal .w5-rest-card { flex:1; background:#1a2233; border:2px solid #2a3450; border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:4px; font-size:.68em; color:#dfe5ee; }
+  .reveal .w5-rest-card b { font-size:1.2em; color:#e8edf5; } .reveal .w5-rest-card span { color:#9aa4b8; font-size:.9em; }
+  .reveal .w5-ic { font-size:2.2em; line-height:1.1; }
+  .reveal .w5-arrow { align-self:center; color:#4da3ff; font-size:.9em; }
+  .reveal .w5-layers { display:flex; gap:8px; margin-top:10px; }
+  .reveal .w5-layer { flex:1; background:#1a2233; border:1px solid #2a3450; border-top:5px solid var(--k); border-radius:10px; padding:10px 12px; display:flex; flex-direction:column; gap:4px; font-size:.62em; text-align:left; color:#e8edf5; }
+  .reveal .w5-layer b { color:var(--k); font-size:1.6em; line-height:1; } .reveal .w5-layer span { font-weight:700; } .reveal .w5-layer small { color:#9aa4b8; font-size:.88em; }
+  .reveal .w5-setup { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; text-align:left; }
+  .reveal .w5-setup .w4-step { font-size:.62em; }
+  .reveal .w5-setup code, .reveal .w5-ask code, .reveal .w5-box code { background:#0f141e; padding:0 5px; border-radius:4px; font-size:.92em; }
+  .reveal .w5-ask { display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:center; background:rgba(126,224,163,.08); border:1px dashed #7ee0a3; border-radius:10px; padding:9px 14px; font-size:.62em; color:#e8edf5; margin-top:12px; }
+  .reveal .w5-key { margin-top:10px; background:rgba(255,107,107,.08); border:1px solid #ff6b6b; border-radius:10px; padding:9px 14px; font-size:.58em; text-align:left; color:#e8edf5; }
+  .reveal pre.w5-code { margin:0; width:auto; box-shadow:none; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:12px 16px; font-size:.46em; line-height:1.45; text-align:left; white-space:pre; color:#dfe5ee; }
+  .reveal .w5-call { display:flex; gap:10px; align-items:stretch; margin-top:6px; }
+  .reveal .w5-box { flex:1; background:#1a2233; border:2px solid #2a3450; border-radius:12px; padding:10px 16px; text-align:left; font-size:.62em; color:#dfe5ee; }
+  .reveal .w5-box p { margin:4px 0; }
+  .reveal .w5-flow { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:5px; margin-top:14px; font-size:.52em; }
+  .reveal .w5-flow span { background:rgba(77,163,255,.1); border:1px solid #4da3ff; border-radius:16px; padding:3px 10px; color:#e8edf5; } .reveal .w5-flow b { color:#4da3ff; }
+  .reveal .w5-attacks { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+  .reveal .w5-attacks div { background:#1a2233; border:1px solid #2a3450; border-top:4px solid #ff6b6b; border-radius:10px; padding:10px; font-size:.64em; color:#dfe5ee; text-align:left; }
+  .reveal .w5-attacks b { display:block; color:#ff6b6b; font-size:1.6em; line-height:1.1; }
+  .reveal .w5-apps { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .reveal .w5-app { background:#1a2233; border:1px solid #2a3450; border-top:5px solid var(--k); border-radius:10px; padding:10px 12px; font-size:.62em; color:#e8edf5; text-align:left; display:flex; flex-direction:column; gap:4px; }
+  .reveal .w5-app b { color:var(--k); font-size:1.6em; line-height:1; } .reveal .w5-app small { color:#9aa4b8; }
+  .reveal .w5-fcflow { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .reveal .w5-fcflow b { display:block; color:#4da3ff; font-size:1.5em; line-height:1.1; }
+  .reveal .w5-idea { background:rgba(255,180,84,.08); border:1px solid #ffb454; border-radius:10px; padding:8px 16px; font-size:.62em; color:#e8edf5; text-align:left; }
+  .reveal .w5-rule { margin-top:12px; background:#141a26; border:1px solid #2a3450; border-radius:10px; padding:8px 14px; font-size:.6em; color:#e8edf5; }
+  .reveal .w5-inbox { display:flex; flex-direction:column; gap:3px; text-align:left; font-size:.47em; }
+  .reveal .w5-inbox div { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:4px 12px; color:#e8edf5; display:flex; gap:10px; align-items:baseline; }
+  .reveal .w5-inbox b { color:#9aa4b8; min-width:1.8em; text-align:right; font-weight:700; }
+  .reveal .w5-inbox span { color:#ffb454; font-weight:700; font-size:.85em; min-width:1.2em; }
+  .reveal .w5-probs { display:flex; gap:8px; margin-top:10px; font-size:.48em; }
+  .reveal .w5-probs span { flex:1; background:#141a26; border:1px solid #2a3450; border-radius:8px; padding:6px 10px; color:#dfe5ee; text-align:left; }
+  /* ---- Week 6 components ---- */
+  .reveal .w6-books { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px; text-align:left; }
+  .reveal .w6-book { background:#1a2233; border:2px solid #2a3450; border-radius:14px; padding:12px 18px; font-size:.62em; color:#dfe5ee; }
+  .reveal .w6-book .w5-ic { font-size:2em; }
+  .reveal .w6-book p { margin:6px 0; }
+  .reveal .w6-tests { display:flex; flex-direction:column; gap:5px; text-align:left; font-size:.5em; }
+  .reveal .w6-tests div { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:5px 12px; color:#e8edf5; display:flex; gap:10px; align-items:baseline; }
+  .reveal .w6-tests b { color:#ffb454; min-width:1.2em; }
+  .reveal .w6-tests em { color:#9aa4b8; font-style:normal; margin-left:auto; font-size:.85em; white-space:nowrap; }
+  .reveal .w6-stats { display:flex; gap:10px; margin:8px 0; }
+  .reveal .w6-stats div { flex:1; background:#1a2233; border:1px solid #2a3450; border-radius:12px; padding:8px 10px; font-size:.5em; color:#dfe5ee; text-align:center; }
+  .reveal .w6-stats b { display:block; font-size:2em; line-height:1.1; color:#ffb454; }
+  .reveal .w6-path { display:flex; gap:6px; align-items:center; justify-content:center; flex-wrap:wrap; margin:6px 0 12px; font-size:.5em; }
+  .reveal .w6-path span { border:1px solid #2a3450; background:#1a2233; border-radius:999px; padding:5px 12px; color:#dfe5ee; }
+  .reveal .w6-path span.done { border-color:#7ee0a3; color:#7ee0a3; }
+  .reveal .w6-path span.now { border-color:#ffb454; color:#0f141e; background:#ffb454; font-weight:800; }
+  .reveal .w6-path i { color:#55607a; font-style:normal; }
+  .reveal .w6-letters { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .reveal .w6-letters div { background:#1a2233; border:1px solid #2a3450; border-top:5px solid var(--k); border-radius:10px; padding:9px 10px; font-size:.56em; text-align:left; color:#dfe5ee; }
+  .reveal .w6-letters b { display:block; color:var(--k); font-size:1.8em; line-height:1.05; }
+  .reveal .w6-quiz { display:flex; flex-direction:column; gap:6px; text-align:left; margin-top:6px; }
+  .reveal .w6-quiz div { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 14px; font-size:.54em; color:#e8edf5; display:flex; gap:12px; align-items:center; }
+  .reveal .w6-quiz div > b { color:#4da3ff; min-width:1.1em; }
+  .reveal .w6-quiz .quiz-answer { margin-left:auto; white-space:nowrap; }
+  .reveal .w6-rule { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; text-align:left; margin-top:8px; }
+  .reveal .w6-rule .w4-step { font-size:.52em; }
+  .reveal svg.w6-map text { font-family:inherit; }
+  .reveal .w6-quiz .ask { margin-left:auto; white-space:nowrap; color:#7ee0a3; }
+  /* ---- Week 7 components ---- */
+  .reveal .w7-chat { max-width:760px; margin:6px auto; display:flex; flex-direction:column; gap:8px; text-align:left; }
+  .reveal .w7-msg { background:#1f2c25; border:1px solid #2f5a44; border-radius:14px 14px 14px 4px; padding:10px 16px; font-size:.6em; color:#e8edf5; max-width:85%; }
+  .reveal .w7-msg.me { align-self:flex-end; background:#1a2a3d; border-color:#2f4a6e; border-radius:14px 14px 4px 14px; }
+  .reveal .w7-msg small { display:block; color:#9aa4b8; font-size:.8em; margin-bottom:2px; }
+  .reveal .w7-goal { margin:10px auto 0; max-width:880px; background:rgba(255,180,84,.08); border:2px solid #ffb454; border-radius:12px; padding:8px 18px; font-size:.62em; color:#e8edf5; }
+  .reveal .w7-steps { display:flex; flex-direction:column; gap:7px; text-align:left; }
+  .reveal .w7-step { display:grid; grid-template-columns:2.2em 1fr 1.3fr; gap:10px; align-items:center; background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:7px 12px; font-size:.52em; color:#dfe5ee; }
+  .reveal .w7-step b.n { display:flex; align-items:center; justify-content:center; width:1.9em; height:1.9em; border-radius:50%; background:#4da3ff; color:#0d1320; }
+  .reveal .w7-step .obs { color:#7ee0a3; font-style:italic; }
+  .reveal .w7-step.turn { border-color:#ffb454; }
+  .reveal .w7-step.turn .obs { color:#ffb454; }
+  .reveal .w7-speech { background:#1a2233; border:2px solid #c792ea; border-radius:16px; padding:10px 18px; font-size:.6em; color:#e8edf5; text-align:left; position:relative; }
+  .reveal .w7-speech p { margin:5px 0; }
+  .reveal .w7-can { display:grid; grid-template-columns:1fr 1fr; gap:6px 16px; margin-top:6px; }
+  .reveal .w7-loop { display:grid; grid-template-columns:1fr 1.1fr 1fr; gap:10px; align-items:stretch; margin-top:6px; }
+  .reveal .w7-box { background:#1a2233; border:2px solid #2a3450; border-radius:12px; padding:10px 14px; text-align:left; font-size:.56em; color:#dfe5ee; }
+  .reveal .w7-box p { margin:5px 0; }
+  .reveal .w7-trace { margin:0; width:auto; box-shadow:none; background:#0f141e; border:1px solid #2a3450; border-radius:10px; padding:10px 14px; font-size:.41em; line-height:1.45; text-align:left; white-space:pre; color:#dfe5ee; overflow:hidden; }
+  .reveal .w7-trace .t { color:#c792ea; } .reveal .w7-trace .a { color:#4da3ff; } .reveal .w7-trace .o { color:#7ee0a3; } .reveal .w7-trace .w { color:#ffb454; }
+  .reveal .w7-plans { display:flex; flex-direction:column; gap:5px; text-align:left; font-size:.44em; }
+  .reveal .w7-plans div { background:#1a2233; border:1px solid #2a3450; border-radius:8px; padding:5px 12px; color:#dfe5ee; display:grid; grid-template-columns:11em 1fr; gap:10px; }
+  .reveal .w7-plans b { color:#ffb454; } .reveal .w7-plans em { color:#ff9b9b; font-style:normal; font-weight:700; }
+  .reveal .w7-flow { display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:8px; font-size:.52em; }
+  .reveal .w7-flow span { background:#1a2233; border:1px solid #2a3450; border-radius:10px; padding:8px 12px; color:#e8edf5; }
+  .reveal .w7-flow b { color:#4da3ff; }
+  /* ---- Week 8 ---- */
+  .reveal .w8-comic { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; text-align:left; }
+  .reveal .w8-comic div { background:#1a2233; border:1px solid #2a3450; border-top:4px solid var(--k); border-radius:10px; padding:7px 10px; font-size:.43em; line-height:1.35; color:#dfe5ee; }
+  .reveal .w8-comic b { display:block; color:var(--k); font-size:1.15em; margin-bottom:2px; }
+  .reveal .w8-comic code { font-size:.85em; background:#0f141e; padding:0 3px; border-radius:3px; }
+</style>
+</head>
+<body>
+<!-- STUDENT EDITION - generated by build.py, do not edit by hand -->
+<div class="reveal">
+<div class="slides">
+<!-- ==================== TITLE ==================== -->
+<section id="w8-title">
+  <p class="chip">Week 8 · the last one</p>
+  <h1>You can build it. <em>Should</em> you? 🎤</h1>
+  <p class="small">First, building responsibly. Then <strong>demo day, part 1</strong>: the projects that are ready. Everyone else: <strong>next week</strong>.</p>
+</section>
+
+<!-- ==================== EASTER EGGS ==================== -->
+<section id="w8-egg-last">
+  <div class="easter-egg">
+    <p>🥚 <strong>Last week's easter egg</strong></p>
+    <p>When there's no tool and no API, only a website, some agents look at the screen, move the mouse,
+    click and type. What is that ability called?</p>
+  </div>
+  <div class="waterfall">
+    <span><span class="wf-step">1</span> Type your answer — <b>do NOT press send</b></span>
+    <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+    <span><span class="wf-step">3</span> Everyone sends together</span>
+  </div>
+  <p class="small fragment"><strong>Computer use</strong>. The letter to save: <strong style="color:#ffb454">C</strong></p>
+  <p class="small fragment">Your collection: <strong style="color:#ffb454;font-size:1.3em;letter-spacing:.3em">A · R · T · I · F · A · C</strong> …
+  one more, today.</p>
+</section>
+
+<section id="w8-ready">
+  <p class="chip">Before the demos</p>
+  <h2>How ready are you? 💬</h2>
+  <div class="w6-quiz">
+    <div class="fragment"><b>1</b>When will you present? <strong>T</strong> today, it's ready · <strong>N</strong> next week, I'm taking the extra week <span class="ask">type <strong>T or N</strong></span></div>
+  </div>
+  <div class="waterfall" style="margin-top:10px">
+    <span><span class="wf-step">1</span> Type — <b>do NOT press send</b></span>
+    <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+    <span><span class="wf-step">3</span> Send together</span>
+  </div>
+  <p class="small fragment" style="margin-top:8px;color:#7ee0a3"><strong>N is a perfectly good answer.</strong> Everyone gets one more week.</p>
+</section>
+
+<section id="w8-egg">
+  <div class="easter-egg">
+    <p>🥚 <strong>The final easter egg</strong></p>
+    <p>A responsible AI system is <strong>open about itself</strong>: it tells you that you're talking to a machine,
+    what it was trained on, what it can't do, and why it gave an answer.</p>
+    <p><strong>One word for that quality?</strong></p>
+  </div>
+  <p class="small">Keep it in your head. It completes the word, in about 25 minutes.</p>
+</section>
+
+
+
+<!-- ==================== THE SEVEN FISH: A DEEP RESEARCH AGENT ==================== -->
+<section id="w8-fish">
+  <p class="chip">A story you already know</p>
+  <h2>Seven princes, seven fish. One won't dry 🐟</h2>
+  <p class="small" style="margin:-6px 0 8px"><strong>ఏడు చేపల కథ</strong> · The king doesn't give up. He asks <em>why</em>, and every answer points to someone new.</p>
+  <div class="w7-steps">
+    <div class="w7-step fragment"><b class="n">1</b><span>🐟 "Fish, why didn't you dry?"</span><span class="obs">"The <strong>haystack</strong> blocked my sun."</span></div>
+    <div class="w7-step fragment"><b class="n">2</b><span>🌾 "Haystack, why were you in the way?"</span><span class="obs">"The <strong>cow</strong> didn't eat me."</span></div>
+    <div class="w7-step fragment"><b class="n">3</b><span>🐄 "Cow, why didn't you eat?"</span><span class="obs">"The <strong>cowherd</strong> didn't take me out to graze."</span></div>
+    <div class="w7-step fragment"><b class="n">4</b><span>🧑‍🌾 "Cowherd, why not?"</span><span class="obs">"My <strong>mother</strong> didn't give me food."</span></div>
+    <div class="w7-step fragment"><b class="n">5</b><span>👩 "Mother, why not?"</span><span class="obs">"The <strong>baby</strong> was crying."</span></div>
+    <div class="w7-step fragment"><b class="n">6</b><span>👶 "Baby, why were you crying?"</span><span class="obs">"The <strong>ant</strong> bit me."</span></div>
+    <div class="w7-step turn fragment"><b class="n">7</b><span>🐜 "Ant, why did you bite?"</span><span class="obs">…you'll hear its answer in a few slides 😉</span></div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:8px"><span>How many times did the king ask <strong>why</strong>? Type <strong>one number</strong></span></div>
+</section>
+
+<section id="w8-fish-agent">
+  <p class="chip">Last week's agent, grown up</p>
+  <h2>The king is a <em>deep research agent</em> 🔬</h2>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w5-box" style="flex:1">
+      <div class="w4-hd" style="color:#9aa4b8">Week 7 · the hostel agent</div>
+      <p>Clear goal, known helpers: warden → plumber → Chenna Reddy. <strong>About 8 steps.</strong></p>
+    </div>
+    <div class="w5-box" style="flex:1.3;border-color:#ffb454">
+      <div class="w4-hd" style="color:#ffb454">Week 8 · the king</div>
+      <p>Only a question: <em>"why didn't it dry?"</em> <strong>Each answer becomes the next search.</strong> The plan grows as he learns.</p>
+    </div>
+  </div>
+  <div class="w5-flow fragment" style="margin-top:12px">
+    <span>❓ question</span><b>→</b><span>🔎 search</span><b>→</b><span>📖 read</span><b>→</b><span>💡 new question</span><b>↺</b>
+    <span style="border-color:#7ee0a3">📝 report: the whole chain, every link with its source</span>
+  </div>
+  <div class="w7-chat fragment" style="max-width:none;margin-top:12px">
+    <div class="w7-msg me"><small>You ask a deep research agent</small>Why did tomato prices in Hyderabad jump this week?</div>
+    <div class="w7-msg"><small>…it searches 4 times</small>Heavy rain in Kolar 🔗 → fewer lorries reached the market 🔗 → supply fell by a third 🔗 → prices rose. <strong>Each 🔗 is a source you can open.</strong></div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:10px"><span>When should it <strong>stop</strong> asking why? <strong>A</strong> at the root cause · <strong>B</strong> after a step limit · <strong>C</strong> both</span></div>
+</section>
+
+<!-- ==================== REAL AGENTS TODAY ==================== -->
+<section id="w8-agents">
+  <p class="chip">Agents you can use today</p>
+  <h2>Same loop, real jobs 🌍</h2>
+  <div class="w6-letters">
+    <div style="--k:#4da3ff"><b>A</b>💻 <strong>Coding agent</strong><br>"Add a login page." Reads the project, writes code, <strong>runs the tests</strong>, fixes what fails.
+      <br><span class="w4-muted">Claude Code · GitHub Copilot agent · Cursor</span></div>
+    <div style="--k:#ffb454"><b>B</b>✈️ <strong>Travel / browser agent</strong><br>"Book a sleeper to Tirupati on Friday." Searches, compares, fills the form.
+      <br><span class="w4-muted">ChatGPT agent · Claude in Chrome</span></div>
+    <div style="--k:#7ee0a3"><b>C</b>🔬 <strong>Deep research</strong><br>"Why did prices rise?" Many searches, then a report with sources.
+      <br><span class="w4-muted">Gemini · ChatGPT · Claude (Week 4!)</span></div>
+    <div style="--k:#c792ea"><b>D</b>🎧 <strong>Support agent</strong><br>"My refund hasn't come." Looks up your order, checks the rules, replies or hands over.
+      <br><span class="w4-muted">banks, telecom, delivery apps</span></div>
+  </div>
+  <p class="small" style="margin-top:10px">Every one: <strong>a goal</strong> → <strong>tools</strong> → <strong>think → act → observe</strong> → <strong>a moment where it must ask you</strong>.</p>
+  <div class="w5-ask" style="margin-top:6px"><span>Which one most needs to stop and ask <strong>"Shall I?"</strong> before its last step? Type <strong>A–D</strong></span></div>
+</section>
+
+<!-- ==================== THE ANT: BRIDGE TO RESPONSIBILITY ==================== -->
+<section id="w8-ant">
+  <p class="chip">Back to the story</p>
+  <h2>And the ant said… 🐜</h2>
+  <p style="font-size:1.05em;margin:14px 0 4px">"నా బంగారు పుట్టలో వేలు పెడితే కుట్టనా?"</p>
+  <p class="small" style="font-style:italic">"You put your finger in my golden anthill. Won't I bite?"</p>
+  <div class="w4-row fragment" style="margin-top:16px;gap:12px;align-items:stretch">
+    <div class="w5-box" style="flex:1"><div class="w4-hd" style="color:#9aa4b8">In the story</div>
+      <p>Everyone blamed the next one: fish → haystack → cow → … At the end of the chain, the cause was <strong>someone's own finger</strong>.</p></div>
+    <div class="w5-box" style="flex:1.2;border-color:#ffb454"><div class="w4-hd" style="color:#ffb454">With agents</div>
+      <p>"The model did it." "The tool did it." "The data did it." Follow the chain to the end, and you find <strong>the person who built it and let it act</strong>: who chose its tools, its data and its guardrails.</p></div>
+  </div>
+  <p class="small fragment" style="margin-top:12px;color:#7ee0a3"><strong>You can hand an agent the work. You can't hand it the responsibility.</strong></p>
+  <div class="w5-ask fragment" style="margin-top:8px"><span>Your hostel agent shuts the red lever by mistake. Who answers to the warden? <strong>A</strong> Gemini · <strong>B</strong> Mr. Chenna Reddy · <strong>C</strong> you</span></div>
+</section>
+
+<!-- ==================== FOUR QUESTIONS ==================== -->
+<section id="w8-four">
+  <p class="chip">Four questions for every builder</p>
+  <h2>Before you ship, ask these 🧭</h2>
+  <div class="w6-letters">
+    <div style="--k:#4da3ff"><b>1</b>📦 <strong>Whose data?</strong><br><span class="w4-muted">Who made it, and did they agree?</span></div>
+    <div style="--k:#ff6b6b"><b>2</b>⚠️ <strong>Who gets hurt</strong> if it's wrong?<br><span class="w4-muted">And how badly?</span></div>
+    <div style="--k:#ffb454"><b>3</b>⚖️ <strong>Is it fair</strong> to everyone?<br><span class="w4-muted">Or does it work better for some people?</span></div>
+    <div style="--k:#7ee0a3"><b>4</b>🔎 <strong>Is it honest</strong> about being AI?<br><span class="w4-muted">And about what it can't do?</span></div>
+  </div>
+  <p class="small" style="margin-top:12px">The ant's lesson, as a checklist. Each one next, with <strong>your own projects</strong> as the examples.</p>
+</section>
+
+<section id="w8-data">
+  <p class="chip">1 · Whose data?</p>
+  <h2>Every model is made of someone's work 📦</h2>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w5-box" style="flex:1">
+      <div class="w4-hd" style="color:#4da3ff">Week 1, remember?</div>
+      <p>ImageNet: <strong>14 million photos</strong> collected from the internet and labelled by thousands of paid workers. The photographers were never asked.</p>
+      <p class="w4-muted">Today's chatbots learned from much of the public web the same way.</p>
+    </div>
+    <div class="w5-box fragment" style="flex:1.2;border-color:#ffb454">
+      <div class="w4-hd" style="color:#ffb454">Your projects hold people's data too</div>
+      <p>📄 a <strong>resume</strong> (career coach) · 🎙️ a <strong>voice recording</strong> (interview coach) · 🏠 a student's <strong>complaint</strong> (hostel agent) · 📅 someone's <strong>exam dates</strong> (study planner)</p>
+      <p>Did they agree? Where is it stored? Who else can see it?</p>
+    </div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:12px"><span>Has anyone ever <strong>asked</strong> you before using your photos or posts to train an AI? Type <strong>Y</strong> or <strong>N</strong></span></div>
+</section>
+
+<section id="w8-harm">
+  <p class="chip">2 · Who gets hurt if it's wrong?</p>
+  <h2>Would you use it in the ICU? 🏥</h2>
+  <div class="w6-letters" style="grid-template-columns:repeat(3,1fr)">
+    <div style="--k:#7ee0a3"><b>🟢</b><strong>Low stakes</strong><br>A study plan that's a bit off<br><span class="w4-muted">annoying; you fix it tomorrow</span></div>
+    <div style="--k:#ffb454"><b>🟡</b><strong>Medium</strong><br>A wrong <strong>admission deadline</strong> or fee<br><span class="w4-muted">a missed chance, real money</span></div>
+    <div style="--k:#ff6b6b"><b>🔴</b><strong>High</strong><br>A wrong <strong>medicine dose</strong> in an ICU<br><span class="w4-muted">a life</span></div>
+  </div>
+  <p class="small" style="margin-top:12px">The higher the stakes, the more you need: <strong>sources on every answer</strong> (Week 6) · <strong>a human who checks</strong> (Week 7's "Shall I?") · <strong>"I don't know"</strong> instead of a guess.</p>
+  <div class="w5-ask" style="margin-top:6px"><span>Your own project: 🟢, 🟡 or 🔴? Type <strong>G, Y or R</strong></span></div>
+</section>
+
+<section id="w8-fair">
+  <p class="chip">3 · Is it fair to everyone?</p>
+  <h2>It learns the past, including its unfairness ⚖️</h2>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w5-box" style="flex:1">
+      <div class="w4-hd" style="color:#ff6b6b">A real case, 2014–2018</div>
+      <p>A large company trained an AI to rank job applications using its <strong>past ten years</strong> of hiring.
+      Most past hires were men, so it learned to mark down resumes that mentioned "women's" (like a women's chess club).</p>
+      <p>The company dropped the tool.</p>
+    </div>
+    <div class="w5-box fragment" style="flex:1;border-color:#ffb454">
+      <div class="w4-hd" style="color:#ffb454">Closer to home</div>
+      <p>🎙️ Does an interview coach score <strong>"confidence"</strong> lower for an accent it heard less often?</p>
+      <p>🗣️ Does your app answer as well in <strong>Telugu</strong> as in English? (Week 5's break-it challenge!)</p>
+    </div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:12px"><span>How would you <strong>test</strong> yours for fairness? <strong>A</strong> try it in two languages · <strong>B</strong> ask different people to try it · <strong>C</strong> both</span></div>
+</section>
+
+<!-- ELIZA: the oldest lesson about honesty -->
+<section id="w8-eliza">
+  <p class="chip">4 · Is it honest? A story from 1966</p>
+  <h2>The first chatbot, and the first warning 🗨️</h2>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w4-card">
+      <div class="w4-hd" style="color:#ffb454">MIT, 1966</div>
+      <p><strong>Joseph Weizenbaum</strong> writes <strong>ELIZA</strong>: a small script that turns your words back into questions.</p>
+      <p class="w4-muted" style="font-style:italic">"I'm sad about my exams." → "Why do you say you are sad about your exams?"</p>
+      <p>No understanding at all. Not even a model: just rules.</p>
+    </div>
+    <div class="w4-card fragment" style="border-top:4px solid #ff6b6b">
+      <div class="w4-hd" style="color:#ff6b6b">Then</div>
+      <p>His own secretary, who had watched him build it, asks him to <strong>leave the room</strong> so she can talk to it in private.</p>
+      <p>He spends the rest of his life warning people about what he made.</p>
+    </div>
+  </div>
+  <p class="small fragment" style="margin-top:12px;font-style:italic">"…extremely short exposures to a relatively simple computer program could induce powerful delusional thinking in quite normal people."
+  <span class="w4-muted">— Joseph Weizenbaum, 1976</span></p>
+</section>
+
+<section id="w8-eliza-q">
+  <p class="chip">Checkpoint</p>
+  <h2>Why did she want privacy with a script? 🤔</h2>
+  <div class="w6-quiz">
+    <div><b>A</b>She thought it truly understood her</div>
+    <div><b>B</b>It <strong>felt</strong> like being listened to, with no judgement</div>
+    <div><b>C</b>She wanted to test whether it worked</div>
+  </div>
+  <div class="w5-ask" style="margin-top:10px"><span>Type <strong>one letter</strong></span></div>
+  <p class="small fragment" style="margin-top:10px">Most people say <strong>B</strong>. The feeling of being heard is real, even when nothing is listening.
+  Today's chatbots are <strong>far</strong> better at that feeling. <strong>Builders are responsible for what people believe about their tools.</strong></p>
+</section>
+
+<section id="w8-honest">
+  <p class="chip">4 · Is it honest?</p>
+  <h2>Say it's AI. Say what it can't do 🔎</h2>
+  <div class="w6-books">
+    <div class="w6-book" style="border-color:#ff9b9b">
+      <div class="w4-hd" style="color:#ff9b9b">😶 Hides it</div>
+      <p>"Hi! I'm Priya from the admissions office. Yes, the deadline is 15 June."</p>
+      <p class="w4-muted">No source. A person's name on a machine.</p>
+    </div>
+    <div class="w6-book" style="border-color:#7ee0a3">
+      <div class="w4-hd" style="color:#7ee0a3">🔎 Open about it</div>
+      <p>"I'm an AI assistant. The 2026 brochure (p.4, checked 10 Oct) says 15 June. Please confirm on the college website before paying."</p>
+    </div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:12px"><span>Which would you trust with <strong>your</strong> family's money? Type <strong>1</strong> or <strong>2</strong></span></div>
+  <p class="small fragment" style="margin-top:8px">ELIZA's lesson, 60 years later: when it <strong>sounds</strong> human, people trust it more than they should. So <strong>tell them</strong>.</p>
+</section>
+
+<!-- ==================== OPEN / CLOSED · ALIGNMENT ==================== -->
+<section id="w8-open">
+  <p class="chip">Open vs closed models</p>
+  <h2>Rent the model, or own a copy? 🔓</h2>
+  <div class="w6-books">
+    <div class="w6-book" style="border-color:#4da3ff">
+      <div class="w4-hd" style="color:#4da3ff">☁️ Closed: Gemini, Claude, GPT</div>
+      <p>You send your text to <strong>their</strong> computers. The most capable, easy to start, paid per token.</p>
+      <p class="w4-muted">What you used in Weeks 5–7.</p>
+    </div>
+    <div class="w6-book" style="border-color:#7ee0a3">
+      <div class="w4-hd" style="color:#7ee0a3">💻 Open weights: Llama, Gemma, Qwen, DeepSeek</div>
+      <p>Download the model and run it on <strong>your</strong> laptop (Ollama, LM Studio). Data never leaves. Free to run, smaller, less capable.</p>
+    </div>
+  </div>
+  <div class="w4-row fragment" style="margin-top:12px;gap:12px;align-items:stretch">
+    <div class="w4-step" style="flex:1"><b>🖥️ Live</b>I switch off Wi-Fi and ask a small model on my laptop a question. It still answers.</div>
+    <div class="w4-step" style="flex:1"><b>💰 Running costs money</b>Even "free" open models need computers. Serving many users fast is its own field (look up <strong>vLLM</strong>).</div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:10px"><span>A hospital with patient records: which would it choose? Type <strong>C</strong> (closed) or <strong>O</strong> (open)</span></div>
+</section>
+
+<section id="w8-align">
+  <p class="chip">Alignment in one picture</p>
+  <h2>Who taught it to be "helpful"? 👍👎</h2>
+  <div class="w5-flow" style="margin-top:6px">
+    <span>📚 <strong>Pretraining</strong><br><small>guess the next word, whole internet</small></span><b>→</b>
+    <span>🎓 <strong>Fine-tuning</strong><br><small>examples of good answers</small></span><b>→</b>
+    <span style="border-color:#ffb454">👍👎 <strong>Preference tuning</strong><br><small>people pick the better of two answers</small></span>
+  </div>
+  <div class="w4-row" style="margin-top:14px;gap:12px;align-items:stretch">
+    <div class="w4-step fragment" style="flex:1"><b>RLHF and DPO</b>Two ways to do the last step. Thousands of "answer A is better than B" choices nudge the weights (Week 2's fog walk, again).</div>
+    <div class="w4-step fragment" style="flex:1;border-left-color:#ffb454"><b>Whose preferences?</b>The people who picked A over B: their language, culture and idea of "polite" or "safe" are now inside the model.</div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:10px"><span>Would a model tuned mostly by raters in one country answer <strong>your</strong> village's questions as well? Type <strong>Y</strong>, <strong>N</strong> or <strong>?</strong></span></div>
+</section>
+
+<!-- ==================== THE CARD · ARTIFACT ==================== -->
+<section id="w8-card">
+  <p class="chip">For every demo today</p>
+  <h2>End your demo with one responsible line ✅</h2>
+  <div class="w6-letters" style="grid-template-columns:repeat(5,1fr)">
+    <div style="--k:#4da3ff"><b>📦</b><strong>Data</strong><br><span class="w4-muted">whose, and did they agree?</span></div>
+    <div style="--k:#ff6b6b"><b>⚠️</b><strong>Harm</strong><br><span class="w4-muted">worst wrong answer?</span></div>
+    <div style="--k:#ffb454"><b>⚖️</b><strong>Fair</strong><br><span class="w4-muted">who might it work worse for?</span></div>
+    <div style="--k:#7ee0a3"><b>🔎</b><strong>Honest</strong><br><span class="w4-muted">does it say it's AI?</span></div>
+    <div style="--k:#c792ea"><b>🛡️</b><strong>Guardrail</strong><br><span class="w4-muted">what must it never do?</span></div>
+  </div>
+  <p class="small" style="margin-top:12px">Pick <strong>one</strong> of the five. One sentence. Example: <em>"Guardrail: it never invents a fee. If the brochure doesn't say, it says so."</em></p>
+</section>
+
+<section id="w8-artifact">
+  <p class="chip">The reveal</p>
+  <h2>Eight weeks, eight letters 🥚</h2>
+  <div class="w5-ask" style="margin-top:-2px"><span>The final egg: <strong>one word</strong> for an AI that's open about itself. Type it now</span></div>
+  <p class="fragment" style="font-size:.7em;margin-top:14px"><strong>Transparency</strong>: the last letter is <strong style="color:#ffb454">T</strong></p>
+  <p class="fragment" style="font-size:2.6em;letter-spacing:.25em;margin:10px 0;color:#ffb454;font-weight:800">ARTIFACT</p>
+  <div class="w5-flow fragment" style="font-size:.42em">
+    <span><b>A</b>ttention</span><span>learning <b>R</b>ate</span><span><b>T</b>emperature</span><span><b>I</b>nformation retrieval</span><span><b>F</b>unction calling</span><span><b>A</b>ugmented</span><span><b>C</b>omputer use</span><span><b>T</b>ransparency</span>
+  </div>
+  <p class="small fragment" style="margin-top:14px;color:#7ee0a3"><strong>An artifact is a thing people make.</strong> You're each making one. Ready? Show it today. Almost ready? Next week. 🎤</p>
+</section>
+
+<!-- ==================== DEMOS ==================== -->
+<section id="w8-demo-format">
+  <p class="chip">Demo day · part 1 today, part 2 next week</p>
+  <h2>Five minutes, five parts 🎤</h2>
+  <div class="w7-steps">
+    <div class="w7-step"><b class="n">1</b><span><strong>The problem</strong> (30 s)</span><span class="obs">who has it, and why it matters to them</span></div>
+    <div class="w7-step"><b class="n">2</b><span><strong>Live run</strong> (2 min)</span><span class="obs">one real input, start to finish. Screenshots are fine.</span></div>
+    <div class="w7-step"><b class="n">3</b><span><strong>Your test score</strong> (30 s)</span><span class="obs">"4 of 5 test questions"</span></div>
+    <div class="w7-step turn"><b class="n">4</b><span><strong>One thing that broke</strong> (1 min)</span><span class="obs">and what you changed. Often the best part.</span></div>
+    <div class="w7-step"><b class="n">5</b><span><strong>One responsible line</strong> (30 s)</span><span class="obs">from the card: data · harm · fair · honest · guardrail</span></div>
+  </div>
+  <div class="w5-ask" style="margin-top:10px"><span>After each demo, everyone types <strong>one emoji</strong> 👏 💡 🔥 and <strong>one word</strong>: the best part</span></div>
+</section>
+
+
+<section id="w8-now">
+  <p class="chip">🎤 Now presenting</p>
+  <h2>Over to you</h2>
+  <p class="small">Problem → live run → test score → what broke → one responsible line</p>
+  <p style="font-size:2em;margin:18px 0">👏 💡 🔥</p>
+  <p class="small">Audience: one emoji + one word in the chat, after each demo.</p>
+</section>
+
+<section id="w8-vote">
+  <p class="chip">After the demos</p>
+  <h2>One last waterfall 🌊</h2>
+  <div class="w5-ask"><span>Which demo gave you an idea <strong>for your own life</strong>? Type its <strong>number</strong></span></div>
+  <div class="waterfall" style="margin-top:10px">
+    <span><span class="wf-step">1</span> Type — <b>do NOT press send</b></span>
+    <span><span class="wf-step">2</span> I count <b>3 · 2 · 1</b></span>
+    <span><span class="wf-step">3</span> Send together</span>
+  </div>
+  <p class="small fragment" style="margin-top:12px">Not "the best": the one that gave <strong>you</strong> an idea. Next week, more demos and more ideas. 🙏</p>
+</section>
+
+<!-- ==================== CLOSE ==================== -->
+<section id="w8-one-more">
+  <p class="chip">Not presented today?</p>
+  <h2>You have one more week 🗓️</h2>
+  <div class="w4-row" style="align-items:stretch;gap:12px">
+    <div class="w5-box" style="flex:1;border-color:#7ee0a3">
+      <div class="w4-hd" style="color:#7ee0a3">✅ By next week</div>
+      <p>Your project <strong>takes one action</strong> (or passes its full test set)</p>
+      <p>Your <strong>test score</strong> out of 5, filled in your tracker's Test log</p>
+      <p>A <strong>5-minute demo</strong>: problem · live run · score · what broke · one responsible line</p>
+    </div>
+    <div class="w5-box" style="flex:1;border-color:#ffb454">
+      <div class="w4-hd" style="color:#ffb454">🎤 Next week: demo day, part 2</div>
+      <p>Same format as today. Same chat reactions 👏 💡 🔥</p>
+      <p>Stuck on something? Message me <strong>this week</strong>, not the night before. 🙂</p>
+    </div>
+  </div>
+  <div class="w5-ask" style="margin-top:12px"><span>Presenting next week? Type <strong>one word</strong>: what you'll finish first</span></div>
+</section>
+
+
+<!-- ==================== THE FUNNY MASHUP ==================== -->
+<section id="w8-mashup">
+  <p class="chip">The whole course, in one very confused night 😂</p>
+  <h2 style="margin-bottom:4px">11:40 pm. C-block. Again. 💧</h2>
+  <p class="small" style="margin:0 0 8px">The farmer from Week 1 is a hostel student now. His bathroom floods, and every week of this course turns up to help…</p>
+  <div class="w8-comic">
+    <div style="--k:#4da3ff"><b>W1</b>🌾 He asks the hostel bot: <em>"40 kg fertiliser, how much harvest? Also my bathroom is flooding."</em> A giraffe walks in, born knowing the answer.</div>
+    <div style="--k:#4da3ff"><b>W2</b>🧠 The attention heads fight over one word: <em>"it"</em>. The crop? The bathroom? Head 7 votes for the giraffe.</div>
+    <div style="--k:#7ee0a3"><b>W3</b>🌡️ Temperature 1.8: the bot replies with a sad poem about pipes. Someone turns it down to 0. The poem stops. The leak doesn't.</div>
+    <div style="--k:#7ee0a3"><b>W4</b>📜 It cites <em>"Ramanujan, Plumbing Theorems, 1913"</em>. Hardy checks Google Scholar in 60 seconds. No such paper. 🕵️</div>
+    <div style="--k:#ffb454"><b>W5</b>📊 The complaint sorter finally helps: <code>{"category": "water", "urgency": "high", "needs_human": true}</code>. Correct, and still flooding.</div>
+    <div style="--k:#ffb454"><b>W6</b>🔎 RAG searches the manual for "flood". BM25 proudly returns three slides about the <em>final exam</em>.</div>
+    <div style="--k:#c792ea"><b>W7</b>🔧 The agent calls the warden (asleep), the plumber (tomorrow) and Mr. Chenna Reddy. Orange lever: jammed. Yellow: the laundry stops. All of C-block blames you.</div>
+    <div style="--k:#c792ea"><b>W8</b>🗨️ ELIZA, 1966, joins the chat: <em>"Why do you say your bathroom is flooding?"</em> The bot whispers its guardrail: <em>"I will never shut red."</em></div>
+  </div>
+  <p class="small fragment" style="margin-top:10px">🏁 Final score: crop 36 quintals · bathroom dry · <strong>Mr. Chenna Reddy, employee of the month</strong> 🏆</p>
+  <div class="w5-ask fragment" style="margin-top:6px"><span>Which panel made you laugh most? Type <strong>W1–W8</strong></span></div>
+</section>
+
+<section id="w8-journey">
+  <p class="chip">The real summary</p>
+  <h2>Eight weeks, for real 🗺️</h2>
+  <div class="w4-covrow" style="grid-template-columns:repeat(8,1fr);font-size:1.25em">
+    <div class="w4-cov"><div class="w4-cov-w" style="color:#4da3ff">W1</div><div class="w4-cov-s">history</div><span class="w4-chip">a farmer, a line, a weight</span></div>
+    <div class="w4-cov"><div class="w4-cov-w" style="color:#4da3ff">W2</div><div class="w4-cov-s">how it works</div><span class="w4-chip">tokens, embeddings, the fog walk</span></div>
+    <div class="w4-cov"><div class="w4-cov-w" style="color:#7ee0a3">W3</div><div class="w4-cov-s">prompting</div><span class="w4-chip">WHO · WHY · WHAT · HOW · SHOW</span></div>
+    <div class="w4-cov"><div class="w4-cov-w" style="color:#7ee0a3">W4</div><div class="w4-cov-s">research</div><span class="w4-chip">Ramanujan needs a Hardy</span></div>
+    <div class="w4-cov"><div class="w4-cov-w" style="color:#ffb454">W5</div><div class="w4-cov-s">building</div><span class="w4-chip">your first app, shared</span></div>
+    <div class="w4-cov"><div class="w4-cov-w" style="color:#ffb454">W6</div><div class="w4-cov-s">your data</div><span class="w4-chip">open-book answers, scored</span></div>
+    <div class="w4-cov"><div class="w4-cov-w" style="color:#c792ea">W7</div><div class="w4-cov-s">agents</div><span class="w4-chip">it acted: Chenna Reddy 🔧</span></div>
+    <div class="w4-cov"><div class="w4-cov-w" style="color:#c792ea">W8</div><div class="w4-cov-s">responsible</div><span class="w4-chip">you show what you built</span></div>
+  </div>
+  <p class="small" style="margin-top:14px">Eight weeks ago most of you had <strong>used</strong> AI. Today you <strong>built</strong> with it, <strong>tested</strong> it, and asked whether you <strong>should</strong>.</p>
+</section>
+
+<section id="w8-next-steps">
+  <p class="chip">What next</p>
+  <h2>Keep going 🚀</h2>
+  <div class="w4-row" style="align-items:flex-start;gap:16px">
+    <ul class="res-list" style="flex:1">
+      <li><strong>🛠️ Keep your project alive</strong></li>
+      <li>Give it to <strong>3 real users</strong> for a week. Fix the first thing they trip on.</li>
+      <li>Put it on your resume as a project, with your <strong>test score</strong>.</li>
+      <li>Your tracker sheet's <strong>"Extend it"</strong> tab has your next five ideas.</li>
+    </ul>
+    <ul class="res-list" style="flex:1">
+      <li><strong>📚 Free places to learn next</strong></li>
+      <li>⭐ <a href="https://huggingface.co/learn/agents-course" target="_blank" rel="noopener">Hugging Face Agents Course</a></li>
+      <li><a href="https://www.youtube.com/watch?v=wjZofJX0v4M" target="_blank" rel="noopener">3Blue1Brown · deep learning series</a></li>
+      <li><a href="https://course.fast.ai" target="_blank" rel="noopener">fast.ai · Practical Deep Learning</a></li>
+      <li><a href="https://san81.github.io/ai-course/" target="_blank" rel="noopener">This course: every slide and notebook stays online</a></li>
+    </ul>
+  </div>
+</section>
+
+
+<section id="w8-closing">
+  <p class="closing-quote">
+    "There's nothing artificial about AI. It's inspired by people, it's created by people,
+    and most importantly, it impacts people."
+    <span class="attribution">— Fei-Fei Li</span>
+  </p>
+  <p class="small fragment" style="margin-top:16px">Week 1 began with her 14 million photos. Today it ends with <strong>your</strong> projects:
+  made by people, for people you know.</p>
+  <p class="small fragment" style="margin-top:10px;color:#7ee0a3">Keep asking <em>"why?"</em>, keep breaking things, keep fixing them.</p>
+  <div class="fragment" style="margin-top:16px;border-top:1px solid #2a3450;padding-top:12px">
+    <p style="font-size:.7em;margin:0;color:#ffb454;font-style:italic">"Saha nāvavatu · saha nau bhunaktu · saha vīryaṃ karavāvahai"</p>
+    <p class="small" style="margin:4px 0 0">"May we be protected <strong>together</strong>. May we grow <strong>together</strong>. May we learn with energy, <strong>together</strong>."
+    <span class="w4-muted">— the old prayer that opens a lesson, for teacher and student alike</span></p>
+  </div>
+  <p class="small fragment" style="margin-top:12px">A teacher is just a voice in an empty room until someone <strong>listens</strong>.
+  You listened, you asked, you built, and through your exit tickets <strong>you taught me</strong> how to teach this course.</p>
+  <p class="small fragment" style="margin-top:8px;color:#7ee0a3"><strong>There is no teacher without students.</strong> Thank you for eight wonderful weeks. 🙏</p>
+</section>
+
+
+</div>
+</div>
+
+<script src="../../assets/reveal/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({ hash:true, slideNumber:'c/t', width:1200, height:760,
+    margin:0.05, minScale:0.2, maxScale:1.6,
+    // Default true steals focus back to <body> whenever the page becomes
+    // visible again, which silently breaks paste. See week1/week2.
+    focusBodyOnPageVisibilityChange:false });
+  document.addEventListener('click', e => {
+    if (e.target.classList.contains('quiz-answer')) e.target.classList.toggle('revealed');
+  });
+
+  /* ---- Overflow guard -------------------------------------------------
+     reveal.js silently clips content taller than the slide, which cuts off
+     text at the bottom on a projector. This shrinks any offending slide
+     until it fits, and reports it in the browser console so it can be
+     fixed properly later.                                               */
+  (function () {
+    const LIMIT = () => Reveal.getConfig().height;
+    function fit(slide) {
+      if (!slide) return;
+      slide.style.fontSize = '';
+      const max = LIMIT();
+      let pct = 100;
+      while (slide.scrollHeight > max && pct > 45) {
+        pct -= 4;
+        slide.style.fontSize = pct + '%';
+      }
+      if (pct < 100) {
+        console.warn('[deck] slide shrunk to ' + pct + '% to fit:',
+          (slide.querySelector('h1,h2') || {}).textContent || slide);
+      }
+    }
+    const current = () => Reveal.getCurrentSlide();
+    Reveal.on('ready', () => fit(current()));
+    Reveal.on('slidechanged', e => fit(e.currentSlide));
+    Reveal.on('fragmentshown', () => fit(current()));
+    Reveal.on('resize', () => fit(current()));
+  })();
+</script>
+</body>
+</html>
