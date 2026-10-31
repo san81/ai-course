@@ -294,6 +294,15 @@
   .reveal .w8-comic div { background:#1a2233; border:1px solid #2a3450; border-top:4px solid var(--k); border-radius:10px; padding:7px 10px; font-size:.43em; line-height:1.35; color:#dfe5ee; }
   .reveal .w8-comic b { display:block; color:var(--k); font-size:1.15em; margin-bottom:2px; }
   .reveal .w8-comic code { font-size:.85em; background:#0f141e; padding:0 3px; border-radius:3px; }
+  /* week 8 mashup: group chat */
+  .reveal .gc { column-count:2; column-gap:14px; text-align:left; background:#0f1520; border:1px solid #2a3450; border-radius:16px; padding:10px 14px; }
+  .reveal .gc-top { column-span:all; display:flex; align-items:center; gap:10px; font-size:.5em; color:#e8edf5; border-bottom:1px solid #2a3450; padding-bottom:7px; margin-bottom:2px; }
+  .reveal .gc-top small { color:#9aa4b8; }
+  .reveal .gc-m { display:block; break-inside:avoid; margin:0 0 6px; background:#1f2c25; border:1px solid #2f5a44; border-radius:4px 12px 12px 12px; padding:4px 11px; font-size:.48em; color:#e8edf5; line-height:1.3; }
+  .reveal .gc-m b { display:block; font-size:.86em; }
+  .reveal .gc-m i.wk { float:right; font-style:normal; color:#9aa4b8; font-size:.8em; margin-left:12px; }
+  .reveal .gc-sys { display:block; break-inside:avoid; text-align:center; background:#1a2233; color:#9aa4b8; border-radius:8px; padding:2px 10px; font-size:.4em; }
+  .reveal .gc-m.me { margin-left:40px; background:#1a2a3d; border-color:#2f4a6e; border-radius:12px 4px 12px 12px; }
 </style>
 </head>
 <body>
@@ -380,15 +389,92 @@
       <p>Only a question: <em>"why didn't it dry?"</em> <strong>Each answer becomes the next search.</strong> The plan grows as he learns.</p>
     </div>
   </div>
-  <div class="w5-flow fragment" style="margin-top:12px">
-    <span>❓ question</span><b>→</b><span>🔎 search</span><b>→</b><span>📖 read</span><b>→</b><span>💡 new question</span><b>↺</b>
+  <div class="fragment">
+  <p class="small" style="margin:12px 0 4px">Last week's loop, still inside: <strong>think → act → observe → repeat</strong></p>
+  <div class="w5-flow" style="margin-top:0">
+    <span>❓ question<br><small style="color:#ff9b9b;font-weight:700;font-size:.72em">🧠 think</small></span><b>→</b><span>🔎 search<br><small style="color:#ffb454;font-weight:700;font-size:.72em">🛠️ act</small></span><b>→</b><span>📖 read<br><small style="color:#4da3ff;font-weight:700;font-size:.72em">👀 observe</small></span><b>→</b><span>💡 new question<br><small style="color:#7ee0a3;font-weight:700;font-size:.72em">↺ repeat</small></span><b>↺</b>
     <span style="border-color:#7ee0a3">📝 report: the whole chain, every link with its source</span>
+  </div>
   </div>
   <div class="w7-chat fragment" style="max-width:none;margin-top:12px">
     <div class="w7-msg me"><small>You ask a deep research agent</small>Why did tomato prices in Hyderabad jump this week?</div>
     <div class="w7-msg"><small>…it searches 4 times</small>Heavy rain in Kolar 🔗 → fewer lorries reached the market 🔗 → supply fell by a third 🔗 → prices rose. <strong>Each 🔗 is a source you can open.</strong></div>
   </div>
   <div class="w5-ask fragment" style="margin-top:10px"><span>When should it <strong>stop</strong> asking why? <strong>A</strong> at the root cause · <strong>B</strong> after a step limit · <strong>C</strong> both</span></div>
+</section>
+
+<!-- ==================== FROM THE HOSTEL AGENT TO A CODING AGENT ==================== -->
+<section id="w8-hostel-to-code">
+  <p class="chip">Same desk, new job</p>
+  <h2 style="margin-bottom:8px">Last week's agent, now writing code 💻</h2>
+  <div style="display:flex;gap:14px;justify-content:center">
+    <div><svg viewBox="0 0 560 330" width="560" height="330" role="img" aria-label="Last week · the hostel agent">
+<defs><marker id="hka" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8b96ad"/></marker></defs>
+<rect x="1" y="1" width="558" height="328" rx="16" fill="#141a26" stroke="#9aa4b8" stroke-width="1.5"/>
+<text x="20" y="28" font-size="15" font-weight="800" fill="#9aa4b8">Last week · the hostel agent</text>
+<rect x="16" y="42" width="318" height="40" rx="12" fill="#1f2738" stroke="#3a4560"/>
+<text x="175" y="67" font-size="13.5" fill="#e8edf5" text-anchor="middle" font-style="italic">“Water is leaking in C-block, room 214!”</text>
+<rect x="18" y="88" width="122" height="20" rx="10" fill="#9aa4b8"/><text x="79" y="102" font-size="11.5" font-weight="800" fill="#0d1320" text-anchor="middle">PROMPT · the goal</text>
+<circle cx="52" cy="160" r="28" fill="#1a2233" stroke="#2a3450" stroke-width="2"/><text x="52" y="171" font-size="30" text-anchor="middle">🧑‍🎓</text>
+<text x="52" y="205" font-size="13" fill="#e8edf5" font-weight="700" text-anchor="middle">Student</text>
+<line x1="84" y1="160" x2="148" y2="160" stroke="#8b96ad" stroke-width="2" marker-end="url(#hka)"/>
+<circle cx="200" cy="160" r="44" fill="#1a2233" stroke="#ffb454" stroke-width="3"/><text x="200" y="176" font-size="44" text-anchor="middle">🧑</text>
+<text x="200" y="124" font-size="20" text-anchor="middle">🧠</text>
+<text x="176" y="122" font-size="11.5" text-anchor="end"><tspan fill="#ff9b9b" font-weight="800">MODEL</tspan><tspan fill="#c8d0dd"> · Gemini</tspan></text>
+<rect x="16" y="222" width="318" height="92" rx="12" fill="#18202f" stroke="#7ee0a3" stroke-dasharray="6 5"/>
+<text x="26" y="240" font-size="11.5" font-weight="800" fill="#7ee0a3">HARNESS · the desk</text>
+<text x="56" y="276" font-size="26" text-anchor="middle">☎️</text><text x="56" y="300" font-size="11.5" fill="#c8d0dd" text-anchor="middle">phone</text>
+<text x="136" y="276" font-size="26" text-anchor="middle">📒</text><text x="136" y="300" font-size="11.5" fill="#c8d0dd" text-anchor="middle">notebook</text>
+<text x="216" y="276" font-size="26" text-anchor="middle">📋</text><text x="216" y="300" font-size="11.5" fill="#c8d0dd" text-anchor="middle">rules card</text>
+<text x="296" y="276" font-size="26" text-anchor="middle">⏱️</text><text x="296" y="300" font-size="11.5" fill="#c8d0dd" text-anchor="middle">15 tries</text>
+<text x="452" y="52" font-size="11.5" font-weight="800" fill="#c792ea" text-anchor="middle">HELPERS</text>
+<line x1="246" y1="160" x2="366" y2="86" stroke="#8b96ad" stroke-width="1.6" marker-end="url(#hka)"/>
+<text x="388" y="95" font-size="26" text-anchor="middle">👩‍💼</text><text x="410" y="85" font-size="13" fill="#e8edf5" font-weight="700">Warden</text><text x="410" y="101" font-size="11.5" fill="#9aa4b8">approves the red lever</text>
+<line x1="246" y1="160" x2="366" y2="138" stroke="#8b96ad" stroke-width="1.6" marker-end="url(#hka)"/>
+<text x="388" y="147" font-size="26" text-anchor="middle">🧰</text><text x="410" y="137" font-size="13" fill="#e8edf5" font-weight="700">Plumber</text><text x="410" y="153" font-size="11.5" fill="#9aa4b8">knows who to call</text>
+<line x1="246" y1="160" x2="366" y2="190" stroke="#8b96ad" stroke-width="1.6" marker-end="url(#hka)"/>
+<text x="388" y="199" font-size="26" text-anchor="middle">🧔</text><text x="410" y="189" font-size="13" fill="#e8edf5" font-weight="700">Chenna Reddy</text><text x="410" y="205" font-size="11.5" fill="#9aa4b8">our MCP server 🔧</text>
+<rect x="352" y="222" width="192" height="92" rx="12" fill="#18202f" stroke="#2a3450"/>
+<text x="384" y="260" font-size="24" text-anchor="middle">📕</text><text x="384" y="284" font-size="11" fill="#c8d0dd" text-anchor="middle">manual</text><text x="384" y="298" font-size="11" fill="#c8d0dd" text-anchor="middle">index p.44</text>
+<text x="448" y="260" font-size="24" text-anchor="middle">🔴</text><text x="448" y="284" font-size="11" fill="#ff9b9b" text-anchor="middle">red lever</text><text x="448" y="298" font-size="11" fill="#ff9b9b" text-anchor="middle">asks warden</text>
+<text x="512" y="260" font-size="24" text-anchor="middle">🚿</text><text x="512" y="284" font-size="11" fill="#7ee0a3" text-anchor="middle">check</text><text x="512" y="298" font-size="11" fill="#7ee0a3" text-anchor="middle">still leaking?</text>
+</svg></div>
+    <div class="fragment"><svg viewBox="0 0 560 330" width="560" height="330" role="img" aria-label="Today · a coding agent">
+<defs><marker id="cka" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8b96ad"/></marker></defs>
+<rect x="1" y="1" width="558" height="328" rx="16" fill="#141a26" stroke="#4da3ff" stroke-width="1.5"/>
+<text x="20" y="28" font-size="15" font-weight="800" fill="#4da3ff">Today · a coding agent</text>
+<rect x="16" y="42" width="318" height="40" rx="12" fill="#1f2738" stroke="#3a4560"/>
+<text x="175" y="67" font-size="13.5" fill="#e8edf5" text-anchor="middle" font-style="italic">“Add a Forgot password button to my app.”</text>
+<rect x="18" y="88" width="122" height="20" rx="10" fill="#9aa4b8"/><text x="79" y="102" font-size="11.5" font-weight="800" fill="#0d1320" text-anchor="middle">PROMPT · the goal</text>
+<circle cx="52" cy="160" r="28" fill="#1a2233" stroke="#2a3450" stroke-width="2"/><text x="52" y="171" font-size="30" text-anchor="middle">👩‍💻</text>
+<text x="52" y="205" font-size="13" fill="#e8edf5" font-weight="700" text-anchor="middle">You</text>
+<line x1="84" y1="160" x2="148" y2="160" stroke="#8b96ad" stroke-width="2" marker-end="url(#cka)"/>
+<circle cx="200" cy="160" r="44" fill="#1a2233" stroke="#ffb454" stroke-width="3"/><text x="200" y="176" font-size="44" text-anchor="middle">🤖</text>
+<text x="200" y="124" font-size="20" text-anchor="middle">🧠</text>
+<text x="176" y="122" font-size="11.5" text-anchor="end"><tspan fill="#ff9b9b" font-weight="800">MODEL</tspan><tspan fill="#c8d0dd"> · Claude · Gemini · GPT</tspan></text>
+<rect x="16" y="222" width="318" height="92" rx="12" fill="#18202f" stroke="#7ee0a3" stroke-dasharray="6 5"/>
+<text x="26" y="240" font-size="11.5" font-weight="800" fill="#7ee0a3">HARNESS · the desk</text>
+<text x="56" y="276" font-size="26" text-anchor="middle">💻</text><text x="56" y="300" font-size="11.5" fill="#c8d0dd" text-anchor="middle">terminal</text>
+<text x="136" y="276" font-size="26" text-anchor="middle">📂</text><text x="136" y="300" font-size="11.5" fill="#c8d0dd" text-anchor="middle">read / edit files</text>
+<text x="216" y="276" font-size="26" text-anchor="middle">📋</text><text x="216" y="300" font-size="11.5" fill="#c8d0dd" text-anchor="middle">rules file</text>
+<text x="296" y="276" font-size="26" text-anchor="middle">⏱️</text><text x="296" y="300" font-size="11.5" fill="#c8d0dd" text-anchor="middle">step limit</text>
+<text x="452" y="52" font-size="11.5" font-weight="800" fill="#c792ea" text-anchor="middle">MCP SERVERS · the helpers</text>
+<line x1="246" y1="160" x2="366" y2="86" stroke="#8b96ad" stroke-width="1.6" marker-end="url(#cka)"/>
+<text x="388" y="95" font-size="26" text-anchor="middle">🐙</text><text x="410" y="85" font-size="13" fill="#e8edf5" font-weight="700">GitHub MCP</text><text x="410" y="101" font-size="11.5" fill="#9aa4b8">issues, pull requests</text>
+<line x1="246" y1="160" x2="366" y2="138" stroke="#8b96ad" stroke-width="1.6" marker-end="url(#cka)"/>
+<text x="388" y="147" font-size="26" text-anchor="middle">🗄️</text><text x="410" y="137" font-size="13" fill="#e8edf5" font-weight="700">Database MCP</text><text x="410" y="153" font-size="11.5" fill="#9aa4b8">see the tables</text>
+<line x1="246" y1="160" x2="366" y2="190" stroke="#8b96ad" stroke-width="1.6" marker-end="url(#cka)"/>
+<text x="388" y="199" font-size="26" text-anchor="middle">🌐</text><text x="410" y="189" font-size="13" fill="#e8edf5" font-weight="700">Browser MCP</text><text x="410" y="205" font-size="11.5" fill="#9aa4b8">click the real page</text>
+<rect x="352" y="222" width="192" height="92" rx="12" fill="#18202f" stroke="#2a3450"/>
+<text x="384" y="260" font-size="24" text-anchor="middle">🔍</text><text x="384" y="284" font-size="11" fill="#c8d0dd" text-anchor="middle">code search</text><text x="384" y="298" font-size="11" fill="#c8d0dd" text-anchor="middle">find the file</text>
+<text x="448" y="260" font-size="24" text-anchor="middle">🔴</text><text x="448" y="284" font-size="11" fill="#ff9b9b" text-anchor="middle">git push</text><text x="448" y="298" font-size="11" fill="#ff9b9b" text-anchor="middle">asks you</text>
+<text x="512" y="260" font-size="24" text-anchor="middle">✅</text><text x="512" y="284" font-size="11" fill="#7ee0a3" text-anchor="middle">run tests</text><text x="512" y="298" font-size="11" fill="#7ee0a3" text-anchor="middle">did it work?</text>
+</svg></div>
+  </div>
+  <div class="w5-flow fragment" style="margin-top:12px;font-size:.5em">
+    <span>📖 read the code</span><b>→</b><span>📝 plan</span><b>→</b><span>✏️ edit</span><b>→</b><span>🧪 run tests</span><b>→</b><span>❌ read the error, fix</span><b>↺</b><span style="border-color:#7ee0a3">✅ pass</span><b>→</b><span style="border-color:#ff9b9b">🔴 "Shall I push?"</span>
+  </div>
+  <div class="w5-ask fragment"><span>Who does the <strong>🚿 "still leaking?"</strong> check now? <strong>A</strong> GitHub MCP · <strong>B</strong> the tests · <strong>C</strong> the rules file</span></div>
 </section>
 
 <!-- ==================== REAL AGENTS TODAY ==================== -->
@@ -407,6 +493,79 @@
   </div>
   <p class="small" style="margin-top:10px">Every one: <strong>a goal</strong> → <strong>tools</strong> → <strong>think → act → observe</strong> → <strong>a moment where it must ask you</strong>.</p>
   <div class="w5-ask" style="margin-top:6px"><span>Which one most needs to stop and ask <strong>"Shall I?"</strong> before its last step? Type <strong>A–D</strong></span></div>
+</section>
+
+<!-- ==================== THE COLLEGE FEE AGENT: MEET THE CAST ==================== -->
+<section id="w8-fee-cast">
+  <p class="chip">Meet a new agent</p>
+  <h2 style="margin-bottom:6px">The College Fee Agent 🤖💰</h2>
+  <svg viewBox="0 0 1120 520" width="1040" height="483" style="display:block;margin:0 auto" role="img" aria-label="The College Fee Agent: the builder, the agent with its model, plan and desk, two tools, the fee sheet and 300 students">
+<defs><marker id="arf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8b96ad"/></marker><marker id="agf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7ee0a3"/></marker></defs>
+<rect x="1" y="1" width="1118" height="518" rx="18" fill="#141a26" stroke="#2a3450"/>
+<rect x="290" y="300" width="320" height="120" rx="14" fill="#18202f" stroke="#3a4560" stroke-dasharray="6 5"/>
+<text x="450" y="322" font-size="13" fill="#9aa4b8" text-anchor="middle">the agent's desk</text>
+<text x="330" y="368" font-size="30" text-anchor="middle">📋</text><text x="330" y="392" font-size="12" fill="#c8d0dd" text-anchor="middle">rules: be polite</text>
+<text x="418" y="368" font-size="30" text-anchor="middle">⏰</text><text x="418" y="392" font-size="12" fill="#c8d0dd" text-anchor="middle">runs 11:58 pm</text>
+<text x="485" y="368" font-size="30" text-anchor="middle">⏱️</text><text x="485" y="392" font-size="12" fill="#c8d0dd" text-anchor="middle">20 steps</text>
+<text x="565" y="368" font-size="30" text-anchor="middle">🔑</text><text x="565" y="392" font-size="12" fill="#c8d0dd" text-anchor="middle">may message anyone</text>
+<circle cx="450" cy="200" r="58" fill="#1a2233" stroke="#ffb454" stroke-width="3"/><text x="450" y="221" font-size="56" text-anchor="middle">🤖</text>
+<text x="450" y="148" font-size="26" text-anchor="middle">🧠</text>
+<text x="450" y="280" font-size="16" fill="#ffb454" font-weight="700" text-anchor="middle">College Fee Agent</text>
+<path d="M430,140 C410,120 392,110 372,104" stroke="#c792ea" stroke-width="1.5" fill="none" stroke-dasharray="3 4"/>
+<rect x="130" y="62" width="244" height="54" rx="27" fill="#231d33" stroke="#c792ea"/>
+<text x="252" y="85" font-size="13.5" fill="#e8d5ff" text-anchor="middle">"Plan: read the sheet → find</text><text x="252" y="103" font-size="13.5" fill="#e8d5ff" text-anchor="middle">unpaid → message each one"</text>
+<circle cx="105" cy="200" r="38" fill="#1a2233" stroke="#2a3450" stroke-width="2.5"/><text x="105" y="213.68" font-size="38" text-anchor="middle">🧑‍💻</text><text x="105" y="260" font-size="16" fill="#e8edf5" font-weight="700" text-anchor="middle">The builder</text><text x="105" y="278" font-size="13" fill="#9aa4b8" text-anchor="middle">a final-year senior</text>
+<line x1="150" y1="200" x2="384" y2="200" stroke="#8b96ad" stroke-width="2" marker-end="url(#arf)"/>
+<text x="268" y="190" font-size="13.5" fill="#8b96ad" text-anchor="middle" font-style="italic">📩 "every night, remind</text>
+<text x="268" y="226" font-size="13.5" fill="#8b96ad" text-anchor="middle" font-style="italic">students who haven't paid"</text>
+<rect x="700" y="70" width="210" height="64" rx="12" fill="#1a2233" stroke="#4da3ff" stroke-width="2"/>
+<text x="728" y="112" font-size="28" text-anchor="middle">📊</text><text x="752" y="96" font-size="14.5" fill="#e8edf5" font-weight="700">read_fee_sheet</text><text x="752" y="116" font-size="12.5" fill="#9aa4b8">tool · only reads</text>
+<rect x="700" y="300" width="210" height="64" rx="12" fill="#1a2233" stroke="#ff9b9b" stroke-width="2"/>
+<text x="728" y="342" font-size="28" text-anchor="middle">💬</text><text x="752" y="326" font-size="14.5" fill="#e8edf5" font-weight="700">send_whatsapp</text><text x="752" y="346" font-size="12.5" fill="#9aa4b8">tool · acts in the world</text>
+<line x1="505" y1="175" x2="696" y2="108" stroke="#8b96ad" stroke-width="2" marker-end="url(#arf)"/>
+<text x="590" y="126" font-size="13.5" fill="#8b96ad" text-anchor="middle" font-style="italic">① read</text>
+<line x1="698" y1="124" x2="512" y2="192" stroke="#7ee0a3" stroke-width="2" marker-end="url(#agf)"/>
+<text x="640" y="178" font-size="13.5" fill="#7ee0a3" text-anchor="middle" font-style="italic">"300 unpaid"</text>
+<line x1="505" y1="228" x2="696" y2="322" stroke="#8b96ad" stroke-width="2" marker-end="url(#arf)"/>
+<text x="612" y="302" font-size="13.5" fill="#8b96ad" text-anchor="end" font-style="italic">② send ×300</text>
+<rect x="955" y="62" width="150" height="80" rx="12" fill="#1a2233" stroke="#2a3450" stroke-width="2"/>
+<text x="1030" y="96" font-size="30" text-anchor="middle">📄</text><text x="1030" y="118" font-size="13.5" fill="#e8edf5" font-weight="700" text-anchor="middle">fee sheet</text><text x="1030" y="134" font-size="11.5" fill="#9aa4b8" text-anchor="middle">last updated 30 Sept</text>
+<line x1="912" y1="102" x2="951" y2="102" stroke="#8b96ad" stroke-width="2" marker-end="url(#arf)"/>
+<circle cx="1030" cy="215" r="34" fill="#1a2233" stroke="#2a3450" stroke-width="2.5"/><text x="1030" y="226.52" font-size="32" text-anchor="middle">🏦</text><text x="1030" y="271" font-size="16" fill="#e8edf5" font-weight="700" text-anchor="middle">Accounts office</text><text x="1030" y="289" font-size="13" fill="#9aa4b8" text-anchor="middle">takes the payments</text>
+<line x1="1030" y1="181" x2="1030" y2="146" stroke="#8b96ad" stroke-width="2" stroke-dasharray="4 5" marker-end="url(#arf)"/>
+<circle cx="1030" cy="375" r="36" fill="#1a2233" stroke="#2a3450" stroke-width="2.5"/><text x="1030" y="387.24" font-size="34" text-anchor="middle">👥</text><text x="1030" y="433" font-size="16" fill="#e8edf5" font-weight="700" text-anchor="middle">300 students</text><text x="1030" y="451" font-size="13" fill="#9aa4b8" text-anchor="middle">on WhatsApp</text>
+<line x1="912" y1="334" x2="990" y2="365" stroke="#8b96ad" stroke-width="2" marker-end="url(#arf)"/>
+<g class="fragment">
+<rect x="10" y="300" width="190" height="25" rx="12.5" fill="#9aa4b8"/><text x="105.0" y="318" font-size="13.5" font-weight="800" fill="#0d1320" text-anchor="middle">USER · sets the goal</text>
+<rect x="345" y="11" width="210" height="25" rx="12.5" fill="#ffb454"/><text x="450.0" y="29" font-size="13.5" font-weight="800" fill="#0d1320" text-anchor="middle">AGENT = model + desk</text>
+<rect x="130" y="32" width="244" height="25" rx="12.5" fill="#c792ea"/><text x="252.0" y="50" font-size="13.5" font-weight="800" fill="#0d1320" text-anchor="middle">PLAN = the model's output</text>
+<rect x="255" y="128" width="165" height="25" rx="12.5" fill="#ff9b9b"/><text x="337.5" y="146" font-size="13.5" font-weight="800" fill="#0d1320" text-anchor="middle">MODEL = the brain</text>
+<rect x="345" y="427" width="210" height="25" rx="12.5" fill="#7ee0a3"/><text x="450.0" y="445" font-size="13.5" font-weight="800" fill="#0d1320" text-anchor="middle">HARNESS = the desk</text>
+<rect x="718" y="40" width="175" height="25" rx="12.5" fill="#4da3ff"/><text x="805.5" y="58" font-size="13.5" font-weight="800" fill="#0d1320" text-anchor="middle">TOOL · reads data</text>
+<rect x="718" y="370" width="175" height="25" rx="12.5" fill="#ff9b9b"/><text x="805.5" y="388" font-size="13.5" font-weight="800" fill="#0d1320" text-anchor="middle">TOOL · takes action</text>
+<rect x="940" y="30" width="180" height="25" rx="12.5" fill="#e8edf5"/><text x="1030.0" y="48" font-size="13.5" font-weight="800" fill="#0d1320" text-anchor="middle">DATA SOURCE</text>
+<rect x="955" y="465" width="150" height="25" rx="12.5" fill="#ffb454"/><text x="1030.0" y="483" font-size="13.5" font-weight="800" fill="#0d1320" text-anchor="middle">WHO IT AFFECTS</text>
+</g>
+</svg>
+  <div class="w5-ask fragment" style="margin-top:8px"><span>Which tool can <strong>hurt someone</strong> if it goes wrong? <strong>A</strong> read_fee_sheet · <strong>B</strong> send_whatsapp</span></div>
+</section>
+
+<!-- ==================== A PROBLEM: WHO DID IT? ==================== -->
+<section id="w8-blame">
+  <p class="chip">A problem first</p>
+  <h2>300 students got a scary WhatsApp 😱</h2>
+  <div class="w7-chat" style="max-width:none;margin:4px 0 10px">
+    <div class="w7-msg"><small>College Fee Agent 🤖 · 11:58 pm · sent to 300 students</small>⚠️ Your semester fee is <strong>unpaid</strong>. You will <strong>not be allowed to write exams</strong>.</div>
+    <div class="w7-msg me"><small>All 300 of them</small>But I paid last month! 😭</div>
+  </div>
+  <p class="small" style="margin:0 0 6px">The principal wants an answer. Let's ask <em>why</em>, like the king did:</p>
+  <div class="w7-steps">
+    <div class="w7-step fragment"><b class="n">1</b><span>🧠 "Model, why did you write that?"</span><span class="obs">"The <strong>tool</strong> told me: unpaid."</span></div>
+    <div class="w7-step fragment"><b class="n">2</b><span>🛠️ "Tool, why did you say unpaid?"</span><span class="obs">"I only read the <strong>fee sheet</strong> I was given."</span></div>
+    <div class="w7-step fragment"><b class="n">3</b><span>📊 "Fee sheet, why?"</span><span class="obs">"I'm <strong>last month's copy</strong>. Nobody gave me the new one."</span></div>
+    <div class="w7-step turn fragment"><b class="n">4</b><span>🤔 "So who gave the agent the old sheet, and let it message 300 people at midnight?"</span><span class="obs">…</span></div>
+  </div>
+  <div class="w5-ask fragment" style="margin-top:10px"><span>Whose fault is it? <strong>A</strong> the model · <strong>B</strong> the tool · <strong>C</strong> the data · <strong>D</strong> someone else</span></div>
 </section>
 
 <!-- ==================== THE ANT: BRIDGE TO RESPONSIBILITY ==================== -->
@@ -509,16 +668,20 @@
 </section>
 
 <section id="w8-eliza-q">
-  <p class="chip">Checkpoint</p>
+  <p class="chip">Checkpoint · the ELIZA effect</p>
   <h2>Why did she want privacy with a script? 🤔</h2>
-  <div class="w6-quiz">
-    <div><b>A</b>She thought it truly understood her</div>
-    <div><b>B</b>It <strong>felt</strong> like being listened to, with no judgement</div>
-    <div><b>C</b>She wanted to test whether it worked</div>
+  <div class="w5-box" style="margin:0 0 10px;font-size:.6em;text-align:left">
+    <strong>The puzzle:</strong> she <strong>watched</strong> him write it. She <strong>knew</strong> it was only rules that turn your sentence into a question.
+    It remembered nothing and understood nothing. <strong>Still</strong>, she asked her boss to leave the room.
   </div>
-  <div class="w5-ask" style="margin-top:10px"><span>Type <strong>one letter</strong></span></div>
-  <p class="small fragment" style="margin-top:10px">Most people say <strong>B</strong>. The feeling of being heard is real, even when nothing is listening.
-  Today's chatbots are <strong>far</strong> better at that feeling. <strong>Builders are responsible for what people believe about their tools.</strong></p>
+  <div class="w7-steps">
+    <div class="w7-step"><b class="n">A</b><span>She thought it truly understood her</span><span class="obs fragment" data-fragment-index="2" style="color:#9aa4b8">Unlikely: she saw it being built, line by line.</span></div>
+    <div class="w7-step"><b class="n">B</b><span>It <strong>felt</strong> like being listened to, with no judgement</span><span class="obs fragment" data-fragment-index="2">Yes. It repeats your words, never judges, never gets bored. That <em>feels</em> like being heard.</span></div>
+    <div class="w7-step"><b class="n">C</b><span>She wanted to test whether it worked</span><span class="obs fragment" data-fragment-index="2" style="color:#9aa4b8">Then she'd test it in front of him. She wanted him <em>out</em>.</span></div>
+  </div>
+  <div class="w5-ask fragment" data-fragment-index="1" style="margin-top:10px"><span>Type <strong>one letter</strong>, then send together</span></div>
+  <p class="small fragment" data-fragment-index="3" style="margin-top:10px">This is the <strong>ELIZA effect</strong>: we trust things that <strong>sound</strong> human, even when we know they aren't.
+  Today's chatbots are <strong>far</strong> better at that feeling, so <strong>builders are responsible for what people believe about their tools.</strong></p>
 </section>
 
 <section id="w8-honest">
@@ -660,21 +823,24 @@
 
 <!-- ==================== THE FUNNY MASHUP ==================== -->
 <section id="w8-mashup">
-  <p class="chip">The whole course, in one very confused night 😂</p>
-  <h2 style="margin-bottom:4px">11:40 pm. C-block. Again. 💧</h2>
-  <p class="small" style="margin:0 0 8px">The farmer from Week 1 is a hostel student now. His bathroom floods, and every week of this course turns up to help…</p>
-  <div class="w8-comic">
-    <div style="--k:#4da3ff"><b>W1</b>🌾 He asks the hostel bot: <em>"40 kg fertiliser, how much harvest? Also my bathroom is flooding."</em> A giraffe walks in, born knowing the answer.</div>
-    <div style="--k:#4da3ff"><b>W2</b>🧠 The attention heads fight over one word: <em>"it"</em>. The crop? The bathroom? Head 7 votes for the giraffe.</div>
-    <div style="--k:#7ee0a3"><b>W3</b>🌡️ Temperature 1.8: the bot replies with a sad poem about pipes. Someone turns it down to 0. The poem stops. The leak doesn't.</div>
-    <div style="--k:#7ee0a3"><b>W4</b>📜 It cites <em>"Ramanujan, Plumbing Theorems, 1913"</em>. Hardy checks Google Scholar in 60 seconds. No such paper. 🕵️</div>
-    <div style="--k:#ffb454"><b>W5</b>📊 The complaint sorter finally helps: <code>{"category": "water", "urgency": "high", "needs_human": true}</code>. Correct, and still flooding.</div>
-    <div style="--k:#ffb454"><b>W6</b>🔎 RAG searches the manual for "flood". BM25 proudly returns three slides about the <em>final exam</em>.</div>
-    <div style="--k:#c792ea"><b>W7</b>🔧 The agent calls the warden (asleep), the plumber (tomorrow) and Mr. Chenna Reddy. Orange lever: jammed. Yellow: the laundry stops. All of C-block blames you.</div>
-    <div style="--k:#c792ea"><b>W8</b>🗨️ ELIZA, 1966, joins the chat: <em>"Why do you say your bathroom is flooding?"</em> The bot whispers its guardrail: <em>"I will never shut red."</em></div>
+  <p class="chip">The whole course, as one WhatsApp group 😂</p>
+  <h2 style="margin-bottom:6px">Meanwhile, in the C-block group chat 💧</h2>
+  <div class="gc">
+    <div class="gc-top">👥 <strong>C-block 2nd floor 🚿🔥</strong> <small>Farmer, Giraffe, Gradient Descent, Head 7, +12 others</small></div>
+    <div class="gc-m"><b style="color:#4da3ff">🌾 Farmer <i class="wk">W1</i></b>Bathroom flooding AGAIN. Also: 40 kg fertiliser, how much harvest?</div>
+    <div class="gc-m"><b style="color:#4da3ff">🦒 Giraffe <i class="wk">W1</i></b>I was born knowing how to walk. Plumbing was not included.</div>
+    <div class="gc-m"><b style="color:#4da3ff">⛰️ Gradient Descent <i class="wk">W2</i></b>On it. One small step at a time… step 4,000: still going downhill. So is the water.</div>
+    <div class="gc-m"><b style="color:#4da3ff">🎯 Attention Head 7 <i class="wk">W2</i></b>"It is leaking." Who is <em>it</em>? 92% sure it's the giraffe.</div>
+    <div class="gc-m"><b style="color:#7ee0a3">🌡️ Temperature 1.8 <i class="wk">W3</i></b>🎶 O pipe, O sorrow, your drip is my tomorrow 🎶</div>
+    <div class="gc-m"><b style="color:#7ee0a3">📜 Ramanujan <i class="wk">W4</i></b>As proved in my 1913 paper, <em>Plumbing Theorems</em>… · <b style="display:inline;color:#ff9b9b">🕵️ Hardy:</b> checked in 60 seconds. No such paper.</div>
+    <div class="gc-m"><b style="color:#ffb454">📊 JSON <i class="wk">W5</i></b><code style="font-size:.78em;white-space:normal">{"category": "water", "urgency": "high", "needs_human": true}</code> Correct. Still flooding.</div>
+    <div class="gc-m"><b style="color:#ffb454">🔎 BM25 <i class="wk">W6</i></b>Searched "flood". Found 3 slides about the <strong>final exam</strong>. You're welcome.</div>
+    <div class="gc-m"><b style="color:#c792ea">🔧 Mr. Chenna Reddy <i class="wk">W7</i></b>Orange is jammed. Shutting yellow… · <b style="display:inline;color:#ff9b9b">🧺 Laundry room:</b> WHO TURNED OFF THE WATER</div>
+    <div class="gc-m"><b style="color:#c792ea">🗨️ ELIZA, 1966 <i class="wk">W8</i></b>Why do you say the laundry room is shouting?</div>
+    <div class="gc-m me fragment"><b style="color:#7ee0a3">🤖 Hostel agent <i class="wk">guardrail</i></b>Red lever? Not without the warden. 🙅</div>
+    <div class="gc-sys fragment">😴 Warden was mentioned 14 times · 📌 Chenna Reddy pinned: "Bathroom dry. Crop: 36 quintals. Employee of the month 🏆"</div>
   </div>
-  <p class="small fragment" style="margin-top:10px">🏁 Final score: crop 36 quintals · bathroom dry · <strong>Mr. Chenna Reddy, employee of the month</strong> 🏆</p>
-  <div class="w5-ask fragment" style="margin-top:6px"><span>Which panel made you laugh most? Type <strong>W1–W8</strong></span></div>
+  <div class="w5-ask fragment" style="margin-top:8px"><span>Who would you <strong>mute</strong> first? Type <strong>W1–W8</strong></span></div>
 </section>
 
 <section id="w8-journey">
